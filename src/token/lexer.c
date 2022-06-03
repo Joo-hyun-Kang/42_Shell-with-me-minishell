@@ -1,67 +1,56 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   command.c                                          :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 02:16:42 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/03 02:46:23 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/03 14:38:54 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "token.h"
 
 /*
- * ├── t_cmd_lst
+ * ├── t_lexer_lst
  * │   ├── struct s_token_list	*head_token
  */
 
-t_cmd_lst	*ft_init_cmd(char *str)
+t_lexer_lst	*ft_init_lexer(char *str)
 {
-	t_cmd_lst	*cl;
+	t_lexer_lst	*l;
 
-	cl = (t_cmd_lst *)malloc(sizeof(t_cmd_lst));
-	if (cl == 0)
+	l = (t_lexer_lst *)malloc(sizeof(t_lexer_lst));
+	if (l == 0)
 		return (0);
-	cl->cmd = str;
-	cl->r_pos = 0;
-	cl->ch = *str;
-	cl->next = 0;
-	cl->prev = 0;
-	cl->head_token = 0;
-	return (cl);
+	l->str = str;
+	l->r_pos = 0;
+	l->ch = *str;
+	l->next = 0;
+	l->prev = 0;
+	l->head_token = 0;
+	return (l);
 }
 
-void	ft_set_cmd_lst(t_cmd_lst *out_cl)
+void	ft_set_lexer(t_lexer_lst *out_l)
 {
-	t_token_lst	*token;
+	t_token_lst	*t ;
 	t_token_lst	*iter;
 
-	token = ft_next_token(out_cl);
-	while (token != 0)
+	t = ft_next_token(out_l);
+	while (t != 0)
 	{
-		if (out_cl->head_token == 0)
-			out_cl->head_token = token;
+		if (out_l->head_token == 0)
+			out_l->head_token = t;
 		else
 		{
-			iter = out_cl->head_token;
+			iter = out_l->head_token;
 			while (iter->next)
 				iter = iter->next;
-			iter->next = token;
-			token->prev = iter;
+			iter->next = t;
+			t ->prev = iter;
 		}
-		token = ft_next_token(out_cl);
+		t = ft_next_token(out_l);
 	}
-}
-
-t_cmd_lst	*ft_get_cmd_lst(char *str)
-{
-	t_cmd_lst	*cl;
-
-	cl = ft_init_cmd(str);
-	if (cl == 0)
-		return (0);
-	ft_set_cmd_lst(cl);
-	return (cl);
 }

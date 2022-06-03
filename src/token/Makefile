@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/03 03:10:40 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/03 14:34:44 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,7 +22,7 @@ INC_DIR			=	inc
 SRC_DIR			=	src
 SRC				=	token.c\
 					token_utils.c\
-					command.c
+					lexer.c
 
 SRCS			=	$(addprefix $(SRC_DIR)/, $(SRC))
 OBJS			=	$(SRC:.c=.o)

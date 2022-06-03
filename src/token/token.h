@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 17:18:03 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/03 02:56:29 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/03 14:39:21 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,10 @@
 # include <stdbool.h>
 
 enum e_token_type {
+	/* String */
 	FUNCTION,
 	ARGUMENT,
+	/*  */
 	MINUS_SIGN,				// -
 	PIPE,					// |
 	SEMICOLON,				// ;
@@ -26,12 +28,12 @@ enum e_token_type {
 	DOUBLE_QUOTE,			// "
 	DOLLER_SIGN,			// $
 	SLASH,					// /
+	QUESTION_MAKR,			// ?
 	/* Redirections */
 	LT,						// > (little)
 	DLT,					// >>
 	GT,						// < (greater)
-	DGT,					// <<
-	QUESTION_MAKR			// ?
+	DGT						// <<
 };
 
 typedef struct s_token_lst {
@@ -41,22 +43,22 @@ typedef struct s_token_lst {
 	struct s_token_lst		*prev;
 } t_token_lst;
 
-typedef struct s_cmd_lst {
-	char					*cmd;
+// Lexical analyzer(어휘 분석기): Lexical analyzer make token into input string.
+typedef struct s_lexer_lst {
+	char					*str;
 	int						r_pos;			// Current read position.
 	char					ch;				// Current read position character.
 	struct s_token_lst		*head_token;
 	struct s_cmd_lst		*next;
 	struct s_cmd_lst		*prev;
-} t_cmd_lst;
+} t_lexer_lst;
 
 /* token.c */
-t_cmd_lst			*ft_init_cmd(char	*str);
 t_token_lst			*ft_new_token(enum e_token_type type, char *str);
-t_token_lst 		*ft_next_token(t_cmd_lst *cl);
-void				ft_read_char(t_cmd_lst *cl);
-char				ft_peek_char(t_cmd_lst *cl);
-void				ft_skip_whitespace(t_cmd_lst *cl);
+t_token_lst 		*ft_next_token(t_lexer_lst *l);
+void				ft_read_char(t_lexer_lst *l);
+char				ft_peek_char(t_lexer_lst *l);
+void				ft_skip_whitespace(t_lexer_lst *l);
 
 /* token_utils.c */
 bool				ft_is_letter(char c);
@@ -66,8 +68,7 @@ char				*ft_strndup(const char *str, size_t n);
 char				*ft_strchr(const char *str, int c);
 
 /* commnad.c */
-t_cmd_lst			*ft_init_cmd(char *str);
-void				ft_set_cmd_lst(t_cmd_lst *out_cl);
-t_cmd_lst			*ft_get_cmd_lst(char *str);
+t_lexer_lst			*ft_init_lexer(char *str);
+void				ft_set_lexer(t_lexer_lst *out_l);
 
 #endif

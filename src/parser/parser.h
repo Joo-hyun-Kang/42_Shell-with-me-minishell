@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:54:36 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/04 00:23:15 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/04 15:45:37 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ typedef struct s_command {
 	enum e_command		cmd;
 	char				*option;
 	char				*argument;
+	struct s_command	*next;
+	struct s_command	*prev;
 } t_command;
 
 #endif

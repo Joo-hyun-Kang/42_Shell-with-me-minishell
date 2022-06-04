@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 17:18:03 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/04 10:21:00 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/04 13:23:52 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 # define TOKEN_SET "|;><"
 # define WHITE_SPACE " \t\f\n\r\v"
-# define QUOTE "\"'"
+# define QUOTE "`\"'"
 
 enum e_token_type {
 	/* String */
@@ -55,7 +55,8 @@ typedef struct s_lexer_lst {
 
 /* token.c */
 t_token_lst			*ft_new_token(enum e_token_type type, char *str);
-t_token_lst 		*ft_create_next_token(t_lexer_lst *l, int *out_seperate);
+bool				ft_is_before_token_seperater(t_lexer_lst *l);
+t_token_lst 		*ft_create_next_token(t_lexer_lst *l);
 void				ft_read_char(t_lexer_lst *l);
 void				ft_skip_meanless_word(t_lexer_lst *l);
 char				*ft_quote(char *str, t_lexer_lst *l, char quote);

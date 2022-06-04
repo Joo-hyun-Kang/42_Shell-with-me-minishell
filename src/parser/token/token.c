@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/04 11:53:44 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/04 13:24:13 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,22 +68,28 @@ char	*ft_quote(char *str, t_lexer_lst *l, char quote)
 	s_pos = l->r_pos;
 	while (l->ch != 0)
 	{
-		if (l->ch == quote)
+		if (flag == 1 && l->ch == ' ')
 		{
-			flag ^= 1;
-			str = ft_strnjoin(str, &l->str[s_pos], l->r_pos - s_pos);
-			ft_read_char(l);
-			s_pos = l->r_pos;
-		}
-		else if (flag == 1 && l->ch == ' ')
-		{
+			// 양쪽 닫혀 있는 Quote + 공백문자 -> 탈출
 			str = ft_strnjoin(str, &l->str[s_pos], l->r_pos - s_pos);
 			break ;
 		}
+		else if (l->ch == quote)
+		{
+			flag ^= 1;
+			str = ft_strnjoin(str, &l->str[s_pos], l->r_pos - s_pos);
+			// Quote 에서 끝났으니 하나 읽고 위치 저장~
+			ft_read_char(l);
+			s_pos = l->r_pos;
+		}
 		else
+			// 아무것도 아니면 계속 읽음
 			ft_read_char(l);
 	}
-	ft_read_char(l);
+	if (l->ch == 0)
+		str = ft_strnjoin(str, &l->str[s_pos], l->r_pos - s_pos);
+	else
+		ft_read_char(l);
 	if (flag == 0)
 	{
 		str = ft_strnjoin(str, &l->str[s_pos], l->r_pos - s_pos);
@@ -122,13 +128,30 @@ char	*ft_get_env(t_lexer_lst *l)
 	return(ft_strndup("env_testing", 11));
 }
 
-t_token_lst *ft_create_next_token(t_lexer_lst *l, int *out_seperate)
+bool	ft_is_before_token_seperater(t_lexer_lst *l)
+{
+	t_token_lst	*t;
+
+	if (l->head_token == 0)
+		return (1);
+	t = l->head_token;
+	while (t->next)
+		t = t->next;
+	if (t->t_type == SEMICOLON || t->t_type == PIPE)
+		return (1);
+	return (0);
+
+}
+
+t_token_lst *ft_create_next_token(t_lexer_lst *l)
 {
 	t_token_lst		*t;
 
 	t = 0;
 	ft_skip_meanless_word(l);
-	if (ft_strchr(TOKEN_SET, l->ch))
+	if (ft_is_before_token_seperater(l))
+		t = ft_new_token(COMMAND, ft_read_argument(l));
+	else if (ft_strchr(TOKEN_SET, l->ch))
 	{
 		if (l->ch == '|')
 		{
@@ -165,19 +188,11 @@ t_token_lst *ft_create_next_token(t_lexer_lst *l, int *out_seperate)
 	}
 	else if (l->ch == '$')
 			t = ft_new_token(ARGUMENT, ft_get_env(l));
-	else if (l->ch == '\'' || l->ch == '"')
+	else if (ft_strchr(QUOTE, l->ch))
 		t = ft_new_token(ARGUMENT, ft_quote(0, l, l->ch));
 	// If not exist before token or that token's meaning is endpoint assign command type to current token.
 	else if (l->ch != 0)
-	{
-		if (*out_seperate == 1)
-		{
-			t = ft_new_token(COMMAND, ft_read_argument(l));
-			*out_seperate = 0;
-		}
-		else
-			t = ft_new_token(ARGUMENT, ft_read_argument(l));
-	}
+		t = ft_new_token(ARGUMENT, ft_read_argument(l));
 	else
 		t = ft_new_token(EOL, 0);
 	return (t);

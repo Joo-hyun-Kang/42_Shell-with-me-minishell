@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/04 03:26:24 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/04 11:53:44 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,35 +45,51 @@ void	ft_read_char(t_lexer_lst *l)
 
 void	ft_skip_meanless_word(t_lexer_lst *l)
 {
-	while (l->ch == '\t' || l->ch == '\n' || l->ch == '\v'
-		|| l->ch == '\f' || l->ch == '\r' || l->ch == ' ')
+	while (ft_strchr(WHITE_SPACE, l->ch))
 		ft_read_char(l);
 }
 
-//char	*ft_quote(char *str, t_lexer_lst *l, int closed, char quote)
-char	*ft_quote(char *str, t_lexer_lst *l, int closed, char quote)
+char	*ft_strnjoin(char *dst, char *src, int n)
 {
-	int		s_pos;
 	char	*tmp;
 
-	if (l->ch == 0 || l->ch == ' ')
-	{
-		if (closed == 0)
-			// quote>
-			// dquote>
-			printf("Unclosed\n");
-		return (str);
-	}
-	s_pos = l->r_pos;
-	while (l->ch != 0 && l->ch != quote)
-		ft_read_char(l);
-	if (l->ch == quote)
-		closed ^= 1;
-	tmp = ft_strndup(&l->str[s_pos], l->r_pos - s_pos);
-	str = ft_strjoin(str, tmp);
+	tmp = ft_strndup(src, n);
+	dst = ft_strjoin(dst, tmp);
 	free(tmp);
+	return (dst);
+}
+
+char	*ft_quote(char *str, t_lexer_lst *l, char quote)
+{
+	int			s_pos;
+	int			flag = 0;
+
 	ft_read_char(l);
-	return (ft_quote(str, l, closed, quote));
+	s_pos = l->r_pos;
+	while (l->ch != 0)
+	{
+		if (l->ch == quote)
+		{
+			flag ^= 1;
+			str = ft_strnjoin(str, &l->str[s_pos], l->r_pos - s_pos);
+			ft_read_char(l);
+			s_pos = l->r_pos;
+		}
+		else if (flag == 1 && l->ch == ' ')
+		{
+			str = ft_strnjoin(str, &l->str[s_pos], l->r_pos - s_pos);
+			break ;
+		}
+		else
+			ft_read_char(l);
+	}
+	ft_read_char(l);
+	if (flag == 0)
+	{
+		str = ft_strnjoin(str, &l->str[s_pos], l->r_pos - s_pos);
+		printf("quote> \n");
+	}
+	return (str);
 }
 
 char	*ft_read_argument(t_lexer_lst *l)
@@ -83,27 +99,27 @@ char	*ft_read_argument(t_lexer_lst *l)
 
 	s_pos = l->r_pos;
 	while (ft_strchr(TOKEN_SET, l->ch) == 0
-			&& ft_strchr(" \t\f\n\r\v", l->ch) == 0
-			&& l->ch != 0
-			&& l->ch != '"'
-			&& l->ch != '\'')
+		&& ft_strchr(WHITE_SPACE, l->ch) == 0
+		&& ft_strchr(QUOTE, l->ch) == 0
+		&& l->ch != 0)
 		ft_read_char(l);
 	rst = ft_strndup(&l->str[s_pos], l->r_pos - s_pos);
-	if (l->ch == '"' || l->ch == '\'') 
-		rst = ft_quote(rst, l, 0, l->ch);
+	if (ft_strchr(QUOTE, l->ch)) 
+		rst = ft_quote(rst, l, l->ch);
 	return (rst);
 }
 
 char	*ft_get_env(t_lexer_lst *l)
 {
 	ft_read_char(l);
+	if (l->ch == 0 || l->ch == ' ')
+		return (ft_strndup("$", 1));
 	while (ft_strchr(TOKEN_SET, l->ch) == 0
-			&& ft_strchr(" \t\f\n\r\v", l->ch) == 0
-			&& l->ch != 0
-			&& l->ch != '"'
-			&& l->ch != '\'')
+		&& ft_strchr(WHITE_SPACE, l->ch) == 0
+		&& ft_strchr(QUOTE, l->ch) == 0
+		&& l->ch != 0)
 		ft_read_char(l);
-	return ("환경변쮸 >_<");
+	return(ft_strndup("env_testing", 11));
 }
 
 t_token_lst *ft_create_next_token(t_lexer_lst *l, int *out_seperate)
@@ -116,49 +132,41 @@ t_token_lst *ft_create_next_token(t_lexer_lst *l, int *out_seperate)
 	{
 		if (l->ch == '|')
 		{
-			t = ft_new_token(PIPE, "|");
+			t = ft_new_token(PIPE, ft_strndup("|", 1));
 			ft_read_char(l);
 		}
 		else if (l->ch == ';')
 		{
-			t = ft_new_token(SEMICOLON, ";");
+			t = ft_new_token(SEMICOLON, ft_strndup(";", 1));
 			ft_read_char(l);
 		}
 		else if (l->ch == '>')
 		{
 			ft_read_char(l);
 			if (l->ch != '>')
-				t = ft_new_token(LT, ">");
+				t = ft_new_token(LT, ft_strndup(">", 1));
 			else
 			{
 				ft_read_char(l);
-				t = ft_new_token(DLT, ">>");
+				t = ft_new_token(DLT, ft_strndup(">>", 2));
 			}
 		}
 		else if (l->ch == '<')
 		{
 			ft_read_char(l);
 			if (l->ch != '<')
-				t = ft_new_token(GT, "<");
+				t = ft_new_token(GT, ft_strndup("<", 1));
 			else
 			{
 				ft_read_char(l);
-				t = ft_new_token(DGT, "<<");
+				t = ft_new_token(DGT, ft_strndup("<<", 2));
 			}
 		}
 	}
 	else if (l->ch == '$')
-		t = ft_new_token(ARGUMENT, ft_get_env(l));
-	else if (l->ch == '\'')
-	{
-		ft_read_char(l);
-		t = ft_new_token(ARGUMENT, ft_quote(0, l, 0, '\''));
-	}
-	else if (l->ch == '"')
-	{
-		ft_read_char(l);
-		t = ft_new_token(ARGUMENT, ft_quote(0, l, 0, '"'));
-	}
+			t = ft_new_token(ARGUMENT, ft_get_env(l));
+	else if (l->ch == '\'' || l->ch == '"')
+		t = ft_new_token(ARGUMENT, ft_quote(0, l, l->ch));
 	// If not exist before token or that token's meaning is endpoint assign command type to current token.
 	else if (l->ch != 0)
 	{

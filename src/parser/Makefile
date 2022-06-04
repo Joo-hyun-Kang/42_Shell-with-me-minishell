@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/04 01:14:02 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/04 07:44:28 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,22 +39,22 @@ vpath %.c $(SRC_DIR) $(TOKEN_DIR)
 all: $(NAME)
 
 $(OBJ_DIR)/%.o: %.c
-	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(OBJ_DIR) $(OBJS)
-	$(AR) $(NAME) $(OBJS)
+	@$(AR) $(NAME) $(OBJS)
 
 $(OBJ_DIR):
 	@mkdir $(OBJ_DIR)
 
 clean:
-	$(RM) $(OBJS) $(OBJ_DIR)
+	@$(RM) $(OBJS) $(OBJ_DIR)
 
 fclean:
-	$(RM) $(OBJS) $(OBJ_DIR) $(NAME)
+	@$(RM) $(OBJS) $(OBJ_DIR) $(NAME)
 
 re:
-	make fclean
-	make all
+	@make fclean
+	@make all
 
 .PHONY: all clean fclean re

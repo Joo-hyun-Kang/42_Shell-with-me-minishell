@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 02:16:42 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/04 03:04:58 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/04 11:41:32 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,16 @@ t_lexer_lst	*ft_init_lexer(char *str)
 
 void	ft_analyze_string(t_lexer_lst *out_l)
 {
-	t_token_lst	*t ;
-	t_token_lst	*iter;
-	int			seperate;
+	t_token_lst		*t ;
+	t_token_lst		*iter;
+	int				seperate;
 
 	seperate = 1;
 	t = ft_create_next_token(out_l, &seperate);
+	out_l->head_token = t;
 	if (t->t_type == PIPE || t->t_type == SEMICOLON)
 		seperate = 1;
-	out_l->head_token = t;
-	iter = t;
+	iter = out_l->head_token;
 	while ((t = ft_create_next_token(out_l, &seperate))->t_type != EOL)
 	{
 		if (t->t_type == PIPE || t->t_type == SEMICOLON)

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 17:18:03 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/04 03:24:30 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/04 10:21:00 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <stdbool.h>
 
 # define TOKEN_SET "|;><"
+# define WHITE_SPACE " \t\f\n\r\v"
+# define QUOTE "\"'"
 
 enum e_token_type {
 	/* String */
@@ -56,7 +58,7 @@ t_token_lst			*ft_new_token(enum e_token_type type, char *str);
 t_token_lst 		*ft_create_next_token(t_lexer_lst *l, int *out_seperate);
 void				ft_read_char(t_lexer_lst *l);
 void				ft_skip_meanless_word(t_lexer_lst *l);
-char				*ft_quote(char *str, t_lexer_lst *l, int closed, char quote);
+char				*ft_quote(char *str, t_lexer_lst *l, char quote);
 char				*ft_read_argument(t_lexer_lst *l);
 
 /* token_utils.c */

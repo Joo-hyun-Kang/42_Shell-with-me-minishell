@@ -112,7 +112,8 @@ void	ft_system(t_argument *argument)
 			else if (child_pid == 0)
 			{
 				//자식 프로세스
-				execve("/bin/ps", NULL, NULL);
+				char *pa_temp = ft_strjoin("/bin/", command);			
+				execve(pa_temp, argument->pa_argument, NULL);
 				printf("this is execuse Error");
 			}
 			else
@@ -159,12 +160,6 @@ void	ft_free_argument(t_argument *pa_argument)
 	p = pa_argument;
 	while (p->next != NULL)
 	{
-		i = 0;
-		while (p->pa_argument[i] != NULL)
-		{
-			free(p->pa_argument[i]);
-			i++;
-		}
 		free(p->pa_argument);
 		temp = p->next;
 		free(p);
@@ -180,7 +175,7 @@ void	ft_execute_echo(t_argument *argument)
 	i = COMMAND_ARG_POSITION;
 	while (argument->pa_argument[i] != NULL)
 	{
-		ft_putstr_fd(argument->pa_argument[i], 1);
+		ft_putstr_fd(argument->pa_argument[i], STDOUT_FILENO);
 		i++;
 	}
 }
@@ -214,15 +209,24 @@ int	main(int argc, char **argv, char **environ)
 	t_argument *pa_arg;
 
 	pa_arg = (t_argument *)malloc(sizeof(t_argument));
-	pa_arg->next_token_type = EOL;
+	pa_arg->next_token_type = PIPE;
 	pa_arg->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
-	pa_arg->pa_argument[0] = "echo";
-	pa_arg->pa_argument[1] = "123";
-	pa_arg->pa_argument[2] = "NULL";
-	pa_arg->next = NULL;
+	pa_arg->pa_argument[0] = "ls";
+	pa_arg->pa_argument[1] = NULL;
+	pa_arg->next = (t_argument *)malloc(sizeof(t_argument));
+	
+	t_argument *p = pa_arg->next;
+	p->next_token_type = EOL;
+	p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+	p->pa_argument[0] = "cat";
+	p->pa_argument[1] = "-e";
+	p->pa_argument[2] = NULL;
+
+	p->next = NULL;
+
 	ft_system(pa_arg);
-	free(pa_arg->pa_argument);
-	free(pa_arg);
+
+
 
 
 	// 다음 예제 코드에서 printf가 2번 입력되는 문제가 있다

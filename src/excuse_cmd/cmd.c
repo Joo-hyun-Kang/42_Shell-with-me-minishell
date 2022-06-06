@@ -94,7 +94,7 @@ void	ft_system(t_argument *argument)
 	
 		//DGT, 세미콜론이라면 명령을 그냥 다음으로 가면 되고 eof라면 그냥 나가면 된다
 		command = argument->pa_argument[COMMAND_POSITION];
-		if (is_bulletin(command, bull_type) == TRUE)
+		if (is_bulletin(command, &bull_type) == TRUE)
 		{
 			//내장 명령어 실행
 			if (bull_type == BUL_ECHO)
@@ -179,35 +179,46 @@ void	ft_execute_echo(t_argument *argument)
 {
 	char	*p;
 	int		i;
+	int		is_newline;
 
+	is_newline = TRUE;
 	i = COMMAND_ARG_POSITION;
+	if (ft_strncmp(argument->pa_argument[COMMAND_ARG_POSITION], "-n", 2) == 0)
+	{	
+		is_newline = FALSE;
+		i++;
+	}
 	while (argument->pa_argument[i] != NULL)
 	{
 		ft_putstr_fd(argument->pa_argument[i], STDOUT_FILENO);
 		i++;
 	}
+	if (is_newline)
+	{
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	}
 }
 
 // 무지성 문자열 비교
-int	is_bulletin(char *command, enum e_bulltein_type out_type)
+int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 {
 	if (ft_strncmp(command, "echo", 4) == 0)
-		out_type = BUL_ECHO;
+		*out_type = BUL_ECHO;
 	else if (ft_strncmp(command, "cd", 2) == 0)
-		out_type = BUL_CD;
+		*out_type = BUL_CD;
 	else if (ft_strncmp(command, "pwd", 3) == 0)
-		out_type = BUL_PWD;
+		*out_type = BUL_PWD;
 	else if (ft_strncmp(command, "export", 6) == 0)
-		out_type = BUL_EXPORT;
+		*out_type = BUL_EXPORT;
 	else if (ft_strncmp(command, "unset", 5) == 0)
-		out_type = BUL_UNSET;
+		*out_type = BUL_UNSET;
 	else if (ft_strncmp(command, "env", 3) == 0)
-		out_type = BUL_ENV;
+		*out_type = BUL_ENV;
 	else if (ft_strncmp(command, "exit", 4) == 0)
-		out_type = BUL_EXIT;
+		*out_type = BUL_EXIT;
 	else
-		out_type = INVAILD;
-	if (out_type == INVAILD)
+		*out_type = INVAILD;
+	if (*out_type == INVAILD)
 		return (FALSE);
 	return(TRUE);
 }
@@ -217,20 +228,22 @@ int	main(int argc, char **argv, char **environ)
 	t_argument *pa_arg;
 
 	pa_arg = (t_argument *)malloc(sizeof(t_argument));
-	pa_arg->next_token_type = PIPE;
-	pa_arg->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
-	pa_arg->pa_argument[0] = "ls";
-	pa_arg->pa_argument[1] = NULL;
+	pa_arg->next_token_type = SEMICOLON;
+	pa_arg->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+	pa_arg->pa_argument[0] = "echo";
+	pa_arg->pa_argument[1] = "1234";
+	pa_arg->pa_argument[2] = NULL;
 	pa_arg->next = (t_argument *)malloc(sizeof(t_argument));
 	
+	/*
 	t_argument *p = pa_arg->next;
 	p->next_token_type = EOL;
 	p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
 	p->pa_argument[0] = "cat";
 	p->pa_argument[1] = "-e";
 	p->pa_argument[2] = NULL;
-
-	p->next = NULL;
+	*/
+	pa_arg->next = NULL;
 
 	ft_system(pa_arg);
 

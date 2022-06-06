@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/06 15:54:51 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/06 16:18:40 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ enum e_token_type {
 typedef struct s_argument {
 	enum e_token_type	next_token_type;
 	char				**pa_argument;
+	struct s_argument	*next;
 } t_argument;
 
 typedef struct s_token_lst {
@@ -48,6 +49,13 @@ typedef struct s_lexer {
 	struct s_token_lst		*head_token;
 } t_lexer;
 
+/*
+ * #########################################################
+ * #                                                       #
+ * #                src/parser/tokenizer/                  #
+ * #                                                       #
+ * #########################################################
+ */
 /* src/parser/tokenizer/token.c */
 t_token_lst			*ft_new_token(enum e_token_type type, char *str);
 t_token_lst	 		*ft_create_next_token(t_lexer *l);
@@ -64,5 +72,14 @@ char				*ft_strndup(const char *str, int n);
 /* src/parser/tokenizer/lexer.c */
 t_lexer				*ft_init_lexer(char *str);
 void				ft_analyze_string(t_lexer *out_l);
+
+/*
+ * #########################################################
+ * #                                                       #
+ * #                       src/parser/                     #
+ * #                                                       #
+ * #########################################################
+ */
+/* src/parser/parser.c */
 
 #endif

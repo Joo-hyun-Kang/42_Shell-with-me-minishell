@@ -29,23 +29,26 @@ void	ft_system(t_argument *argument)
 	enum e_bulltein_type	bull_type;
 	int						pipe_fd[PIPE_COUNT];
 	int						std_fd[PIPE_COUNT];
+	int						is_pipe_on;
 
 	// Create pipe
 	if (pipe(pipe_fd) == PIPE_ERROR)
 		ft_print_error();
-
 
 	// Reserve before argument's address for Free 
 	pa_orgin_argument = argument;
 	
 
 	// loop for execute command
+	is_pipe_on = FALSE;
 	while (argument != NULL)
 	{
 		//do pipe setting
 		mult_command = argument->next_token_type;
 		if (mult_command == PIPE || mult_command == LT || mult_command == DLT || mult_command == GT)
 		{
+			is_pipe_on = TRUE;
+			
 			//FD1 : STDOUT -> PIPE OUT
 			std_fd[PIPE_OUT] = dup(STDOUT_FILENO);
 
@@ -59,7 +62,7 @@ void	ft_system(t_argument *argument)
 				ft_print_error();
 			}
 		}
-		else if (mult_command == SEMICOLON || mult_command == DGT || mult_command == EOL)
+		else if (is_pipe_on && (mult_command == SEMICOLON || mult_command == DGT || mult_command == EOL))
 		{
 			//FD0 : STDIN -> PIPE IN
 			std_fd[PIPE_IN] = dup(STDIN_FILENO);
@@ -86,10 +89,6 @@ void	ft_system(t_argument *argument)
 			{
 				ft_print_error();
 			}
-		}
-		else
-		{
-			ft_print_error();
 		}
 	
 		//DGT, 세미콜론이라면 명령을 그냥 다음으로 가면 되고 eof라면 그냥 나가면 된다
@@ -132,7 +131,7 @@ void	ft_system(t_argument *argument)
 		argument = argument->next;
 	}
 
-	//FD0 : FIFE_OUT -> STDIN
+	//FD0 : FIFE_IN -> STDIN
 	pipe_fd[PIPE_IN] = dup(STDIN_FILENO);
 
 	if (std_fd[PIPE_IN] != STDIN_FILENO)
@@ -183,7 +182,8 @@ void	ft_execute_echo(t_argument *argument)
 
 	is_newline = TRUE;
 	i = COMMAND_ARG_POSITION;
-	if (ft_strncmp(argument->pa_argument[COMMAND_ARG_POSITION], "-n", 2) == 0)
+	if (argument->pa_argument[i] != NULL && \
+	ft_strncmp(argument->pa_argument[COMMAND_ARG_POSITION], "-n", 2) == 0)
 	{	
 		is_newline = FALSE;
 		i++;
@@ -225,25 +225,45 @@ int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 
 int	main(int argc, char **argv, char **environ)
 {
+	//Test Code
 	t_argument *pa_arg;
+	t_argument *p;
 
 	pa_arg = (t_argument *)malloc(sizeof(t_argument));
-	pa_arg->next_token_type = SEMICOLON;
-	pa_arg->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
-	pa_arg->pa_argument[0] = "echo";
-	pa_arg->pa_argument[1] = "1234";
-	pa_arg->pa_argument[2] = NULL;
-	pa_arg->next = (t_argument *)malloc(sizeof(t_argument));
+	p = pa_arg;
 	
-	/*
-	t_argument *p = pa_arg->next;
-	p->next_token_type = EOL;
+	//echo
+	p->next_token_type = SEMICOLON;
 	p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
-	p->pa_argument[0] = "cat";
-	p->pa_argument[1] = "-e";
+	p->pa_argument[0] = ft_strdup("echo");
+	p->pa_argument[1] = ft_strdup("1234");
 	p->pa_argument[2] = NULL;
-	*/
-	pa_arg->next = NULL;
+	
+	p->next = (t_argument *)malloc(sizeof(t_argument));
+	p = p->next;
+	p->next_token_type = SEMICOLON;
+	p->pa_argument = (char **)malloc(sizeof(char *) * 3 + 1);
+	p->pa_argument[0] = ft_strdup("echo");
+	p->pa_argument[1] = ft_strdup("-n");
+	p->pa_argument[2] = ft_strdup("5678");
+	p->pa_argument[3] = NULL;
+
+	p->next = (t_argument *)malloc(sizeof(t_argument));
+	p = p->next;
+	p->next_token_type = SEMICOLON;
+	p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+	p->pa_argument[0] = ft_strdup("echo");
+	p->pa_argument[1] = ft_strdup("-n");
+	p->pa_argument[2] = NULL;
+
+	p->next = (t_argument *)malloc(sizeof(t_argument));
+	p = p->next;
+	p->next_token_type = SEMICOLON;
+	p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+	p->pa_argument[0] = ft_strdup("echo");
+	p->pa_argument[1] = NULL;
+
+	p->next = NULL;
 
 	ft_system(pa_arg);
 

@@ -152,21 +152,19 @@ void	ft_system(t_argument *argument)
 
 void	ft_free_argument(t_argument *pa_argument)
 {
-	t_argument *p;
-	t_argument *temp;
+	t_argument 	*p;
+	t_argument 	*temp;
+	int			i;
 
 	p = pa_argument;
 	while (p->next != NULL)
 	{
-		//free에서 pa_argument의 내부에 것 free안해주고 있음
-		/*
 		i = 0;
 		while (p->pa_argument[i] != NULL)
 		{
 			free(p->pa_argument[i]);
-			i++
+			i++;
 		}
-		*/
 		free(p->pa_argument);
 		temp = p->next;
 		free(p);

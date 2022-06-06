@@ -6,11 +6,26 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/06 15:56:22 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/06 16:18:44 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+int	ft_get_argument_size(t_token_lst *token)
+{
+	int	i;
+
+	i = 0;
+	while (token->token_type != EOL
+		&& token->token_type != SEMICOLON
+		&& token->token_type != PIPE)
+	{
+		++i;
+		token = token->next;
+	}
+	return (i);
+}
 
 t_argument	*ft_parse_token(t_lexer *l)
 {

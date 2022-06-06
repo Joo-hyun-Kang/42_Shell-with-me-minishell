@@ -6,11 +6,11 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/06 15:23:52 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/06 15:55:52 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenizer.h"
+#include "../../../include/minishell.h"
 
 t_token_lst	*ft_new_token(enum e_token_type type, char *str)
 {
@@ -66,6 +66,7 @@ char	*ft_strnjoin(char *dst, char *src, int n)
 	return (dst);
 }
 
+// FIXME: Memory allocation
 char	*ft_quote(char *str, t_lexer *l, char quote)
 {
 	int			start_pos;

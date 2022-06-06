@@ -6,11 +6,11 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 02:16:42 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/06 13:24:43 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/06 15:55:45 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "tokenizer.h"
+#include "../../../include/minishell.h"
 
 t_lexer	*ft_init_lexer(char *str)
 {

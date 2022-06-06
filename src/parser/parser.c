@@ -6,12 +6,11 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/06 13:49:24 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/06 15:56:22 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parser.h"
-#include "tokenizer/tokenizer.h"
+#include "../../include/minishell.h"
 
 t_argument	*ft_parse_token(t_lexer *l)
 {

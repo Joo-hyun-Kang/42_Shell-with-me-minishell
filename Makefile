@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/06 15:32:25 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/06 15:55:15 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,24 +22,32 @@ LIBFT_DIR		=	library/libft/
 LIBFT_INC		=	$(LIBFT_DIR)inc
 
 LIBFT_CP		=	-lft -L$(LIBFT_DIR)
+#--------------[ TOKENIZER ]-----------------
+TOKEN_DIR		=	src/parser/tokenizer
+TOKEN_SRC		=	token.c\
+					token_utils.c\
+					lexer.c
+#--------------[ PARSER ]----------------
+PARSER_DIR		=	src/parser
+PARSER_SRC		=	parser.c
 #--------------[ MINISHELL ]----------------
 NAME			=	minishell	
-INC_DIR			=	inc
 OBJ_DIR			=	objects
 SRC_DIR			=	src
 SRC				=	main.c
 
-SRCS			=	$(addprefix $(SRC_DIR)/, $(SRC))
-OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
+OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
+					$(addprefix $(OBJ_DIR)/, $(PARSER_SRC:.c=.o))\
+					$(addprefix $(OBJ_DIR)/, $(TOKEN_SRC:.c=.o))
 #-----------------[ CMD ]-------------------
 CC				=	gcc
 CFLAGS			=	-Wall -Wextra -Werror
-CPPFLAGS		=	-I $(INC)
+CPPFLAGS		=	-I include/minishell.h
 LDLIBS			=	$(LIBFT_CP)
 AR				=	ar -rcs
 RM				=	rm -rf
 
-vpath %.c $(SRC_DIR)
+vpath %.c $(SRC_DIR) $(TOKEN_DIR) $(PARSER_DIR)
 
 all: $(NAME)
 

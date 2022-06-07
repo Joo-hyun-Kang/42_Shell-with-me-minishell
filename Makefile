@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/07 02:09:19 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/07 16:43:24 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,11 +24,11 @@ LIBFT_INC		=	$(LIBFT_DIR)inc
 LIBFT_CP		=	-lft -L$(LIBFT_DIR)
 #--------------[ TOKENIZER ]-----------------
 TOKEN_DIR		=	src/parser/tokenizer
-TOKEN_SRC		=	token.c
-					#lexer.c
+TOKEN_SRC		=	token.c\
+					lexer.c
 #--------------[ PARSER ]----------------
 PARSER_DIR		=	src/parser
-PARSER_SRC		=	#parser.c
+PARSER_SRC		=	parser.c
 #--------------[ MINISHELL ]----------------
 NAME			=	minishell	
 OBJ_DIR			=	objects

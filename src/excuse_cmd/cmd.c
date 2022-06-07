@@ -297,45 +297,94 @@ int	main(int argc, char **argv, char **environ)
 	t_argument *pa_arg;
 	t_argument *p;
 
-	pa_arg = (t_argument *)malloc(sizeof(t_argument));
-	p = pa_arg;
-	
 	//echo
-	p->next_token_type = SEMICOLON;
-	p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
-	p->pa_argument[0] = ft_strdup("echo");
-	p->pa_argument[1] = ft_strdup("1234");
-	p->pa_argument[2] = NULL;
-	
-	p->next = (t_argument *)malloc(sizeof(t_argument));
-	p = p->next;
-	p->next_token_type = SEMICOLON;
-	p->pa_argument = (char **)malloc(sizeof(char *) * 3 + 1);
-	p->pa_argument[0] = ft_strdup("echo");
-	p->pa_argument[1] = ft_strdup("-n");
-	p->pa_argument[2] = ft_strdup("5678");
-	p->pa_argument[3] = NULL;
+	{
+		printf("Echo TEST\n");
+		
+		pa_arg = (t_argument *)malloc(sizeof(t_argument));
+		p = pa_arg;
+		
+		printf("my output is \n");
 
-	p->next = (t_argument *)malloc(sizeof(t_argument));
-	p = p->next;
-	p->next_token_type = SEMICOLON;
-	p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
-	p->pa_argument[0] = ft_strdup("echo");
-	p->pa_argument[1] = ft_strdup("-n");
-	p->pa_argument[2] = NULL;
+		p->next_token_type = SEMICOLON;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+		p->pa_argument[0] = ft_strdup("echo");
+		p->pa_argument[1] = ft_strdup("1234");
+		p->pa_argument[2] = NULL;
+		
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = SEMICOLON;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 3 + 1);
+		p->pa_argument[0] = ft_strdup("echo");
+		p->pa_argument[1] = ft_strdup("-n");
+		p->pa_argument[2] = ft_strdup("5678");
+		p->pa_argument[3] = NULL;
 
-	p->next = (t_argument *)malloc(sizeof(t_argument));
-	p = p->next;
-	p->next_token_type = SEMICOLON;
-	p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
-	p->pa_argument[0] = ft_strdup("echo");
-	p->pa_argument[1] = NULL;
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = SEMICOLON;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+		p->pa_argument[0] = ft_strdup("echo");
+		p->pa_argument[1] = ft_strdup("-n");
+		p->pa_argument[2] = NULL;
 
-	p->next = NULL;
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = SEMICOLON;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+		p->pa_argument[0] = ft_strdup("echo");
+		p->pa_argument[1] = NULL;
 
+		ft_system(pa_arg);
 
+		printf("\n");
 
+		printf("expectd output is \n");
+		printf("1234\n");
+		printf("5678\n");
+		printf("\n");
+	}
 
-	ft_system(pa_arg);
+	{
+		printf("Pwd TEST\n");
+		
+		pa_arg = (t_argument *)malloc(sizeof(t_argument));
+		p = pa_arg;
+		
+		printf("my output is \n");
+
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+		p->pa_argument[0] = ft_strdup("pwd");
+		p->pa_argument[1] = NULL;
+		
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+		p->pa_argument[0] = ft_strdup("pwd");
+		p->pa_argument[1] = ft_strdup("213213");
+		p->pa_argument[2] = NULL;
+
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 3 + 1);
+		p->pa_argument[0] = ft_strdup("pwd");
+		p->pa_argument[1] = ft_strdup("213213");
+		p->pa_argument[2] = ft_strdup("213213");
+		p->pa_argument[3] = NULL;
+
+		p->next = NULL;
+
+		ft_system(pa_arg);
+
+		printf("\n");
+ 
+		//printf("expectd output is \n");
+		//printf("1234\n");
+		//printf("5678\n");
+	}
 	
 }

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/07 19:10:13 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/07 23:34:02 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ t_argument	*ft_init_argument(void)
 }
 
 /*
+ * parse error
  * ARGUMENT 없는 리다이렉션 ) > a.txt
  * 리다이렉션 후 ARGUMENT가 없음 ) echo hello >
  * ARGUMENT 없는 파이프

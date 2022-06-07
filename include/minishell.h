@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/07 18:49:35 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/08 00:57:43 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,20 @@
 # define MINISHELL_H
 
 # include "../library/libft/inc/libft.h"
+# include <stdio.h>
 # include <stdbool.h>
-#include <stdio.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 # define TOKEN_RESERVED "|;><"
 # define TOKEN_SPACE " \r\v\f\n\t"
 # define TOKEN_QUOTE "\"'"
+# define BANNER "\n\n\n\
+     S  H  E  L  L          W  I  T  H          M  E\n\
+     -  -  -  -  -          -  -  -  -          -  -\n\
+                                                    \n\
+                                   Jokang   Kanghyki\n\
+                                   ------ & --------\n\n"
 
 enum e_token_type {
 	ARGUMENT,

@@ -6,162 +6,285 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/06 15:55:52 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/07 19:00:23 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-t_token_lst	*ft_new_token(enum e_token_type type, char *str)
+char	*ft_strndup(const char *src, size_t n)
 {
-	t_token_lst	*t;
+	size_t	i;
+	size_t	src_size;
+	char	*dup;
 
-	t = (t_token_lst *)malloc(sizeof(t_token_lst));
-	if (t == 0)
+	i = 0;
+	src_size = ft_strlen(src);
+	if (src_size < n)
+		n = src_size;
+	dup = (char *)malloc(sizeof(char) * (n + 1));
+	if (dup == 0)
 		return (0);
-	t->token_type = type;
-	t->pa_str_or_null = str;
-	t->next = 0;
-	return (t);
-}
-
-void	ft_read_char(t_lexer *l)
-{
-	if (l->read_pos >= ft_strlen(l->pa_str))
-		l->ch = 0;
-	else
+	while (i < n)
 	{
-		++l->read_pos;
-		l->ch = l->pa_str[l->read_pos];
+		dup[i] = src[i];
+		++i;
 	}
+	dup[i] = 0;
+	return (dup);
 }
 
-char	ft_lookup_char(t_lexer *l)
+char	*gnl_strjoin(char *s1, char *s2)
 {
-	if (l->read_pos >= ft_strlen(l->pa_str))
+	int		index;
+	char	*str;
+	char	*loc_s1;
+
+	index = 0;
+	loc_s1 = s1;
+	if (!s1 && !s2)
 		return (0);
-	return (l->pa_str[l->read_pos]);
-}
-
-char	ft_lookup_next_char(t_lexer *l)
-{
-	if (l->read_pos + 1 >= ft_strlen(l->pa_str))
-		return (0);
-	return (l->pa_str[l->read_pos + 1]);
-}
-
-void	ft_skip_whitespace(t_lexer *l)
-{
-	while (ft_strchr(" \r\v\f\n\t", ft_lookup_char(l)))
-		ft_read_char(l);
-}
-
-char	*ft_strnjoin(char *dst, char *src, int n)
-{
-	char	*tmp;
-
-	tmp = ft_strndup(src, n);
-	dst = ft_strjoin(dst, tmp);
-	free(tmp);
-	return (dst);
-}
-
-// FIXME: Memory allocation
-char	*ft_quote(char *str, t_lexer *l, char quote)
-{
-	int			start_pos;
-	int			flag = 0;
-
-	ft_read_char(l);
-	start_pos = l->read_pos;
-	while (ft_lookup_char(l) != 0)
+	else if (!s1 || !s2)
 	{
-		if (flag == 1 && ft_lookup_char(l) == ' ')
-		{
-			str = ft_strnjoin(str, &l->pa_str[start_pos], l->read_pos - start_pos);
-			break ;
-		}
-		else if (ft_lookup_char(l) == quote)
-		{
-			flag ^= 1;
-			str = ft_strnjoin(str, &l->pa_str[start_pos], l->read_pos - start_pos);
-			ft_read_char(l);
-			start_pos = l->read_pos;
-		}
+		if (!s1)
+			return (ft_strndup(s2, ft_strlen(s2)));
 		else
-			ft_read_char(l);
+			return (ft_strndup(s1, ft_strlen(s1)));
 	}
-	if (ft_lookup_char(l) == 0)
-		str = ft_strnjoin(str, &l->pa_str[start_pos], l->read_pos - start_pos);
-	else
-		ft_read_char(l);
-	if (flag == 0)
-		str = ft_strnjoin(str, &l->pa_str[start_pos], l->read_pos - start_pos);
+	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (!str)
+		return (0);
+	while (*s1)
+		str[index++] = *(s1++);
+	while (*s2)
+		str[index++] = *(s2++);
+	str[index] = 0;
+	free(loc_s1);
 	return (str);
 }
 
-char	*ft_read_argument(t_lexer *l)
+t_token_lst	*ft_init_token(char *pa_str, enum e_token_type token_type)
 {
-	int			start_pos;
-	char		*rst;
+	t_token_lst	*new_token;
 
-	start_pos = l->read_pos;
-	while (ft_strchr(TOKEN_SEPARATOR, ft_lookup_char(l)) == 0
-		&& ft_strchr(" \r\v\f\n\t", ft_lookup_char(l)) == 0
-		&& ft_strchr("\"'", ft_lookup_char(l)) == 0
-		&& ft_lookup_char(l) != 0)
-		ft_read_char(l);
-	rst = ft_strndup(&l->pa_str[start_pos], l->read_pos - start_pos);
-	if (ft_strchr("\"'", ft_lookup_char(l))) 
-		rst = ft_quote(rst, l, ft_lookup_char(l));
-	return (rst);
+	new_token = (t_token_lst *)malloc(sizeof(t_token_lst));
+	if (new_token == 0)
+		return (0);
+	ft_memset(new_token, 0, sizeof(t_token_lst));
+	new_token->pa_str = pa_str;
+	new_token->token_type = token_type;
+	return (new_token);
 }
 
-char	*ft_get_env(t_lexer *l)
+void	ft_read_char(t_lexer *out_lexer)
 {
-	(void)l;
-	return(ft_strndup("env", 3));
+	if (out_lexer->read_pos < ft_strlen(out_lexer->pa_str))
+		out_lexer->read_pos += 1;
 }
 
-t_token_lst *ft_create_next_token(t_lexer *l)
+char	ft_get_char(t_lexer *out_lexer)
 {
-	t_token_lst		*t;
+	return (out_lexer->pa_str[out_lexer->read_pos]);
+}
 
-	t = 0;
-	ft_skip_whitespace(l);
-	if (ft_strchr(TOKEN_SEPARATOR, ft_lookup_char(l)))
-	{
-		if (ft_lookup_char(l) == '|')
-			t = ft_new_token(PIPE, 0);
-		else if (ft_lookup_char(l) == ';')
-			t = ft_new_token(SEMICOLON, 0);
-		else if (ft_lookup_char(l) == '>')
-		{
-			if (ft_lookup_next_char(l) != '>')
-				t = ft_new_token(LT, 0);
-			else
-			{
-				t = ft_new_token(DLT, 0);
-				ft_read_char(l);
-			}
-		}
-		else if (ft_lookup_char(l) == '<')
-		{
-			if (ft_lookup_next_char(l) != '<')
-				t = ft_new_token(GT, 0);
-			else
-			{
-				t = ft_new_token(DGT, 0);
-				ft_read_char(l);
-			}
-		}
-		ft_read_char(l);
-	}
-	else if (ft_lookup_char(l) == '$')
-		t = ft_new_token(ARGUMENT, ft_get_env(l));
-	else if (ft_lookup_char(l) != 0)
-		t = ft_new_token(ARGUMENT, ft_read_argument(l));
+char	ft_peek_char(t_lexer *out_lexer)
+{
+	if (out_lexer->read_pos < ft_strlen(out_lexer->pa_str))
+		return (out_lexer->pa_str[out_lexer->read_pos + 1]);
+	return (0);
+}
+
+void	ft_skip_space(t_lexer *out_lexer)
+{
+	while (ft_strchr(TOKEN_SPACE, ft_get_char(out_lexer)) != 0)
+		ft_read_char(out_lexer);
+}
+
+int	ft_get_pos(t_lexer *lexer)
+{
+	return (lexer->read_pos);
+}
+
+void	ft_add_token(t_lexer *out_lexer, t_token_lst *new_token)
+{
+	t_token_lst	*iter;
+
+	if (out_lexer->head == 0)
+		out_lexer->head = new_token;
 	else
-		t = ft_new_token(EOL, 0);
-	return (t);
+	{
+		iter = out_lexer->head;
+		while (iter->next != 0)
+			iter = iter->next;
+		iter->next = new_token;
+	}
+}
+
+void	ft_tokenization_reserved(t_lexer *out_lexer)
+{
+	enum e_token_type	token_type;
+
+	token_type = 0;
+	if (ft_get_char(out_lexer) == ';')
+		token_type = SEMICOLON;
+	else if (ft_get_char(out_lexer) == '|')
+		token_type = PIPE;
+	else if (ft_get_char(out_lexer) == '<' && ft_peek_char(out_lexer) == '<')
+	{
+		token_type = DGT;
+		ft_read_char(out_lexer);
+	}
+	else if (ft_get_char(out_lexer) == '<')
+		token_type = GT;
+	else if (ft_get_char(out_lexer) == '>' && ft_peek_char(out_lexer) == '>')
+	{
+		token_type = DLT;
+		ft_read_char(out_lexer);
+	}
+	else if (ft_get_char(out_lexer) == '>')
+		token_type = LT;
+	ft_add_token(out_lexer, ft_init_token(0, token_type));
+	ft_read_char(out_lexer);
+}
+
+char	*ft_dquote(t_lexer *out_lexer, char *pa_str)
+{
+	int		start_pos;
+	int		is_closed;
+	char	*tmp;
+
+	is_closed = 0;
+	ft_read_char(out_lexer);
+	start_pos = ft_get_pos(out_lexer);
+	while (ft_get_char(out_lexer) != 0)
+	{
+		if (is_closed == 1 && ft_strchr(TOKEN_SPACE, ft_get_char(out_lexer) != 0))
+			break ;
+		if (ft_get_char(out_lexer) == '"')
+		{
+			is_closed ^= 1;
+			tmp = ft_strndup(&out_lexer->pa_str[start_pos], out_lexer->read_pos - start_pos);
+			pa_str = gnl_strjoin(pa_str, tmp);
+			free(tmp);
+			ft_read_char(out_lexer);
+			start_pos = ft_get_pos(out_lexer);
+		}
+		else if (ft_get_char(out_lexer) == '$')
+		{
+			tmp = ft_get_env(out_lexer);
+			pa_str = gnl_strjoin(pa_str, tmp);
+			free(tmp);
+			start_pos = ft_get_pos(out_lexer);
+		}
+		else
+			ft_read_char(out_lexer);
+	}
+	if (is_closed == 1 && ft_strchr(TOKEN_SPACE, ft_get_char(out_lexer) != 0))
+	{
+		tmp = ft_strndup(&out_lexer->pa_str[start_pos], out_lexer->read_pos - start_pos);
+		pa_str = gnl_strjoin(pa_str, tmp);
+		free(tmp);
+		ft_read_char(out_lexer);
+		return (pa_str);
+	}
+	if (is_closed == 0)
+		printf("dquote>\n");
+	return (pa_str);
+}
+
+char	*ft_squote(t_lexer *out_lexer, char *pa_str)
+{
+	int		start_pos;
+	int		is_closed;
+	char	*tmp;
+
+	is_closed = 0;
+	ft_read_char(out_lexer);
+	start_pos = ft_get_pos(out_lexer);
+	while (ft_get_char(out_lexer) != 0)
+	{
+		if (is_closed == 1 && ft_strchr(TOKEN_SPACE, ft_get_char(out_lexer) != 0))
+			break ;
+		if (ft_get_char(out_lexer) == '\'')
+		{
+			is_closed ^= 1;
+			tmp = ft_strndup(&out_lexer->pa_str[start_pos], out_lexer->read_pos - start_pos);
+			pa_str = gnl_strjoin(pa_str, tmp);
+			free(tmp);
+			ft_read_char(out_lexer);
+			start_pos = ft_get_pos(out_lexer);
+		}
+		else
+			ft_read_char(out_lexer);
+	}
+	if (is_closed == 1 && ft_strchr(TOKEN_SPACE, ft_get_char(out_lexer) != 0))
+	{
+		tmp = ft_strndup(&out_lexer->pa_str[start_pos], out_lexer->read_pos - start_pos);
+		pa_str = gnl_strjoin(pa_str, tmp);
+		free(tmp);
+		ft_read_char(out_lexer);
+		return (pa_str);
+	}
+	if (is_closed == 0)
+		printf("dquote>\n");
+	return (pa_str);
+}
+
+void	ft_tokenization_argument(t_lexer *out_lexer)
+{
+	int		start_pos;
+	char	*pa_dup_str;
+
+	pa_dup_str = 0;
+	start_pos = ft_get_pos(out_lexer);
+	while (ft_strchr(TOKEN_RESERVED, ft_get_char(out_lexer)) == 0
+			&& ft_strchr(TOKEN_SPACE, ft_get_char(out_lexer)) == 0
+			&& ft_strchr(TOKEN_QUOTE, ft_get_char(out_lexer)) == 0)
+		ft_read_char(out_lexer);
+	if (ft_get_pos(out_lexer) - start_pos != 0)
+		pa_dup_str = ft_strndup(&out_lexer->pa_str[start_pos], out_lexer->read_pos - start_pos);
+	if (ft_get_char(out_lexer) == '"')
+		pa_dup_str = ft_dquote(out_lexer, pa_dup_str);
+	else if (ft_get_char(out_lexer) == '\'')
+		pa_dup_str = ft_squote(out_lexer, pa_dup_str);
+	else if (ft_get_char(out_lexer) == '$')
+		pa_dup_str = ft_get_env(out_lexer);
+	ft_read_char(out_lexer);
+	ft_add_token(out_lexer, ft_init_token(pa_dup_str, ARGUMENT));
+}
+
+char	*ft_get_env(t_lexer *out_lexer)
+{
+	int		start_pos;
+	// char	*env;
+	// char	*env_key;
+
+	ft_read_char(out_lexer);
+	start_pos = ft_get_pos(out_lexer);
+	while (ft_strchr(TOKEN_RESERVED, ft_get_char(out_lexer)) == 0
+			&& ft_strchr(TOKEN_SPACE, ft_get_char(out_lexer)) == 0
+			&& ft_strchr(TOKEN_QUOTE, ft_get_char(out_lexer)) == 0)
+		ft_read_char(out_lexer);
+	/*
+	 * env = getenv(env_key);
+	 * free(env_key);
+	 * ft_add_token(out_lexer, ft_init_token(env, ARGUMENT));
+	 */
+	if (ft_get_pos(out_lexer) - start_pos != 0)
+		return (ft_strndup(&out_lexer->pa_str[start_pos], out_lexer->read_pos - start_pos));
+	else
+		return (ft_strndup("$", 1));
+}
+
+void	ft_tokenization(t_lexer *out_lexer)
+{
+	while (ft_get_char(out_lexer) != 0)
+	{
+		ft_skip_space(out_lexer);
+		if (ft_strchr(TOKEN_RESERVED, ft_get_char(out_lexer)) != 0)
+			ft_tokenization_reserved(out_lexer);
+		else if (ft_get_char(out_lexer) != 0)
+			ft_tokenization_argument(out_lexer);
+	}
+	ft_add_token(out_lexer, ft_init_token(0, EOL));
 }

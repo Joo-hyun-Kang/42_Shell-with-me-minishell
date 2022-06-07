@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/07 15:56:59 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/07 16:39:59 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,26 +60,25 @@ typedef struct s_lexer {
  * #########################################################
  */
 /* src/parser/tokenizer/token.c */
-char	*ft_strndup(const char *src, size_t n);
-char	*gnl_strjoin(char *s1, char *s2);
-t_token_lst	*ft_init_token(char *pa_str, enum e_token_type token_type);
-void	ft_read_char(t_lexer *out_lexer);
-char	ft_get_char(t_lexer *out_lexer);
-char	ft_peek_char(t_lexer *out_lexer);
-void	ft_skip_space(t_lexer *out_lexer);
-int	ft_get_pos(t_lexer *lexer);
-void	ft_add_token(t_lexer *out_lexer, t_token_lst *new_token);
-void	ft_tokenization_reserved(t_lexer *out_lexer);
-void	ft_tokenization_argument(t_lexer *out_lexer);
-void	ft_tokenization_quote(t_lexer *out_lexer, char *pa_str, char quote);
-char	*ft_get_env(t_lexer *out_lexer);
-char	*ft_dquote(t_lexer *out_lexer, char *pa_str);
-char	*ft_squote(t_lexer *out_lexer, char *pa_str);
-void	ft_tokenization(t_lexer *out_lexer);
+char			*ft_strndup(const char *src, size_t n);
+char			*gnl_strjoin(char *s1, char *s2);
+t_token_lst		*ft_init_token(char *pa_str, enum e_token_type token_type);
+void			ft_read_char(t_lexer *out_lexer);
+char			ft_get_char(t_lexer *out_lexer);
+char			ft_peek_char(t_lexer *out_lexer);
+void			ft_skip_space(t_lexer *out_lexer);
+int				ft_get_pos(t_lexer *lexer);
+void			ft_add_token(t_lexer *out_lexer, t_token_lst *new_token);
+void			ft_tokenization_reserved(t_lexer *out_lexer);
+void			ft_tokenization_argument(t_lexer *out_lexer);
+void			ft_tokenization_quote(t_lexer *out_lexer, char *pa_str, char quote);
+char			*ft_get_env(t_lexer *out_lexer);
+char			*ft_dquote(t_lexer *out_lexer, char *pa_str);
+char			*ft_squote(t_lexer *out_lexer, char *pa_str);
+void			ft_tokenization(t_lexer *out_lexer);
 
 /* src/parser/tokenizer/lexer.c */
-t_lexer				*ft_init_lexer(char *str);
-void				ft_analyze_string(t_lexer *out_l);
+t_lexer			*ft_init_lexer(char *str);
 
 /*
  * #########################################################

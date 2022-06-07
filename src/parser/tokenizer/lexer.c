@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 02:16:42 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/06 15:55:45 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/06 21:13:05 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,26 +19,36 @@ t_lexer	*ft_init_lexer(char *str)
 	l = (t_lexer *)malloc(sizeof(t_lexer));
 	if (l == 0)
 		return (0);
+	ft_memset(l, 0, sizeof(t_lexer));
 	l->pa_str = str;
-	l->read_pos = 0;
 	l->ch = *str;
-	l->head_token = 0;
 	return (l);
 }
 
-void	ft_analyze_string(t_lexer *out_l)
+void	ft_add_token(t_lexer *lexer, t_token_lst *token)
 {
-	t_token_lst		*t ;
-	t_token_lst		*iter;
+	t_token_lst	*iter;
 
-	t = ft_create_next_token(out_l);
-	out_l->head_token = t;
-	iter = out_l->head_token;
-	t = ft_create_next_token(out_l);
-	while (t != 0)
+	if (lexer->head_token == 0)
 	{
-		iter->next = t;
+		lexer->head_token = token;
+		return ;
+	}
+	iter = lexer->head_token;
+	while (iter->next)
 		iter = iter->next;
-		t = ft_create_next_token(out_l);
+	iter->next = token;
+}
+
+void	ft_analyze_string(t_lexer *lexer)
+{
+	t_token_lst		*token;
+
+	token = ft_create_next_token(lexer);
+	lexer->read_token = token;
+	while (token->token_type != EOL)
+	{
+		ft_add_token(lexer, token);
+		token = ft_create_next_token(lexer);
 	}
 }

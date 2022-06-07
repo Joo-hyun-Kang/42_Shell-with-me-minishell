@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/06 15:55:15 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/07 02:09:19 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,12 +24,11 @@ LIBFT_INC		=	$(LIBFT_DIR)inc
 LIBFT_CP		=	-lft -L$(LIBFT_DIR)
 #--------------[ TOKENIZER ]-----------------
 TOKEN_DIR		=	src/parser/tokenizer
-TOKEN_SRC		=	token.c\
-					token_utils.c\
-					lexer.c
+TOKEN_SRC		=	token.c
+					#lexer.c
 #--------------[ PARSER ]----------------
 PARSER_DIR		=	src/parser
-PARSER_SRC		=	parser.c
+PARSER_SRC		=	#parser.c
 #--------------[ MINISHELL ]----------------
 NAME			=	minishell	
 OBJ_DIR			=	objects
@@ -41,7 +40,7 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(TOKEN_SRC:.c=.o))
 #-----------------[ CMD ]-------------------
 CC				=	gcc
-CFLAGS			=	-Wall -Wextra -Werror
+CFLAGS			=	-Wall -Wextra -Werror -g
 CPPFLAGS		=	-I include/minishell.h
 LDLIBS			=	$(LIBFT_CP)
 AR				=	ar -rcs

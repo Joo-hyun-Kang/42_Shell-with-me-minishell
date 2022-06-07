@@ -216,15 +216,16 @@ void	ft_execute_echo(t_argument *argument)
 void	ft_execute_pwd(t_argument *argument)
 {
 	char		*pa_path;
-	int			i;
+	int			length;
 	const int	SIZE = 0;
 
 	//getcwd 매개변수로 NULL, size가 현재 path보다 작다면
 	//그러면 내부에서 path만큼 동적할당 해서 문자열을 반환해준다
-	i = COMMAND_ARG_POSITION;
-	if (argument->pa_argument[i] != NULL)
+	length = ft_get_length_2d_arr(argument->pa_argument);
+	if (length > 1)
 	{
 		ft_putstr_fd("pwd: too many arguments\n", STDOUT_FILENO);
+		return ;
 	}
 
 	pa_path = getcwd(NULL, SIZE);
@@ -234,6 +235,7 @@ void	ft_execute_pwd(t_argument *argument)
 	}
 
 	ft_putstr_fd(pa_path, STDOUT_FILENO);
+	ft_putchar_fd('\n', STDOUT_FILENO);
 }
 
 void	ft_execute_cd(t_argument *argument)

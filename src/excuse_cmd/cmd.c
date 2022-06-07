@@ -223,6 +223,7 @@ int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 
 int	main(int argc, char **argv, char **environ)
 {
+	/*
 	//Test Code
 	t_argument *pa_arg;
 	t_argument *p;
@@ -264,24 +265,37 @@ int	main(int argc, char **argv, char **environ)
 	p->next = NULL;
 
 	ft_system(pa_arg);
-
-
-
-
-	// 다음 예제 코드에서 printf가 2번 입력되는 문제가 있다
-	/*
-	pid_t child_pid = fork();
-
-	char *str[2];
-
-	str[0] = "ps";
-	str[1] = NULL;
-	if (child_pid == 0)
-	{
-		printf("HI I'm CHILD0\n");
-		execve("/bin/ps", NULL, NULL);
-	}
-	wait(NULL);
-	printf("HI I'm parent");
 	*/
+
+
+	if (argc != 2)
+	{
+		printf("%s\n", "argument error!");
+		exit(1);
+	}
+	
+	char *pa_p = getcwd(NULL, 10);
+	if (pa_p == NULL)
+	{
+		printf("%s\n", "pwd is error");
+		printf("%s\n", "cd will bed end");
+	}
+	printf("current path : %s\n", pa_p);
+	free(pa_p);
+	pa_p = NULL;
+
+	if (chdir(argv[1]) == -1)
+	{
+		printf("%s\n", "cd is error");
+	}
+
+	pa_p = getcwd(NULL, 10);
+	if (pa_p == NULL)
+	{
+		printf("%s\n", "pwd is error");
+		printf("%s\n", "cd will bed end");
+	}
+	printf("current path : %s\n", pa_p);
+	free(pa_p);
+	pa_p = NULL;
 }

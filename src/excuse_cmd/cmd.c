@@ -64,6 +64,8 @@ void	ft_system(t_argument *argument)
 		}
 		else if (is_pipe_on && (mult_command == SEMICOLON || mult_command == DGT || mult_command == EOL))
 		{
+			is_pipe_on = FALSE;
+			
 			//FD0 : STDIN -> PIPE IN
 			std_fd[PIPE_IN] = dup(STDIN_FILENO);
 
@@ -98,7 +100,7 @@ void	ft_system(t_argument *argument)
 			//내장 명령어 실행
 			if (bull_type == BUL_ECHO)
 				ft_execute_echo(argument);
-			else if (bull_type == BUL_CD)
+			else if (bull_type == BUL_CD && !is_pipe_on)
 				ft_execute_cd(argument);
 			else if (bull_type == BUL_PWD)
 				ft_execute_pwd(argument);
@@ -341,11 +343,6 @@ int	main(int argc, char **argv, char **environ)
 		ft_system(pa_arg);
 
 		printf("\n");
-
-		printf("expectd output is \n");
-		printf("1234\n");
-		printf("5678\n");
-		printf("\n");
 	}
 
 	{
@@ -383,10 +380,43 @@ int	main(int argc, char **argv, char **environ)
 		ft_system(pa_arg);
 
 		printf("\n");
- 
-		//printf("expectd output is \n");
-		//printf("1234\n");
-		//printf("5678\n");
+	}
+
+	{
+		printf("Cd TEST\n");
+		
+		pa_arg = (t_argument *)malloc(sizeof(t_argument));
+		p = pa_arg;
+		
+		printf("my output is \n");
+
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+		p->pa_argument[0] = ft_strdup("cd");
+		p->pa_argument[1] = NULL;
+		
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+		p->pa_argument[0] = ft_strdup("cd");
+		p->pa_argument[1] = ft_strdup("../");
+		p->pa_argument[2] = NULL;
+
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 3 + 1);
+		p->pa_argument[0] = ft_strdup("pwd");
+		p->pa_argument[1] = ft_strdup("213213");
+		p->pa_argument[2] = ft_strdup("213213");
+		p->pa_argument[3] = NULL;
+
+		p->next = NULL;
+
+		ft_system(pa_arg);
+
+		printf("\n");
 	}
 	
 }

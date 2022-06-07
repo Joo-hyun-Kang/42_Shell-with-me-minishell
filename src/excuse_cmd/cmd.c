@@ -98,6 +98,10 @@ void	ft_system(t_argument *argument)
 			//내장 명령어 실행
 			if (bull_type == BUL_ECHO)
 				ft_execute_echo(argument);
+			else if (bull_type == BUL_CD)
+				ft_execute_cd(argument);
+			else if (bull_type == BUL_PWD)
+				ft_execute_pwd(argument);
 		}
 		else
 		{
@@ -172,6 +176,18 @@ void	ft_free_argument(t_argument *pa_argument)
 	}
 }
 
+int	ft_get_length_2d_arr(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i] != NULL)
+	{
+		i++;
+	}
+	return (i);
+}
+
 void	ft_execute_echo(t_argument *argument)
 {
 	char	*p;
@@ -194,6 +210,60 @@ void	ft_execute_echo(t_argument *argument)
 	if (is_newline)
 	{
 		ft_putchar_fd('\n', STDOUT_FILENO);
+	}
+}
+
+void	ft_execute_pwd(t_argument *argument)
+{
+	char		*pa_path;
+	int			i;
+	const int	SIZE = 0;
+
+	//getcwd 매개변수로 NULL, size가 현재 path보다 작다면
+	//그러면 내부에서 path만큼 동적할당 해서 문자열을 반환해준다
+	i = COMMAND_ARG_POSITION;
+	if (argument->pa_argument[i] != NULL)
+	{
+		ft_putstr_fd("pwd: too many arguments\n", STDOUT_FILENO);
+	}
+
+	pa_path = getcwd(NULL, SIZE);
+	if (pa_path == NULL)
+	{
+		ft_putstr_fd("pwd: can't get current path\n", STDOUT_FILENO);
+	}
+
+	ft_putstr_fd(pa_path, STDOUT_FILENO);
+}
+
+void	ft_execute_cd(t_argument *argument)
+{
+	int			result;
+	int			length;
+	const int	CHDIR_ERROR = -1;
+	
+	length = ft_get_length_2d_arr(argument->pa_argument);
+	//Please check when argument 2 is, some cases is like no error
+	if (length == 3)
+	{
+		ft_put_str_fd("cd: string not in pwd: ", STDOUT_FILENO);
+		ft_put_str_fd(argument->pa_argument[length - 1], STDOUT_FILENO);
+		ft_put_char_fd('\n', STDOUT_FILENO);
+		return ;
+	}
+	if (length > 3)
+	{
+		ft_put_str_fd("cd: too many arguments\n", STDOUT_FILENO);
+		return ;
+	}
+
+	result = chdir(argument->pa_argument[length - 1]);
+
+	if (result == CHDIR_ERROR)
+	{
+		ft_put_str_fd("cd: no such file or directory: ", STDOUT_FILENO);
+		ft_put_str_fd(argument->pa_argument[length - 1], STDOUT_FILENO);
+		ft_put_char_fd('\n', STDOUT_FILENO);
 	}
 }
 

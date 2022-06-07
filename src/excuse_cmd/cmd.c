@@ -245,29 +245,36 @@ void	ft_execute_cd(t_argument *argument)
 	int			result;
 	int			length;
 	const int	CHDIR_ERROR = -1;
+	const int	SECOND_ARG = 1;
 	
 	length = ft_get_length_2d_arr(argument->pa_argument);
 	//Please check when argument 2 is, some cases is like no error
-	if (length == 3)
+	if (length > 2)
 	{
-		ft_putstr_fd("cd: string not in pwd: ", STDOUT_FILENO);
-		ft_putstr_fd(argument->pa_argument[length - 1], STDOUT_FILENO);
-		ft_putchar_fd('\n', STDOUT_FILENO);
-		return ;
-	}
-	if (length > 3)
-	{
-		ft_putstr_fd("cd: too many arguments\n", STDOUT_FILENO);
+		ft_putstr_fd("cd: ", STDOUT_FILENO);
+		ft_putstr_fd(argument->pa_argument[SECOND_ARG], STDOUT_FILENO);
+		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
 		return ;
 	}
 
-	result = chdir(argument->pa_argument[length - 1]);
+	if (length == 1)
+	{
+		result = chdir("/");
+	}
+	else if (length == 2)
+	{
+		result = chdir(argument->pa_argument[COMMAND_ARG_POSITION]);
+	}
+	else
+	{
+		ft_print_error();
+	}
 
 	if (result == CHDIR_ERROR)
 	{
-		ft_putstr_fd("cd: no such file or directory: ", STDOUT_FILENO);
+		ft_putstr_fd("cd: ", STDOUT_FILENO);
 		ft_putstr_fd(argument->pa_argument[length - 1], STDOUT_FILENO);
-		ft_putchar_fd('\n', STDOUT_FILENO);
+		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
 	}
 }
 
@@ -394,22 +401,60 @@ int	main(int argc, char **argv, char **environ)
 		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
 		p->pa_argument[0] = ft_strdup("cd");
 		p->pa_argument[1] = NULL;
+
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+		p->pa_argument[0] = ft_strdup("pwd");
+		p->pa_argument[1] = NULL;
 		
 		p->next = (t_argument *)malloc(sizeof(t_argument));
 		p = p->next;
 		p->next_token_type = EOL;
 		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
 		p->pa_argument[0] = ft_strdup("cd");
-		p->pa_argument[1] = ft_strdup("../");
+		p->pa_argument[1] = ft_strdup("bin");
 		p->pa_argument[2] = NULL;
 
 		p->next = (t_argument *)malloc(sizeof(t_argument));
 		p = p->next;
 		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 3 + 1);
+		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
 		p->pa_argument[0] = ft_strdup("pwd");
-		p->pa_argument[1] = ft_strdup("213213");
-		p->pa_argument[2] = ft_strdup("213213");
+		p->pa_argument[1] = NULL;
+
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+		p->pa_argument[0] = ft_strdup("cd");
+		p->pa_argument[1] = ft_strdup("~");
+		p->pa_argument[2] = NULL;
+
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+		p->pa_argument[0] = ft_strdup("pwd");
+		p->pa_argument[1] = NULL;
+
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+		p->pa_argument[0] = ft_strdup("cd");
+		p->pa_argument[1] = ft_strdup("2131313");
+		p->pa_argument[2] = NULL;
+		p->next = NULL;
+
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 3 + 1);
+		p->pa_argument[0] = ft_strdup("cd");
+		p->pa_argument[1] = ft_strdup("342424");
+		p->pa_argument[2] = ft_strdup("32131");
 		p->pa_argument[3] = NULL;
 
 		p->next = NULL;
@@ -418,5 +463,6 @@ int	main(int argc, char **argv, char **environ)
 
 		printf("\n");
 	}
+
 	
 }

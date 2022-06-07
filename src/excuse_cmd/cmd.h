@@ -23,7 +23,7 @@ enum e_bulltein_type {
 };
 
 void	ft_system(t_argument *argument);
-int		is_bulletin(char *command, enum e_bulltein_type out_type);
+int		is_bulletin(char *command, enum e_bulltein_type *out_type);
 void	ft_execute_echo(t_argument *argument);
 void	ft_print_error();
 void	ft_free_argument(t_argument *pa_argument);

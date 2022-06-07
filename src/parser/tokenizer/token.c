@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/07 17:13:47 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/07 19:00:23 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -270,7 +270,6 @@ char	*ft_get_env(t_lexer *out_lexer)
 	 * free(env_key);
 	 * ft_add_token(out_lexer, ft_init_token(env, ARGUMENT));
 	 */
-	printf("%s\n", &out_lexer->pa_str[out_lexer->read_pos]);
 	if (ft_get_pos(out_lexer) - start_pos != 0)
 		return (ft_strndup(&out_lexer->pa_str[start_pos], out_lexer->read_pos - start_pos));
 	else

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/07 18:46:05 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/07 19:10:13 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,9 @@ t_argument	*ft_command_to_argument(char *command)
 	lexer = ft_init_lexer(command);
 	if (lexer == 0)
 		return (0);
-	// 토큰화
 	ft_tokenization(lexer);
+	head = 0;
 	cur_token = lexer->head;
-	// 토큰들을 argument에 담기
 	while (cur_token->token_type != EOL)
 	{
 		// TODO: Malloc Execption
@@ -112,6 +111,7 @@ t_argument	*ft_command_to_argument(char *command)
 		if (cur_token == 0)
 			return (0);
 		ft_add_argument(&head, argument);
+		argument = 0;
 	}
-	return (argument);
+	return (head);
 }

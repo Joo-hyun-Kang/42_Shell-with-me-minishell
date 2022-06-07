@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 20:05:14 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/07 18:50:07 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/07 19:09:25 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,51 @@ int main(void)
 	ft_tokenization(lexer);
 	ft_print_token_test(lexer);
 	
-	t_lexer	*lexer2;
-	lexer2 = (t_lexer *)malloc(sizeof(t_lexer));
-	lexer2->pa_str = "echo front\"$ENVZZ what is your name\"rear";
-	printf("%s\n", lexer2->pa_str);
-	lexer2->read_pos = 0;
-	ft_tokenization(lexer2);
-	ft_print_token_test(lexer2);
-
-	arg = ft_command_to_argument("echo front\"$ENVZZ what is your name\"rear");
-	(void)arg;
-	while (*(arg->pa_argument) != 0)
+	arg = ft_command_to_argument("echo hello | wc -l | $ENV $ $cute ; echo Hello zzzzzzzzzz\"hello  what  is  your  name\"asdad\"asdas\"");
+	while (arg != 0)
 	{
-		printf("%s\n", *(arg->pa_argument));
-		++(arg->pa_argument);
+		printf("=============\n");
+		printf("{ next tokenType: %s }\n", t_type_str_test[arg->next_token_type]);
+		while (*(arg->pa_argument) != 0)
+		{
+			printf("{ arg->pa_argument: %s }\n", *(arg->pa_argument));
+			++(arg->pa_argument);
+		}
+		arg = arg->next;
 	}
+
+	arg = ft_command_to_argument("echo frontENVZZ what is your namerear | wc ; echo hi");
+	while (arg != 0)
+	{
+		printf("=============\n");
+		printf("{ next tokenType: %s }\n", t_type_str_test[arg->next_token_type]);
+		while (*(arg->pa_argument) != 0)
+		{
+			printf("{ arg->pa_argument: %s }\n", *(arg->pa_argument));
+			++(arg->pa_argument);
+		}
+		arg = arg->next;
+	}
+
+	arg = ft_command_to_argument("| echo hello");
+	while (arg != 0)
+	{
+		printf("=============\n");
+		printf("{ next tokenType: %s }\n", t_type_str_test[arg->next_token_type]);
+		while (*(arg->pa_argument) != 0)
+		{
+			printf("{ arg->pa_argument: %s }\n", *(arg->pa_argument));
+			++(arg->pa_argument);
+		}
+		arg = arg->next;
+	}
+//	t_lexer	*lexer2;
+//	lexer2 = (t_lexer *)malloc(sizeof(t_lexer));
+//	lexer2->pa_str = "echo front\"$ENVZZ what is your name\"rear";
+//	printf("%s\n", lexer2->pa_str);
+//	lexer2->read_pos = 0;
+//	ft_tokenization(lexer2);
+//	ft_print_token_test(lexer2);
+
 	return 0;
 }

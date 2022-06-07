@@ -336,36 +336,4 @@ int	main(int argc, char **argv, char **environ)
 
 	ft_system(pa_arg);
 	*/
-
-
-	if (argc != 2)
-	{
-		printf("%s\n", "argument error!");
-		exit(1);
-	}
-	
-	char *pa_p = getcwd(NULL, 10);
-	if (pa_p == NULL)
-	{
-		printf("%s\n", "pwd is error");
-		printf("%s\n", "cd will bed end");
-	}
-	printf("current path : %s\n", pa_p);
-	free(pa_p);
-	pa_p = NULL;
-
-	if (chdir(argv[1]) == -1)
-	{
-		printf("%s\n", "cd is error");
-	}
-
-	pa_p = getcwd(NULL, 10);
-	if (pa_p == NULL)
-	{
-		printf("%s\n", "pwd is error");
-		printf("%s\n", "cd will bed end");
-	}
-	printf("current path : %s\n", pa_p);
-	free(pa_p);
-	pa_p = NULL;
 }

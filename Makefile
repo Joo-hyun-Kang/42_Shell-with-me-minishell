@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/07 18:37:38 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/08 01:02:27 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,8 +20,6 @@ CLEAR			=	"\x1b[1A\x1b[M"
 LIBFT			=	$(LIBFT_DIR)libft.a
 LIBFT_DIR		=	library/libft/
 LIBFT_INC		=	$(LIBFT_DIR)inc
-
-LIBFT_CP		=	-lft -L$(LIBFT_DIR)
 #--------------[ TOKENIZER ]-----------------
 TOKEN_DIR		=	src/parser/tokenizer
 TOKEN_SRC		=	token.c\
@@ -41,8 +39,10 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 #-----------------[ CMD ]-------------------
 CC				=	gcc
 CFLAGS			=	-Wall -Wextra -Werror -g
-CPPFLAGS		=	-I include/minishell.h
-LDLIBS			=	$(LIBFT_CP)
+CPPFLAGS		=	-I include/minishell.h\
+					-I /opt/homebrew/opt/readline/include
+LDLIBS			=	-l ft -L $(LIBFT_DIR)\
+					-l readline -L /opt/homebrew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 

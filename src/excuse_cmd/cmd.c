@@ -246,14 +246,14 @@ void	ft_execute_cd(t_argument *argument)
 	//Please check when argument 2 is, some cases is like no error
 	if (length == 3)
 	{
-		ft_put_str_fd("cd: string not in pwd: ", STDOUT_FILENO);
-		ft_put_str_fd(argument->pa_argument[length - 1], STDOUT_FILENO);
-		ft_put_char_fd('\n', STDOUT_FILENO);
+		ft_putstr_fd("cd: string not in pwd: ", STDOUT_FILENO);
+		ft_putstr_fd(argument->pa_argument[length - 1], STDOUT_FILENO);
+		ft_putchar_fd('\n', STDOUT_FILENO);
 		return ;
 	}
 	if (length > 3)
 	{
-		ft_put_str_fd("cd: too many arguments\n", STDOUT_FILENO);
+		ft_putstr_fd("cd: too many arguments\n", STDOUT_FILENO);
 		return ;
 	}
 
@@ -261,9 +261,9 @@ void	ft_execute_cd(t_argument *argument)
 
 	if (result == CHDIR_ERROR)
 	{
-		ft_put_str_fd("cd: no such file or directory: ", STDOUT_FILENO);
-		ft_put_str_fd(argument->pa_argument[length - 1], STDOUT_FILENO);
-		ft_put_char_fd('\n', STDOUT_FILENO);
+		ft_putstr_fd("cd: no such file or directory: ", STDOUT_FILENO);
+		ft_putstr_fd(argument->pa_argument[length - 1], STDOUT_FILENO);
+		ft_putchar_fd('\n', STDOUT_FILENO);
 	}
 }
 
@@ -293,7 +293,6 @@ int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 
 int	main(int argc, char **argv, char **environ)
 {
-	/*
 	//Test Code
 	t_argument *pa_arg;
 	t_argument *p;
@@ -334,6 +333,9 @@ int	main(int argc, char **argv, char **environ)
 
 	p->next = NULL;
 
+
+
+
 	ft_system(pa_arg);
-	*/
+	
 }

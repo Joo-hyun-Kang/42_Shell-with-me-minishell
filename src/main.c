@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 20:05:14 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/07 15:45:10 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/07 18:50:07 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ void	ft_print_token_test(t_lexer *lexer)
 
 int main(void)
 {
-	t_lexer	*lexer;
+	t_lexer		*lexer;
+	t_argument	*arg;
 
 	lexer = (t_lexer *)malloc(sizeof(t_lexer));
 	lexer->pa_str = "echo hello | wc -l | $ENV $ $cute ; echo Hello zzzzzzzzzz\"hello  what  is  your  name\"asdad\"asdas\"";
@@ -44,5 +45,13 @@ int main(void)
 	lexer2->read_pos = 0;
 	ft_tokenization(lexer2);
 	ft_print_token_test(lexer2);
+
+	arg = ft_command_to_argument("echo front\"$ENVZZ what is your name\"rear");
+	(void)arg;
+	while (*(arg->pa_argument) != 0)
+	{
+		printf("%s\n", *(arg->pa_argument));
+		++(arg->pa_argument);
+	}
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/07 16:39:59 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/07 18:49:35 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,17 @@ typedef struct s_token_lst {
 	struct s_token_lst		*next;
 } t_token_lst;
 
-typedef struct s_argument {
-	enum e_token_type	next_token_type;
-	char				**pa_argument;
-	char				*use_only_redirection;
-	struct s_argument	*next;
-} t_argument;
-
 typedef struct s_lexer {
 	char					*pa_str;
 	int						read_pos;
 	struct s_token_lst		*head;
 } t_lexer;
+
+typedef struct s_argument {
+	enum e_token_type		next_token_type;
+	char					**pa_argument;
+	struct s_argument		*next;
+} t_argument;
 
 /*
  * #########################################################
@@ -89,14 +88,10 @@ t_lexer			*ft_init_lexer(char *str);
  */
 /* src/parser/parser.c */
 t_argument			*ft_init_argument(void);
-char				**ft_init_pa_argument(int size);
-int					ft_get_pa_argument_size(t_lexer *lexer);
-void				ft_read_token(t_lexer *lexer);
-t_token_lst	*ft_lookup_token(t_lexer *lexer);
-t_argument			*ft_create_argument(t_lexer *lexer);
-t_argument			*ft_add_argument(t_argument *head, t_argument *add);
-t_argument			*ft_parse_token(t_lexer *lexer);
-/* API */
-t_argument			*ft_parse_command(char *command);
+int					ft_argument_size(t_token_lst *cur_token);
+void				ft_add_argument(t_argument **head, t_argument *argument);
+t_token_lst			*ft_read_token(t_token_lst *cur_token, t_argument *argument, int index);
+t_token_lst			*ft_read_token_only_type_argument(t_token_lst *cur_token, t_argument *argument, int index);
+t_argument			*ft_command_to_argument(char *command);
 
 #endif

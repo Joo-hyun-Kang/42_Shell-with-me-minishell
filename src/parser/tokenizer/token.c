@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/07 16:35:41 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/07 17:13:47 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,9 +194,40 @@ char	*ft_dquote(t_lexer *out_lexer, char *pa_str)
 
 char	*ft_squote(t_lexer *out_lexer, char *pa_str)
 {
-	(void)out_lexer;
-	(void)pa_str;
-	return (0);
+	int		start_pos;
+	int		is_closed;
+	char	*tmp;
+
+	is_closed = 0;
+	ft_read_char(out_lexer);
+	start_pos = ft_get_pos(out_lexer);
+	while (ft_get_char(out_lexer) != 0)
+	{
+		if (is_closed == 1 && ft_strchr(TOKEN_SPACE, ft_get_char(out_lexer) != 0))
+			break ;
+		if (ft_get_char(out_lexer) == '\'')
+		{
+			is_closed ^= 1;
+			tmp = ft_strndup(&out_lexer->pa_str[start_pos], out_lexer->read_pos - start_pos);
+			pa_str = gnl_strjoin(pa_str, tmp);
+			free(tmp);
+			ft_read_char(out_lexer);
+			start_pos = ft_get_pos(out_lexer);
+		}
+		else
+			ft_read_char(out_lexer);
+	}
+	if (is_closed == 1 && ft_strchr(TOKEN_SPACE, ft_get_char(out_lexer) != 0))
+	{
+		tmp = ft_strndup(&out_lexer->pa_str[start_pos], out_lexer->read_pos - start_pos);
+		pa_str = gnl_strjoin(pa_str, tmp);
+		free(tmp);
+		ft_read_char(out_lexer);
+		return (pa_str);
+	}
+	if (is_closed == 0)
+		printf("dquote>\n");
+	return (pa_str);
 }
 
 void	ft_tokenization_argument(t_lexer *out_lexer)

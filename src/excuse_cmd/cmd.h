@@ -8,8 +8,8 @@
 #define FALSE (0)
 #endif
 
-#define PIPE_IN (0)
-#define PIPE_OUT (1)
+#define PIPE_READ (0)
+#define PIPE_WRITE (1)
 
 #define NULL_POSITOIN (1)
 #define BIN_SH_POSIOTON (1)

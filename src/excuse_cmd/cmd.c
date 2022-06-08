@@ -27,12 +27,12 @@ void	ft_system(t_argument *argument)
 	enum e_token_type		mult_command;
 	char					*command;
 	enum e_bulltein_type	bull_type;
-	int						pipe_fd[PIPE_COUNT];
-	int						std_fd[PIPE_COUNT];
+	int						fd_pipe[PIPE_COUNT];
+	int						fd_temp;
 	int						is_pipe_on;
 
 	// Create pipe
-	if (pipe(pipe_fd) == PIPE_ERROR)
+	if (pipe(fd_pipe) == PIPE_ERROR)
 		ft_print_error();
 
 	// Reserve before argument's address for Free
@@ -50,47 +50,29 @@ void	ft_system(t_argument *argument)
 			is_pipe_on = TRUE;
 
 			//FD1 : STDOUT -> PIPE OUT
-			std_fd[PIPE_OUT] = dup(STDOUT_FILENO);
+			fd_temp = dup(STDOUT_FILENO);
 
-			if (pipe_fd[PIPE_OUT] != STDOUT_FILENO)
-			{
-				dup2(pipe_fd[PIPE_OUT], STDOUT_FILENO);
-				close(pipe_fd[PIPE_OUT]);
-			}
-			else
-			{
-				ft_print_error();
-			}
+			// 파이프 실패 예외처리 해줄것
+			dup2(fd_pipe[PIPE_WRITE], STDOUT_FILENO);
+			close(fd_pipe[PIPE_WRITE]);
+		
 		}
-		else if (is_pipe_on && (mult_command == SEMICOLON || mult_command == DGT || mult_command == EOL))
+		else if (is_pipe_on && (mult_command == SEMICOLON || mult_command == DGT || mult_command == EOL || mult_command == ARGUMENT))
 		{
 			is_pipe_on = FALSE;
 
-			//FD0 : STDIN -> PIPE IN
-			std_fd[PIPE_IN] = dup(STDIN_FILENO);
-
-			if (pipe_fd[PIPE_IN] != STDIN_FILENO)
-			{
-				dup2(pipe_fd[PIPE_IN], STDIN_FILENO);
-				close(pipe_fd[PIPE_IN]);
-			}
-			else
-			{
-				ft_print_error();
-			}
 
 			//FD1 : PIPE OUT -> STDOUT
-			pipe_fd[PIPE_OUT] = dup(STDOUT_FILENO);
+			// 파이프 실패 예외처리 해줄것
+			//fd_pipe[PIPE_WRITE] = dup(STDOUT_FILENO);
+			dup2(fd_temp, STDOUT_FILENO);
+			close(fd_temp);
 
-			if (std_fd[PIPE_OUT] != STDOUT_FILENO)
-			{
-				dup2(std_fd[PIPE_OUT], STDOUT_FILENO);
-				close(std_fd[PIPE_OUT]);
-			}
-			else
-			{
-				ft_print_error();
-			}
+			//FD0 : STDIN -> PIPE IN
+			fd_temp = dup(STDIN_FILENO);
+			// 파이프 실패 예외처리 해줄것
+			dup2(fd_pipe[PIPE_READ], STDIN_FILENO);
+			close(fd_pipe[PIPE_READ]);
 		}
 
 		//DGT, 세미콜론이라면 명령을 그냥 다음으로 가면 되고 eof라면 그냥 나가면 된다
@@ -123,7 +105,7 @@ void	ft_system(t_argument *argument)
 				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
 				ft_get_sh_command(argument->pa_argument, pa_copy_argument);
 				//ft_free_command(pa_copy_argument);
-				for (int i = 0; i < length + 3; ++i)
+				for (int i = 0; i < length + 2; ++i)
 				{
 					printf("%s\n", pa_copy_argument[i]);
 				}
@@ -147,21 +129,26 @@ void	ft_system(t_argument *argument)
 		argument = argument->next;
 	}
 
+	/*
 	//FD0 : FIFE_IN -> STDIN
-	pipe_fd[PIPE_IN] = dup(STDIN_FILENO);
+	fd_pipe[PIPE_READ] = dup(STDIN_FILENO);
 
-	if (std_fd[PIPE_IN] != STDIN_FILENO)
+	if (std_fd[PIPE_READ] != STDIN_FILENO)
 	{
-		dup2(std_fd[PIPE_IN], STDIN_FILENO);
-		close(std_fd[PIPE_IN]);
+		dup2(std_fd[PIPE_READ], STDIN_FILENO);
+		close(std_fd[PIPE_READ]);
 	}
 	else
 	{
 		ft_print_error();
 	}
+	*/
 
-	close(pipe_fd[PIPE_OUT]);
-	close(pipe_fd[PIPE_IN]);
+	//close(fd_pipe[PIPE_WRITE]);
+	//close(fd_pipe[PIPE_READ]);
+
+	dup2(fd_temp, STDIN_FILENO);
+	close(fd_temp);
 
 	ft_free_argument(pa_orgin_argument);
 }
@@ -345,220 +332,251 @@ int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 	return(TRUE);
 }
 
-/*
-int	main(int argc, char **argv, char **environ)
-{
-	//Test Code
-	t_argument *pa_arg;
-	t_argument *p;
-	//echo
-	{
-		printf("Echo TEST\n");
 
-		pa_arg = (t_argument *)malloc(sizeof(t_argument));
-		p = pa_arg;
+// int	main(int argc, char **argv, char **environ)
+// {
+	
+// 	//Test Code
+// 	t_argument *pa_arg;
+// 	t_argument *p;
+	
+// 	/*
+// 	//echo
+// 	{
+// 		printf("Echo TEST\n");
 
-		printf("my output is \n");
+// 		pa_arg = (t_argument *)malloc(sizeof(t_argument));
+// 		p = pa_arg;
 
-		p->next_token_type = SEMICOLON;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
-		p->pa_argument[0] = ft_strdup("echo");
-		p->pa_argument[1] = ft_strdup("1234");
-		p->pa_argument[2] = NULL;
+// 		printf("my output is \n");
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = SEMICOLON;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 3 + 1);
-		p->pa_argument[0] = ft_strdup("echo");
-		p->pa_argument[1] = ft_strdup("-n");
-		p->pa_argument[2] = ft_strdup("5678");
-		p->pa_argument[3] = NULL;
+// 		p->next_token_type = SEMICOLON;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+// 		p->pa_argument[0] = ft_strdup("echo");
+// 		p->pa_argument[1] = ft_strdup("1234");
+// 		p->pa_argument[2] = NULL;
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = SEMICOLON;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
-		p->pa_argument[0] = ft_strdup("echo");
-		p->pa_argument[1] = ft_strdup("-n");
-		p->pa_argument[2] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = SEMICOLON;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 3 + 1);
+// 		p->pa_argument[0] = ft_strdup("echo");
+// 		p->pa_argument[1] = ft_strdup("-n");
+// 		p->pa_argument[2] = ft_strdup("5678");
+// 		p->pa_argument[3] = NULL;
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = SEMICOLON;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
-		p->pa_argument[0] = ft_strdup("echo");
-		p->pa_argument[1] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = SEMICOLON;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+// 		p->pa_argument[0] = ft_strdup("echo");
+// 		p->pa_argument[1] = ft_strdup("-n");
+// 		p->pa_argument[2] = NULL;
 
-		ft_system(pa_arg);
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = SEMICOLON;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+// 		p->pa_argument[0] = ft_strdup("echo");
+// 		p->pa_argument[1] = NULL;
 
-		printf("\n");
-	}
+// 		ft_system(pa_arg);
 
-	//Pwd
-	{
-		printf("Pwd TEST\n");
+// 		printf("\n");
+// 	}
 
-		pa_arg = (t_argument *)malloc(sizeof(t_argument));
-		p = pa_arg;
+// 	//Pwd
+// 	{
+// 		printf("Pwd TEST\n");
 
-		printf("my output is \n");
+// 		pa_arg = (t_argument *)malloc(sizeof(t_argument));
+// 		p = pa_arg;
 
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
-		p->pa_argument[0] = ft_strdup("pwd");
-		p->pa_argument[1] = NULL;
+// 		printf("my output is \n");
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
-		p->pa_argument[0] = ft_strdup("pwd");
-		p->pa_argument[1] = ft_strdup("213213");
-		p->pa_argument[2] = NULL;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+// 		p->pa_argument[0] = ft_strdup("pwd");
+// 		p->pa_argument[1] = NULL;
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 3 + 1);
-		p->pa_argument[0] = ft_strdup("pwd");
-		p->pa_argument[1] = ft_strdup("213213");
-		p->pa_argument[2] = ft_strdup("213213");
-		p->pa_argument[3] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+// 		p->pa_argument[0] = ft_strdup("pwd");
+// 		p->pa_argument[1] = ft_strdup("213213");
+// 		p->pa_argument[2] = NULL;
 
-		p->next = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 3 + 1);
+// 		p->pa_argument[0] = ft_strdup("pwd");
+// 		p->pa_argument[1] = ft_strdup("213213");
+// 		p->pa_argument[2] = ft_strdup("213213");
+// 		p->pa_argument[3] = NULL;
 
-		ft_system(pa_arg);
+// 		p->next = NULL;
 
-		printf("\n");
-	}
+// 		ft_system(pa_arg);
 
-	//Cd
-	{
-		printf("Cd TEST\n");
+// 		printf("\n");
+// 	}
 
-		pa_arg = (t_argument *)malloc(sizeof(t_argument));
-		p = pa_arg;
+// 	//Cd
+// 	{
+// 		printf("Cd TEST\n");
 
-		printf("my output is \n");
+// 		pa_arg = (t_argument *)malloc(sizeof(t_argument));
+// 		p = pa_arg;
 
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
-		p->pa_argument[0] = ft_strdup("cd");
-		p->pa_argument[1] = NULL;
+// 		printf("my output is \n");
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
-		p->pa_argument[0] = ft_strdup("pwd");
-		p->pa_argument[1] = NULL;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+// 		p->pa_argument[0] = ft_strdup("cd");
+// 		p->pa_argument[1] = NULL;
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
-		p->pa_argument[0] = ft_strdup("cd");
-		p->pa_argument[1] = ft_strdup("bin");
-		p->pa_argument[2] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+// 		p->pa_argument[0] = ft_strdup("pwd");
+// 		p->pa_argument[1] = NULL;
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
-		p->pa_argument[0] = ft_strdup("pwd");
-		p->pa_argument[1] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+// 		p->pa_argument[0] = ft_strdup("cd");
+// 		p->pa_argument[1] = ft_strdup("bin");
+// 		p->pa_argument[2] = NULL;
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
-		p->pa_argument[0] = ft_strdup("cd");
-		p->pa_argument[1] = ft_strdup("~");
-		p->pa_argument[2] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+// 		p->pa_argument[0] = ft_strdup("pwd");
+// 		p->pa_argument[1] = NULL;
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
-		p->pa_argument[0] = ft_strdup("pwd");
-		p->pa_argument[1] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+// 		p->pa_argument[0] = ft_strdup("cd");
+// 		p->pa_argument[1] = ft_strdup("~");
+// 		p->pa_argument[2] = NULL;
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
-		p->pa_argument[0] = ft_strdup("cd");
-		p->pa_argument[1] = ft_strdup("2131313");
-		p->pa_argument[2] = NULL;
-		p->next = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+// 		p->pa_argument[0] = ft_strdup("pwd");
+// 		p->pa_argument[1] = NULL;
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 3 + 1);
-		p->pa_argument[0] = ft_strdup("cd");
-		p->pa_argument[1] = ft_strdup("342424");
-		p->pa_argument[2] = ft_strdup("32131");
-		p->pa_argument[3] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 2 + 1);
+// 		p->pa_argument[0] = ft_strdup("cd");
+// 		p->pa_argument[1] = ft_strdup("2131313");
+// 		p->pa_argument[2] = NULL;
+// 		p->next = NULL;
 
-		p->next = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * 3 + 1);
+// 		p->pa_argument[0] = ft_strdup("cd");
+// 		p->pa_argument[1] = ft_strdup("342424");
+// 		p->pa_argument[2] = ft_strdup("32131");
+// 		p->pa_argument[3] = NULL;
 
-		ft_system(pa_arg);
+// 		p->next = NULL;
 
-		printf("\n");
-	}
+// 		ft_system(pa_arg);
 
+// 		printf("\n");
+// 	}
 
-	//execuse
-	{
-		printf("execuse TEST\n");
+	
+// 	//execuse
+// 	{
+// 		printf("execuse TEST\n");
 
-		pa_arg = (t_argument *)malloc(sizeof(t_argument));
-		p = pa_arg;
+// 		pa_arg = (t_argument *)malloc(sizeof(t_argument));
+// 		p = pa_arg;
 
-		printf("my output is \n");
+// 		printf("my output is \n");
 
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
-		p->pa_argument[0] = ft_strdup("ls");
-		p->pa_argument[1] = NULL;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+// 		p->pa_argument[0] = ft_strdup("ls");
+// 		p->pa_argument[1] = NULL;
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1 + 1));
-		p->pa_argument[0] = ft_strdup("cd");
-		p->pa_argument[1] = ft_strdup("../");
-		p->pa_argument[2] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1 + 1));
+// 		p->pa_argument[0] = ft_strdup("cd");
+// 		p->pa_argument[1] = ft_strdup("../");
+// 		p->pa_argument[2] = NULL;
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
-		p->pa_argument[0] = ft_strdup("pwd");
-		p->pa_argument[1] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+// 		p->pa_argument[0] = ft_strdup("pwd");
+// 		p->pa_argument[1] = NULL;
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
-		p->pa_argument[0] = ft_strdup("./a.out");
-		p->pa_argument[1] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+// 		p->pa_argument[0] = ft_strdup("./a.out");
+// 		p->pa_argument[1] = NULL;
 
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1 + 1));
-		p->pa_argument[0] = ft_strdup("ls");
-		p->pa_argument[1] = ft_strdup("a");
-		p->pa_argument[2] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1 + 1));
+// 		p->pa_argument[0] = ft_strdup("ls");
+// 		p->pa_argument[1] = ft_strdup("a");
+// 		p->pa_argument[2] = NULL;
 
-		p->next = NULL;
+// 		p->next = NULL;
 
-		ft_system(pa_arg);
+// 		ft_system(pa_arg);
 
-		printf("END!\n");
-	}
-}
-*/
+// 		printf("END!\n");
+// 	}
+// 	*/
+
+	
+// 	{
+// 		printf("execuse TEST\n");
+
+// 		pa_arg = (t_argument *)malloc(sizeof(t_argument));
+// 		p = pa_arg;
+
+// 		printf("my output is \n");
+
+// 		p->next_token_type = PIPE;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+// 		p->pa_argument[0] = ft_strdup("ls");
+// 		p->pa_argument[1] = NULL;
+
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+// 		p->pa_argument[0] = ft_strdup("wc");
+// 		p->pa_argument[1] = NULL;
+
+// 		p->next = NULL;
+
+// 		ft_system(pa_arg);
+
+// 		printf("END!\n");
+// 	}
+// }

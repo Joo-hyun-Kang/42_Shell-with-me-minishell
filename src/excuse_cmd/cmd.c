@@ -107,6 +107,8 @@ void	ft_system(t_argument *argument)
 		}
 		else
 		{
+			char **pa_copy_argument = NULL;
+			
 			pid_t child_pid;
 			child_pid = fork();
 
@@ -114,21 +116,12 @@ void	ft_system(t_argument *argument)
 			{
 				ft_print_error();
 			}
-			else if (child_pid > 0)
+			else if (child_pid == 0)
 			{
-				
-				//char *pa_temp = ft_strjoin("/bin/", command);
-				
 				int length = ft_get_length_2d_arr(argument->pa_argument);
-				char **pa_copy_argument = (char **)malloc(sizeof(char *) * length + 1 + 1 + 1);
-				ft_strjoin_2d_arr(argument->pa_argument, "-c", pa_copy_argument);
-				int i = 0;
-				while (pa_copy_argument[i])
-				{
-					printf("%s\n", pa_copy_argument[i]);
-					i++;
-				}
-				//"/bin/sh" "-c" "ls"
+				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
+				ft_get_sh_command(argument->pa_argument, pa_copy_argument);
+				//ft_free_command(pa_copy_argument);
 				execve("/bin/sh", pa_copy_argument, NULL);
 				printf("this is execuse Error");
 			}
@@ -138,12 +131,14 @@ void	ft_system(t_argument *argument)
 				wait(NULL);
 				printf("%s\n", "Hi i'm perent");
 			}
-			
 			// 자식프로세스 제작해서 excuse
 			// 만약에 여기서 fork를 한다고 하면
 			// 어떻게 될까?
-
 			// 내장 명령어에서 파이프를 쓴다고 하면 자식 프로세스 간의 가
+			if (pa_copy_argument != NULL)
+			{
+				ft_free_command(pa_copy_argument);
+			}
 		}
 		argument = argument->next;
 	}
@@ -189,6 +184,19 @@ void	ft_free_argument(t_argument *pa_argument)
 	}
 }
 
+void	ft_free_command(char **pa_char)
+{
+	int i;
+
+	i = 0;
+	while (pa_char[i] != NULL)
+	{
+		free(pa_char[i]);
+		i++;
+	}
+	free(pa_char);
+}
+
 int	ft_get_length_2d_arr(char **array)
 {
 	int	i;
@@ -201,24 +209,24 @@ int	ft_get_length_2d_arr(char **array)
 	return (i);
 }
 
-void	ft_strjoin_2d_arr(char **src_2d, char *src_string, char **out_dst)
+void	ft_get_sh_command(char **src_2d, char **out_dst)
 {
 	int	i;
 	int j;
 	int	length;
 
-	out_dst[0] = ft_strdup("/bin/sh");
-	out_dst[1] = ft_strdup("-c");
-
 	i = 0;
-	j = 2;
-	while (src_2d[i] != NULL)
+	out_dst[i++] = ft_strdup("/bin/sh");
+	out_dst[i++] = ft_strdup("-c");
+
+	j = 0;
+	while (src_2d[j] != NULL)
 	{
-		out_dst[j] = src_2d[i];
+		out_dst[i] = ft_strdup(src_2d[j]);
 		i++;
 		j++;
 	}
-	out_dst[j] = NULL;
+	out_dst[i] = NULL;
 }
 
 void	ft_execute_echo(t_argument *argument)
@@ -333,6 +341,7 @@ int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 	return(TRUE);
 }
 
+/*
 int	main(int argc, char **argv, char **environ)
 {
 	//Test Code
@@ -496,7 +505,7 @@ int	main(int argc, char **argv, char **environ)
 
 		printf("\n");
 	}
-	*/
+	
 
 	//execuse
 	{
@@ -508,15 +517,45 @@ int	main(int argc, char **argv, char **environ)
 		printf("my output is \n");
 
 		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
 		p->pa_argument[0] = ft_strdup("ls");
 		p->pa_argument[1] = NULL;
+
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1 + 1));
+		p->pa_argument[0] = ft_strdup("cd");
+		p->pa_argument[1] = ft_strdup("../");
+		p->pa_argument[2] = NULL;
+
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+		p->pa_argument[0] = ft_strdup("pwd");
+		p->pa_argument[1] = NULL;
+
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+		p->pa_argument[0] = ft_strdup("./a.out");
+		p->pa_argument[1] = NULL;
+
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1 + 1));
+		p->pa_argument[0] = ft_strdup("ls");
+		p->pa_argument[1] = ft_strdup("a");
+		p->pa_argument[2] = NULL;
 
 		p->next = NULL;
 
 		ft_system(pa_arg);
 
-		printf("\n");
+		printf("END!\n");
 	}
-	
 }
+*/

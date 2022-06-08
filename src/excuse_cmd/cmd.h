@@ -11,6 +11,10 @@
 #define PIPE_IN (0)
 #define PIPE_OUT (1)
 
+#define NULL_POSITOIN (1)
+#define BIN_SH_POSIOTON (1)
+#define BIN_SH_ARG_POSITION (1)
+
 enum e_bulltein_type {
     BUL_ECHO,
     BUL_CD,
@@ -34,4 +38,5 @@ int		is_bulletin(char *command, enum e_bulltein_type *out_type);
 void	ft_print_error();
 void	ft_free_argument(t_argument *pa_argument);
 int     ft_get_length_2d_arr(char **array);
-void	ft_strjoin_2d_arr(char **src_2d, char *src_string, char **out_dst);
+void	ft_get_sh_command(char **src_2d, char **out_dst);
+void	ft_free_command(char **pa_char);

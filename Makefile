@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/08 01:02:27 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/08 20:08:25 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,9 @@ TOKEN_SRC		=	token.c\
 #--------------[ PARSER ]----------------
 PARSER_DIR		=	src/parser
 PARSER_SRC		=	parser.c
+#--------------[ EXCUSE ]----------------
+EXCUSE_DIR		=	src/excuse_cmd
+EXCUSE_SRC		=	cmd.c
 #--------------[ MINISHELL ]----------------
 NAME			=	minishell	
 OBJ_DIR			=	objects
@@ -35,18 +38,20 @@ SRC				=	main.c
 
 OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(PARSER_SRC:.c=.o))\
-					$(addprefix $(OBJ_DIR)/, $(TOKEN_SRC:.c=.o))
+					$(addprefix $(OBJ_DIR)/, $(TOKEN_SRC:.c=.o))\
+					$(addprefix $(OBJ_DIR)/, $(EXCUSE_SRC:.c=.o))
 #-----------------[ CMD ]-------------------
 CC				=	gcc
-CFLAGS			=	-Wall -Wextra -Werror -g
-CPPFLAGS		=	-I include/minishell.h\
-					-I /opt/homebrew/opt/readline/include
+CFLAGS			=	# -Wall -Wextra -Werror -g
+CPPFLAGS		=	-I include\
+					-I $(EXCUSE_DIR)\
+					-I /Users/kanghyki/.brew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /opt/homebrew/opt/readline/lib
+					-l readline -L /Users/kanghyki/.brew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 
-vpath %.c $(SRC_DIR) $(TOKEN_DIR) $(PARSER_DIR)
+vpath %.c $(SRC_DIR) $(TOKEN_DIR) $(PARSER_DIR) $(EXCUSE_DIR)
 
 all: $(NAME)
 

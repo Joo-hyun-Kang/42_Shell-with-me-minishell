@@ -35,9 +35,9 @@ void	ft_system(t_argument *argument)
 	if (pipe(pipe_fd) == PIPE_ERROR)
 		ft_print_error();
 
-	// Reserve before argument's address for Free 
+	// Reserve before argument's address for Free
 	pa_orgin_argument = argument;
-	
+
 
 	// loop for execute command
 	is_pipe_on = FALSE;
@@ -48,7 +48,7 @@ void	ft_system(t_argument *argument)
 		if (mult_command == PIPE || mult_command == LT || mult_command == DLT || mult_command == GT)
 		{
 			is_pipe_on = TRUE;
-			
+
 			//FD1 : STDOUT -> PIPE OUT
 			std_fd[PIPE_OUT] = dup(STDOUT_FILENO);
 
@@ -65,7 +65,7 @@ void	ft_system(t_argument *argument)
 		else if (is_pipe_on && (mult_command == SEMICOLON || mult_command == DGT || mult_command == EOL))
 		{
 			is_pipe_on = FALSE;
-			
+
 			//FD0 : STDIN -> PIPE IN
 			std_fd[PIPE_IN] = dup(STDIN_FILENO);
 
@@ -78,10 +78,10 @@ void	ft_system(t_argument *argument)
 			{
 				ft_print_error();
 			}
-			
+
 			//FD1 : PIPE OUT -> STDOUT
 			pipe_fd[PIPE_OUT] = dup(STDOUT_FILENO);
-			
+
 			if (std_fd[PIPE_OUT] != STDOUT_FILENO)
 			{
 				dup2(std_fd[PIPE_OUT], STDOUT_FILENO);
@@ -92,7 +92,7 @@ void	ft_system(t_argument *argument)
 				ft_print_error();
 			}
 		}
-	
+
 		//DGT, 세미콜론이라면 명령을 그냥 다음으로 가면 되고 eof라면 그냥 나가면 된다
 		command = argument->pa_argument[COMMAND_POSITION];
 		if (is_bulletin(command, &bull_type) == TRUE)
@@ -108,7 +108,7 @@ void	ft_system(t_argument *argument)
 		else
 		{
 			char **pa_copy_argument = NULL;
-			
+
 			pid_t child_pid;
 			child_pid = fork();
 
@@ -119,9 +119,14 @@ void	ft_system(t_argument *argument)
 			else if (child_pid == 0)
 			{
 				int length = ft_get_length_2d_arr(argument->pa_argument);
+				printf("length = %d\n", length);
 				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
 				ft_get_sh_command(argument->pa_argument, pa_copy_argument);
 				//ft_free_command(pa_copy_argument);
+				for (int i = 0; i < length + 3; ++i)
+				{
+					printf("%s\n", pa_copy_argument[i]);
+				}
 				execve("/bin/sh", pa_copy_argument, NULL);
 				printf("this is execuse Error");
 			}
@@ -129,7 +134,6 @@ void	ft_system(t_argument *argument)
 			{
 				//부모 프로세스라면 기다린다
 				wait(NULL);
-				printf("%s\n", "Hi i'm perent");
 			}
 			// 자식프로세스 제작해서 excuse
 			// 만약에 여기서 fork를 한다고 하면
@@ -239,7 +243,7 @@ void	ft_execute_echo(t_argument *argument)
 	i = COMMAND_ARG_POSITION;
 	if (argument->pa_argument[i] != NULL && \
 	ft_strncmp(argument->pa_argument[COMMAND_ARG_POSITION], "-n", 2) == 0)
-	{	
+	{
 		is_newline = FALSE;
 		i++;
 	}
@@ -285,7 +289,7 @@ void	ft_execute_cd(t_argument *argument)
 	int			length;
 	const int	CHDIR_ERROR = -1;
 	const int	SECOND_ARG = 1;
-	
+
 	length = ft_get_length_2d_arr(argument->pa_argument);
 	//Please check when argument 2 is, some cases is like no error
 	if (length > 2)
@@ -347,14 +351,13 @@ int	main(int argc, char **argv, char **environ)
 	//Test Code
 	t_argument *pa_arg;
 	t_argument *p;
-	/*
 	//echo
 	{
 		printf("Echo TEST\n");
-		
+
 		pa_arg = (t_argument *)malloc(sizeof(t_argument));
 		p = pa_arg;
-		
+
 		printf("my output is \n");
 
 		p->next_token_type = SEMICOLON;
@@ -362,7 +365,7 @@ int	main(int argc, char **argv, char **environ)
 		p->pa_argument[0] = ft_strdup("echo");
 		p->pa_argument[1] = ft_strdup("1234");
 		p->pa_argument[2] = NULL;
-		
+
 		p->next = (t_argument *)malloc(sizeof(t_argument));
 		p = p->next;
 		p->next_token_type = SEMICOLON;
@@ -395,17 +398,17 @@ int	main(int argc, char **argv, char **environ)
 	//Pwd
 	{
 		printf("Pwd TEST\n");
-		
+
 		pa_arg = (t_argument *)malloc(sizeof(t_argument));
 		p = pa_arg;
-		
+
 		printf("my output is \n");
 
 		p->next_token_type = EOL;
 		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
 		p->pa_argument[0] = ft_strdup("pwd");
 		p->pa_argument[1] = NULL;
-		
+
 		p->next = (t_argument *)malloc(sizeof(t_argument));
 		p = p->next;
 		p->next_token_type = EOL;
@@ -433,10 +436,10 @@ int	main(int argc, char **argv, char **environ)
 	//Cd
 	{
 		printf("Cd TEST\n");
-		
+
 		pa_arg = (t_argument *)malloc(sizeof(t_argument));
 		p = pa_arg;
-		
+
 		printf("my output is \n");
 
 		p->next_token_type = EOL;
@@ -450,7 +453,7 @@ int	main(int argc, char **argv, char **environ)
 		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
 		p->pa_argument[0] = ft_strdup("pwd");
 		p->pa_argument[1] = NULL;
-		
+
 		p->next = (t_argument *)malloc(sizeof(t_argument));
 		p = p->next;
 		p->next_token_type = EOL;
@@ -505,15 +508,15 @@ int	main(int argc, char **argv, char **environ)
 
 		printf("\n");
 	}
-	
+
 
 	//execuse
 	{
 		printf("execuse TEST\n");
-		
+
 		pa_arg = (t_argument *)malloc(sizeof(t_argument));
 		p = pa_arg;
-		
+
 		printf("my output is \n");
 
 		p->next_token_type = EOL;

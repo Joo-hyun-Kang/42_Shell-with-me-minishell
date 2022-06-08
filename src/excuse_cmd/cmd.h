@@ -34,3 +34,4 @@ int		is_bulletin(char *command, enum e_bulltein_type *out_type);
 void	ft_print_error();
 void	ft_free_argument(t_argument *pa_argument);
 int     ft_get_length_2d_arr(char **array);
+void	ft_strjoin_2d_arr(char **src_2d, char *src_string, char **out_dst);

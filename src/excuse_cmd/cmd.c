@@ -114,11 +114,22 @@ void	ft_system(t_argument *argument)
 			{
 				ft_print_error();
 			}
-			else if (child_pid == 0)
+			else if (child_pid > 0)
 			{
-				//자식 프로세스
-				char *pa_temp = ft_strjoin("/bin/", command);			
-				execve(pa_temp, argument->pa_argument, NULL);
+				
+				//char *pa_temp = ft_strjoin("/bin/", command);
+				
+				int length = ft_get_length_2d_arr(argument->pa_argument);
+				char **pa_copy_argument = (char **)malloc(sizeof(char *) * length + 1 + 1 + 1);
+				ft_strjoin_2d_arr(argument->pa_argument, "-c", pa_copy_argument);
+				int i = 0;
+				while (pa_copy_argument[i])
+				{
+					printf("%s\n", pa_copy_argument[i]);
+					i++;
+				}
+				//"/bin/sh" "-c" "ls"
+				execve("/bin/sh", pa_copy_argument, NULL);
 				printf("this is execuse Error");
 			}
 			else
@@ -188,6 +199,26 @@ int	ft_get_length_2d_arr(char **array)
 		i++;
 	}
 	return (i);
+}
+
+void	ft_strjoin_2d_arr(char **src_2d, char *src_string, char **out_dst)
+{
+	int	i;
+	int j;
+	int	length;
+
+	out_dst[0] = ft_strdup("/bin/sh");
+	out_dst[1] = ft_strdup("-c");
+
+	i = 0;
+	j = 2;
+	while (src_2d[i] != NULL)
+	{
+		out_dst[j] = src_2d[i];
+		i++;
+		j++;
+	}
+	out_dst[j] = NULL;
 }
 
 void	ft_execute_echo(t_argument *argument)
@@ -307,7 +338,7 @@ int	main(int argc, char **argv, char **environ)
 	//Test Code
 	t_argument *pa_arg;
 	t_argument *p;
-
+	/*
 	//echo
 	{
 		printf("Echo TEST\n");
@@ -352,6 +383,7 @@ int	main(int argc, char **argv, char **environ)
 		printf("\n");
 	}
 
+	//Pwd
 	{
 		printf("Pwd TEST\n");
 		
@@ -389,6 +421,7 @@ int	main(int argc, char **argv, char **environ)
 		printf("\n");
 	}
 
+	//Cd
 	{
 		printf("Cd TEST\n");
 		
@@ -463,6 +496,27 @@ int	main(int argc, char **argv, char **environ)
 
 		printf("\n");
 	}
+	*/
 
+	//execuse
+	{
+		printf("execuse TEST\n");
+		
+		pa_arg = (t_argument *)malloc(sizeof(t_argument));
+		p = pa_arg;
+		
+		printf("my output is \n");
+
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * 1 + 1);
+		p->pa_argument[0] = ft_strdup("ls");
+		p->pa_argument[1] = NULL;
+
+		p->next = NULL;
+
+		ft_system(pa_arg);
+
+		printf("\n");
+	}
 	
 }

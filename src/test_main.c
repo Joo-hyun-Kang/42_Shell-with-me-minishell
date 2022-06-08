@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 20:05:14 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/07 23:00:14 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/08 19:54:47 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,20 @@ int main(void)
 	}
 
 	arg = ft_command_to_argument("| echo hello");
+	while (arg != 0)
+	{
+		printf("=============\n");
+		printf("{ next tokenType: %s }\n", t_type_str_test[arg->next_token_type]);
+		while (*(arg->pa_argument) != 0)
+		{
+			printf("{ arg->pa_argument: %s }\n", *(arg->pa_argument));
+			++(arg->pa_argument);
+		}
+		arg = arg->next;
+	}
+
+	arg = ft_command_to_argument("\"$l\"s");
+
 	while (arg != 0)
 	{
 		printf("=============\n");

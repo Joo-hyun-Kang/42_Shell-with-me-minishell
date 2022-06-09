@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/08 00:57:43 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/09 04:39:49 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# define TOKEN_RESERVED "|;><"
-# define TOKEN_SPACE " \r\v\f\n\t"
-# define TOKEN_QUOTE "\"'"
+# define METACHAR "|;><"
+# define WHITE_SPACE " \r\v\f\n\t"
+//# define QUOTE "\"'"
+
 # define BANNER "\n\n\n\
      S  H  E  L  L          W  I  T  H          M  E\n\
      -  -  -  -  -          -  -  -  -          -  -\n\
@@ -47,12 +48,6 @@ typedef struct s_token_lst {
 	struct s_token_lst		*next;
 } t_token_lst;
 
-typedef struct s_lexer {
-	char					*pa_str;
-	int						read_pos;
-	struct s_token_lst		*head;
-} t_lexer;
-
 typedef struct s_argument {
 	enum e_token_type		next_token_type;
 	char					**pa_argument;
@@ -68,24 +63,11 @@ typedef struct s_argument {
  */
 /* src/parser/tokenizer/token.c */
 char			*ft_strndup(const char *src, size_t n);
-char			*gnl_strjoin(char *s1, char *s2);
 t_token_lst		*ft_init_token(char *pa_str, enum e_token_type token_type);
-void			ft_read_char(t_lexer *out_lexer);
-char			ft_get_char(t_lexer *out_lexer);
-char			ft_peek_char(t_lexer *out_lexer);
-void			ft_skip_space(t_lexer *out_lexer);
-int				ft_get_pos(t_lexer *lexer);
-void			ft_add_token(t_lexer *out_lexer, t_token_lst *new_token);
-void			ft_tokenization_reserved(t_lexer *out_lexer);
-void			ft_tokenization_argument(t_lexer *out_lexer);
-void			ft_tokenization_quote(t_lexer *out_lexer, char *pa_str, char quote);
-char			*ft_get_env(t_lexer *out_lexer);
-char			*ft_dquote(t_lexer *out_lexer, char *pa_str);
-char			*ft_squote(t_lexer *out_lexer, char *pa_str);
-void			ft_tokenization(t_lexer *out_lexer);
-
-/* src/parser/tokenizer/lexer.c */
-t_lexer			*ft_init_lexer(char *str);
+void			ft_add_token(t_token_lst **head, t_token_lst *new_token);
+t_token_lst		*ft_create_token_meta_char(char **str);
+t_token_lst		*ft_create_token_argument(char **str);
+t_token_lst		*ft_tokenization(char *str);
 
 /*
  * #########################################################
@@ -95,11 +77,13 @@ t_lexer			*ft_init_lexer(char *str);
  * #########################################################
  */
 /* src/parser/parser.c */
-t_argument			*ft_init_argument(void);
-int					ft_argument_size(t_token_lst *cur_token);
-void				ft_add_argument(t_argument **head, t_argument *argument);
-t_token_lst			*ft_read_token(t_token_lst *cur_token, t_argument *argument, int index);
-t_token_lst			*ft_read_token_only_type_argument(t_token_lst *cur_token, t_argument *argument, int index);
-t_argument			*ft_command_to_argument(char *command);
+t_argument		*ft_init_argument(void);
+char			**ft_malloc_pa_argument(t_token_lst *cur_token);
+void			ft_add_argument(t_argument **head, t_argument *argument);
+t_token_lst		*ft_read_token(t_token_lst *cur_token, t_argument *argument, int index);
+t_token_lst		*ft_read_token_state_only_argument(t_token_lst *cur_token, t_argument *argument, int index);
+t_argument		*ft_str_to_argument(char *str);
+void			ft_delete_token(t_token_lst *token);
+void			ft_delete_argument(t_argument *arg);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/09 14:03:27 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/09 14:21:14 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,39 +57,32 @@ void	ft_add_argument(t_argument **head, t_argument *arg)
 	}
 }
 
-t_token_lst	*ft_read_token(t_token_lst *cur_token, t_argument *arg, int index)
+t_token_lst	*ft_read_token(t_token_lst *cur_token, t_argument *out_arg, int index)
 {
 	if (cur_token->token_type == ARGUMENT)
 	{
-		arg->pa_argument[index] = cur_token->pa_str;
-		return (ft_read_token(cur_token->next, arg, index + 1));
+		out_arg->pa_argument[index] = cur_token->pa_str;
+		return (ft_read_token(cur_token->next, out_arg, index + 1));
 	}
 	else
 	{
-		arg->next_token_type = cur_token->token_type;
+		printf("%s\n", cur_token->pa_str);
+		out_arg->next_token_type = cur_token->token_type;
 		if (cur_token->token_type == EOL)
 			return (cur_token);
 		return (cur_token->next);
 	}
 }
 
-t_token_lst	*ft_read_token_state_only_argument(t_token_lst *cur_token, t_argument *arg, int index)
+t_token_lst	*ft_read_token_state_only_argument(t_token_lst *cur_token, t_argument *out_arg, int index)
 {
-	if (cur_token->token_type == EOL)
-		return (cur_token);
 	if (cur_token->token_type != ARGUMENT)
 	{
-/*
- * parse error
- * ARGUMENT 없는 리다이렉션 ) > a.txt
- * 리다이렉션 후 ARGUMENT가 없음 ) echo hello >
- * ARGUMENT 없는 파이프
- */
 		printf("Error: parsing error\n");
 		return (0);
 	}
-	arg->pa_argument[index] = cur_token->pa_str;
-	return (ft_read_token(cur_token->next, arg, index + 1));
+	out_arg->pa_argument[index] = cur_token->pa_str;
+	return (ft_read_token(cur_token->next, out_arg, index + 1));
 }
 
 t_argument	*ft_str_to_argument(char *str)
@@ -109,7 +102,6 @@ t_argument	*ft_str_to_argument(char *str)
 		cur_token = ft_read_token_state_only_argument(cur_token, cur_arg, 0);
 		if (cur_token == 0)
 		{
-			printf("asdasdad\n");
 			ft_delete_argument(head_arg);
 			break ;
 		}

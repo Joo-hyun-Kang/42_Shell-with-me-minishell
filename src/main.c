@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/09 14:05:42 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/09 14:22:32 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,13 @@ char	**ft_copy_env(char **env)
 	i = 0;
 	while (env[i])
 		++i;
-	duplicated = (char **)malloc(sizeof(char *) + (i + 1));
+	duplicated = (char **)malloc(sizeof(char *) * (i + 1));
 	if (duplicated == 0)
 		return (0);
 	duplicated[i] = 0;
 	i = 0;
 	while (env[i])
 	{
-		printf("%s\n", env[i]);
 		duplicated[i] = ft_strdup(env[i]);
 		++i;
 	}
@@ -46,9 +45,9 @@ void	ft_show_argument_test(t_argument *arg)
 		printf("{ t_argument: NULL }\n");
 		return ;
 	}
-	printf("{ next tokenType: %s }\n", t_type_str_test[arg->next_token_type]);
 	while (arg != 0)
 	{
+		printf("{ next tokenType: %s }\n", t_type_str_test[arg->next_token_type]);
 		str = arg->pa_argument;
 		while (*str != 0)
 		{

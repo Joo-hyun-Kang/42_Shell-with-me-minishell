@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/08 20:08:25 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/09 04:02:17 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,8 +22,7 @@ LIBFT_DIR		=	library/libft/
 LIBFT_INC		=	$(LIBFT_DIR)inc
 #--------------[ TOKENIZER ]-----------------
 TOKEN_DIR		=	src/parser/tokenizer
-TOKEN_SRC		=	token.c\
-					lexer.c
+TOKEN_SRC		=	token.c
 #--------------[ PARSER ]----------------
 PARSER_DIR		=	src/parser
 PARSER_SRC		=	parser.c
@@ -42,12 +41,14 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(EXCUSE_SRC:.c=.o))
 #-----------------[ CMD ]-------------------
 CC				=	gcc
-CFLAGS			=	# -Wall -Wextra -Werror -g
+CFLAGS			=	-g # -Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(EXCUSE_DIR)\
-					-I /Users/kanghyki/.brew/opt/readline/include
+					-I /opt/homebrew/opt/readline/include
+					#-I /Users/kanghyki/.brew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /Users/kanghyki/.brew/opt/readline/lib
+					-l readline -L /opt/homebrew/opt/readline/lib
+					#-l readline -L /Users/kanghyki/.brew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 

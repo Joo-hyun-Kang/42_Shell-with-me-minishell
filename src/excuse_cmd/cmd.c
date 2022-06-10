@@ -38,7 +38,6 @@ void	ft_system(t_argument *argument)
 	// Reserve before argument's address for Free
 	pa_orgin_argument = argument;
 
-
 	// loop for execute command
 	is_pipe_on = FALSE;
 	while (argument != NULL)
@@ -112,11 +111,6 @@ void	ft_system(t_argument *argument)
 				execve("/bin/sh", pa_copy_argument, NULL);
 				printf("this is execuse Error");
 			}
-			else
-			{
-				//부모 프로세스라면 기다린다
-				wait(NULL);
-			}
 			// 자식프로세스 제작해서 excuse
 			// 만약에 여기서 fork를 한다고 하면
 			// 어떻게 될까?
@@ -128,6 +122,9 @@ void	ft_system(t_argument *argument)
 		}
 		argument = argument->next;
 	}
+
+	wait(NULL);
+	wait(NULL);
 
 	/*
 	//FD0 : FIFE_IN -> STDIN
@@ -333,12 +330,12 @@ int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 }
 
 
-// int	main(int argc, char **argv, char **environ)
-// {
+int	main(int argc, char **argv, char **environ)
+{
 	
-// 	//Test Code
-// 	t_argument *pa_arg;
-// 	t_argument *p;
+	//Test Code
+	t_argument *pa_arg;
+	t_argument *p;
 	
 // 	/*
 // 	//echo
@@ -553,30 +550,30 @@ int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 // 	*/
 
 	
-// 	{
-// 		printf("execuse TEST\n");
+	{
+		printf("execuse TEST\n");
 
-// 		pa_arg = (t_argument *)malloc(sizeof(t_argument));
-// 		p = pa_arg;
+		pa_arg = (t_argument *)malloc(sizeof(t_argument));
+		p = pa_arg;
 
-// 		printf("my output is \n");
+		printf("my output is \n");
 
-// 		p->next_token_type = PIPE;
-// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
-// 		p->pa_argument[0] = ft_strdup("ls");
-// 		p->pa_argument[1] = NULL;
+		p->next_token_type = PIPE;
+		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+		p->pa_argument[0] = ft_strdup("ls");
+		p->pa_argument[1] = NULL;
 
-// 		p->next = (t_argument *)malloc(sizeof(t_argument));
-// 		p = p->next;
-// 		p->next_token_type = EOL;
-// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
-// 		p->pa_argument[0] = ft_strdup("wc");
-// 		p->pa_argument[1] = NULL;
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+		p->pa_argument[0] = ft_strdup("sort");
+		p->pa_argument[1] = NULL;
 
-// 		p->next = NULL;
+		p->next = NULL;
 
-// 		ft_system(pa_arg);
+		ft_system(pa_arg);
 
-// 		printf("END!\n");
-// 	}
-// }
+		printf("END!\n");
+	}
+}

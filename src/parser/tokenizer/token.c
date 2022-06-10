@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/09 04:01:52 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:25:59 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,22 +34,22 @@ char	*ft_strndup(const char *src, size_t n)
 	return (dup);
 }
 
-t_token_lst	*ft_init_token(char *pa_str, enum e_token_type token_type)
+t_token	*ft_init_token(char *pa_str, enum e_token_type token_type)
 {
-	t_token_lst	*new_token;
+	t_token	*new_token;
 
-	new_token = (t_token_lst *)malloc(sizeof(t_token_lst));
+	new_token = (t_token *)malloc(sizeof(t_token));
 	if (new_token == 0)
 		return (0);
-	ft_memset(new_token, 0, sizeof(t_token_lst));
+	ft_memset(new_token, 0, sizeof(t_token));
 	new_token->pa_str = pa_str;
 	new_token->token_type = token_type;
 	return (new_token);
 }
 
-void	ft_add_token(t_token_lst **head, t_token_lst *new_token)
+void	ft_add_token(t_token **head, t_token *new_token)
 {
-	t_token_lst	*iter;
+	t_token	*iter;
 
 	if (*head == 0)
 		*head = new_token;
@@ -62,7 +62,7 @@ void	ft_add_token(t_token_lst **head, t_token_lst *new_token)
 	}
 }
 
-t_token_lst	*ft_create_token_meta_char(char **str)
+t_token	*ft_create_token_meta_char(char **str)
 {
 	enum e_token_type	token_type;
 
@@ -93,7 +93,7 @@ t_token_lst	*ft_create_token_meta_char(char **str)
 	return (ft_init_token(0, token_type));
 }
 
-t_token_lst	*ft_create_token_argument(char **str)
+t_token	*ft_create_token_argument(char **str)
 {
 	char	*s_pos;
 	char	*duplicated;
@@ -105,10 +105,10 @@ t_token_lst	*ft_create_token_argument(char **str)
 	return (ft_init_token(duplicated, ARGUMENT));
 }
 
-t_token_lst	*ft_tokenization(char *str)
+t_token	*ft_tokenization(char *str)
 {
-	t_token_lst	*head;
-	t_token_lst	*new_token;
+	t_token	*head;
+	t_token	*new_token;
 
 	head = 0;
 	while (*str != 0)

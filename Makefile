@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/09 22:50:29 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/10 15:12:00 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,7 +34,8 @@ NAME			=	minishell
 OBJ_DIR			=	objects
 SRC_DIR			=	src
 SRC				=	main.c\
-					environment.c
+					env_utils.c\
+					env_execute.c
 
 OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(PARSER_SRC:.c=.o))\

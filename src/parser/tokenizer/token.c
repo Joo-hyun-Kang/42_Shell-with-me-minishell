@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 04:25:26 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 04:52:03 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,26 @@ void	ft_combine_str(char **dst, char *src)
 	}
 }
 
-void	ft_quote(char **str, char **dst, char quote)
+void	ft_replace_str_with_env(char **str, char **dst, char **env)
+{
+	char	*s_pos;
+	char	*key;
+	char	*value;
+
+	++(*str);
+	s_pos = *str;
+	while (*(*str) != 0
+			&& ft_strchr_except_null(WHITE_SPACE, *(*str)) == 0
+			&& ft_strchr_except_null(METACHAR, *(*str)) == 0
+			&& ft_strchr_except_null(QUOTE, *(*str)) == 0)
+		++(*str);
+	key = ft_strndup(s_pos, *str - s_pos);
+	value = ft_key_to_value(env, key);
+	free(key);
+	ft_combine_str(dst, value);
+}
+
+void	ft_quote(char **str, char **dst, char quote, char **env)
 {
 	char	*s_pos;
 	char	*read_line;
@@ -134,6 +153,8 @@ void	ft_quote(char **str, char **dst, char quote)
 			++(*str);
 			return ;
 		}
+		else if (*(*str) == '$')
+			ft_replace_str_with_env(str, dst, env);
 		++(*str);
 	}
 	ft_combine_str(dst, ft_strndup(s_pos, *str - s_pos));
@@ -145,11 +166,11 @@ void	ft_quote(char **str, char **dst, char quote)
 	else
 		read_line = readline("quote> ");
 	for_free = read_line;
-	ft_quote(&read_line, dst, quote);
+	ft_quote(&read_line, dst, quote, env);
 	free(for_free);
 }
 
-t_token	*ft_create_token_argument(char **str)
+t_token	*ft_create_token_argument(char **str, char **env)
 {
 	char	*s_pos;
 	char	*pa_str;
@@ -163,15 +184,18 @@ t_token	*ft_create_token_argument(char **str)
 		while (*(*str) != 0
 				&& ft_strchr_except_null(WHITE_SPACE, *(*str)) == 0
 				&& ft_strchr_except_null(METACHAR, *(*str)) == 0
-				&& ft_strchr_except_null(QUOTE, *(*str)) == 0)
+				&& ft_strchr_except_null(QUOTE, *(*str)) == 0
+				&& *(*str) != '$')
 			++(*str);
 		ft_combine_str(&pa_str, ft_strndup(s_pos, *str - s_pos));
 		if (ft_strchr_except_null(QUOTE, *(*str)) != 0)
 		{
 			quote = *(*str);
 			++(*str);
-			ft_quote(str, &pa_str, quote);
+			ft_quote(str, &pa_str, quote, env);
 		}
+		else if (*(*str) == '$')
+			ft_replace_str_with_env(str, &pa_str, env);
 		else if (ft_strchr_except_null(WHITE_SPACE, *(*str)) != 0
 				|| ft_strchr_except_null(METACHAR, *(*str)) != 0)
 			break ;
@@ -179,7 +203,7 @@ t_token	*ft_create_token_argument(char **str)
 	return (ft_init_token(pa_str, ARGUMENT));
 }
 
-t_token	*ft_tokenization(char *str)
+t_token	*ft_tokenization(char *str, char **env)
 {
 	t_token	*head;
 	t_token	*new_token;
@@ -194,7 +218,7 @@ t_token	*ft_tokenization(char *str)
 			if (ft_strchr_except_null(METACHAR, *str) != 0)
 				new_token = ft_create_token_meta_char(&str);
 			else
-				new_token = ft_create_token_argument(&str);
+				new_token = ft_create_token_argument(&str, env);
 			ft_add_token(&head, new_token);
 		}
 	}

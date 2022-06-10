@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 04:00:42 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 04:42:38 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,10 @@ char			*ft_strndup(const char *src, size_t n);
 t_token			*ft_init_token(char *pa_str, enum e_token_type token_type);
 void			ft_add_token(t_token **head, t_token *new_token);
 void			ft_combine_str(char **dst, char *src);
-void			ft_quote(char **str, char **dst, char quote);
+void			ft_quote(char **str, char **dst, char quote, char **env);
 t_token			*ft_create_token_meta_char(char **str);
-t_token			*ft_create_token_argument(char **str);
-t_token			*ft_tokenization(char *str);
+t_token			*ft_create_token_argument(char **str, char **env);
+t_token			*ft_tokenization(char *str, char **env);
 
 /*
  * #########################################################
@@ -98,7 +98,7 @@ void			ft_delete_argument(t_argument *arg);
  * #########################################################
  */
 
-/* src/environment.c */
+/* src/env_utils.c */
 int				ft_strdplen(char **str);
 char			**ft_copy_env(char **env);
 int				ft_is_match_key(char *env, char *key);
@@ -109,6 +109,7 @@ char			**ft_remove_dict_from_env(char **env, char *key);
 char			**ft_unset_env(char **env, char *key);
 char			**ft_set_env(char **env, char *new_dict);
 void			ft_print_env(char **env);
+char			*ft_key_to_value(char **env, char *key);
 
 /* src/environment_execute.c */
 int				ft_strcmp(const char *s1, const char *s2);

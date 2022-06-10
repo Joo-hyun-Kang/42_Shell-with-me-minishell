@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 17:59:21 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:10:53 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include "excuse_cmd/cmd.h"
 
 const char	*t_type_str_test[8] = {"ARGUMENT", "PIPE", "SEMICOLON", "LT", "DLT", "GT", "DGT", "EOL"};
-char		**g_env;
 
 void	ft_show_argument_test(t_argument *arg)
 {
@@ -60,12 +59,12 @@ int main(int argc, char **argv, char **env)
 	t_argument	*arg;
 
 	printf("%s", BANNER);
-	g_env = ft_copy_env(env);
+	environment = ft_copy_env(env);
 	while (1)
 	{
 		str = readline("minishell-4.2$ ");
 		add_history(str);
-		arg = ft_str_to_argument(str);
+		arg = ft_create_argument(str, &environment);
 #if 0
 		environment = ft_set_env(environment, ft_create_dict_test(str, "ENV_FOR_TEST"));
 		environment = ft_unset_env(environment, str);

@@ -6,13 +6,11 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:19:31 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 16:18:13 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:14:44 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
-extern char	**g_env;
 
 int	ft_strcmp(const char *s1, const char *s2)
 {
@@ -33,9 +31,9 @@ void	ft_execute_export(t_argument *arg)
 	const int	COMMAND_ARG_POSITION = 1;
 
 	if (arg->pa_argument[COMMAND_ARG_POSITION] != 0)
-		g_env = ft_set_env(g_env, arg->pa_argument[COMMAND_ARG_POSITION]);
+		*(arg->env) = ft_set_env(*(arg->env), arg->pa_argument[COMMAND_ARG_POSITION]);
 	else
-		ft_print_env(g_env);
+		ft_print_env(*(arg->env));
 }
 
 void	ft_execute_env(t_argument *arg)
@@ -43,8 +41,8 @@ void	ft_execute_env(t_argument *arg)
 	const int	COMMAND_ARG_POSITION = 1;
 
 	if (arg->pa_argument[COMMAND_ARG_POSITION] != 0)
-		g_env = ft_set_env(g_env, arg->pa_argument[COMMAND_ARG_POSITION]);
-	ft_print_env(g_env);
+		*(arg->env) = ft_set_env(*(arg->env), arg->pa_argument[COMMAND_ARG_POSITION]);
+	ft_print_env(*(arg->env));
 }
 
 void	ft_execute_unset(t_argument *arg)
@@ -52,7 +50,7 @@ void	ft_execute_unset(t_argument *arg)
 	const int	COMMAND_ARG_POSITION = 1;
 
 	if (arg->pa_argument[COMMAND_ARG_POSITION] != 0)
-		g_env = ft_unset_env(g_env, arg->pa_argument[COMMAND_ARG_POSITION]);
+		*(arg->env) = ft_unset_env(*(arg->env), arg->pa_argument[COMMAND_ARG_POSITION]);
 }
 
 void	ft_env_simple_command_test(t_argument *arg)

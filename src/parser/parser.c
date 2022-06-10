@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 14:40:10 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:09:38 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ t_token_lst	*ft_read_token_state_only_argument(t_token_lst *cur_token, t_argumen
 	return (ft_read_token(cur_token->next, out_arg, index + 1));
 }
 
-t_argument	*ft_str_to_argument(char *str)
+t_argument	*ft_create_argument(char *str, char ***env)
 {
 	t_argument	*head_arg;
 	t_argument	*cur_arg;
@@ -100,6 +100,7 @@ t_argument	*ft_str_to_argument(char *str)
 	{
 		cur_arg = ft_init_argument();
 		cur_arg->pa_argument = ft_malloc_pa_argument(cur_token);
+		cur_arg->env = env;
 		cur_token = ft_read_token_state_only_argument(cur_token, cur_arg, 0);
 		if (cur_token == 0)
 		{

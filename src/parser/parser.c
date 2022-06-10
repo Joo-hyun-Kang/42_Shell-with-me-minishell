@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 18:09:38 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:25:52 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_argument	*ft_init_argument(void)
 	return (argument);
 }
 
-char	**ft_malloc_pa_argument(t_token_lst *cur_token)
+char	**ft_malloc_pa_argument(t_token *cur_token)
 {
 	char	**pa_argument;
 	int		i;
@@ -58,7 +58,7 @@ void	ft_add_argument(t_argument **head, t_argument *arg)
 	}
 }
 
-t_token_lst	*ft_read_token(t_token_lst *cur_token, t_argument *out_arg, int index)
+t_token	*ft_read_token(t_token *cur_token, t_argument *out_arg, int index)
 {
 	if (cur_token->token_type == ARGUMENT)
 	{
@@ -75,7 +75,7 @@ t_token_lst	*ft_read_token(t_token_lst *cur_token, t_argument *out_arg, int inde
 	}
 }
 
-t_token_lst	*ft_read_token_state_only_argument(t_token_lst *cur_token, t_argument *out_arg, int index)
+t_token	*ft_read_token_state_only_argument(t_token *cur_token, t_argument *out_arg, int index)
 {
 	if (cur_token->token_type != ARGUMENT)
 	{
@@ -90,8 +90,8 @@ t_argument	*ft_create_argument(char *str, char ***env)
 {
 	t_argument	*head_arg;
 	t_argument	*cur_arg;
-	t_token_lst	*head_token;
-	t_token_lst	*cur_token;
+	t_token	*head_token;
+	t_token	*cur_token;
 
 	head_arg = 0;
 	head_token = ft_tokenization(str);
@@ -113,9 +113,9 @@ t_argument	*ft_create_argument(char *str, char ***env)
 	return (head_arg);
 }
 
-void	ft_delete_token(t_token_lst *token)
+void	ft_delete_token(t_token *token)
 {
-	t_token_lst *prev;
+	t_token *prev;
 
 	prev = token;
 	while (token != 0)

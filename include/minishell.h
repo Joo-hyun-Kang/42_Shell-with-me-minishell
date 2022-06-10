@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/09 04:39:49 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 09:18:57 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,5 +85,25 @@ t_token_lst		*ft_read_token_state_only_argument(t_token_lst *cur_token, t_argume
 t_argument		*ft_str_to_argument(char *str);
 void			ft_delete_token(t_token_lst *token);
 void			ft_delete_argument(t_argument *arg);
+
+/*
+ * #########################################################
+ * #                                                       #
+ * #                          src/                         #
+ * #                                                       #
+ * #########################################################
+ */
+
+/* src/environment.c */
+int				ft_strdplen(char **str);
+char			**ft_copy_env(char **env);
+char			*ft_get_env(char **env, char *key);
+int				ft_is_match_key(char *env, char *key);
+char			**ft_find_matched_key(char **env, char *key);
+char			*ft_create_dict(char *key, char *value);
+char			**ft_add_dict_to_env(char **env, char *str);
+char			**ft_remove_dict_from_env(char **env, char *key);
+char			**ft_unset_env(char **env, char *key);
+char			**ft_set_env(char **env, char *key, char *value);
 
 #endif

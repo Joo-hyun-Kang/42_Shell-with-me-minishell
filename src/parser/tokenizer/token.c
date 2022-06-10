@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 04:18:19 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 04:25:26 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,9 @@ void	ft_quote(char **str, char **dst, char quote)
 		++(*str);
 	}
 	ft_combine_str(dst, ft_strndup(s_pos, *str - s_pos));
+	for_free = *dst;
+	*dst = ft_strjoin(*dst, "\n");
+	free(for_free);
 	if (quote == '"')
 		read_line = readline("dquote> ");
 	else

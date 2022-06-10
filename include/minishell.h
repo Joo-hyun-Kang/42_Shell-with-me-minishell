@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 09:18:57 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 14:33:55 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,5 +105,6 @@ char			**ft_add_dict_to_env(char **env, char *str);
 char			**ft_remove_dict_from_env(char **env, char *key);
 char			**ft_unset_env(char **env, char *key);
 char			**ft_set_env(char **env, char *key, char *value);
+void			ft_print_env(char **env);
 
 #endif

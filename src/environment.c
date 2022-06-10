@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 16:52:07 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 13:40:03 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 14:33:06 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,7 +169,6 @@ char	**ft_remove_dict_from_env(char **env, char *key)
 
 char	**ft_unset_env(char **env, char *key)
 {
-	char	**find_env;
 	char	**new_env;
 
 	if (ft_find_matched_key(env, key) != 0)
@@ -198,4 +197,15 @@ char	**ft_set_env(char **env, char *key, char *value)
 	new_env = ft_add_dict_to_env(env, new_dict);
 	ft_delete_env(env);
 	return (new_env);
+}
+
+void	ft_print_env(char **env)
+{
+	int i = 0;
+	
+	while (env[i])
+	{
+		printf("%s\n", env[i]);
+		++i;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 16:52:07 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 17:55:13 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 05:11:26 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,4 +172,25 @@ void	ft_print_env(char **env)
 		printf("%s\n", env[i]);
 		++i;
 	}
+}
+
+char	*ft_key_to_value(char **env, char *key)
+{
+	int		i;
+	char	*value;
+
+	i = 0;
+	while (*env)
+	{
+		if (ft_is_match_key(*env, key) == 1)
+		 {
+			while ((*env)[i] != '=')
+				++i;
+			++i;
+			return (ft_strdup(&(*env)[i]));
+		}
+		else
+			++env;
+	}
+	return (ft_strdup(""));
 }

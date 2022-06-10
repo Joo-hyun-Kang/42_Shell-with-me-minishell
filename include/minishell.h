@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 16:11:24 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 18:14:21 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_token_lst {
 typedef struct s_argument {
 	enum e_token_type		next_token_type;
 	char					**pa_argument;
+	char					***env;
 	struct s_argument		*next;
 } t_argument;
 
@@ -82,7 +83,7 @@ char			**ft_malloc_pa_argument(t_token_lst *cur_token);
 void			ft_add_argument(t_argument **head, t_argument *argument);
 t_token_lst		*ft_read_token(t_token_lst *cur_token, t_argument *argument, int index);
 t_token_lst		*ft_read_token_state_only_argument(t_token_lst *cur_token, t_argument *argument, int index);
-t_argument		*ft_str_to_argument(char *str);
+t_argument		*ft_create_argument(char *str, char ***env);
 void			ft_delete_token(t_token_lst *token);
 void			ft_delete_argument(t_argument *arg);
 

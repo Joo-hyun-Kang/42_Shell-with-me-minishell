@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 18:10:53 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 02:17:52 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ int main(int argc, char **argv, char **env)
 		str = readline("minishell-4.2$ ");
 		add_history(str);
 		arg = ft_create_argument(str, &environment);
+		if (arg == 0)
+		{
+			free(str);
+			continue ;
+		}
 #if 0
 		environment = ft_set_env(environment, ft_create_dict_test(str, "ENV_FOR_TEST"));
 		environment = ft_unset_env(environment, str);

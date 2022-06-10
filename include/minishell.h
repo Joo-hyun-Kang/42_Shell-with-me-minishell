@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 18:25:30 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 20:24:15 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 # define METACHAR "|;><"
 # define WHITE_SPACE " \r\v\f\n\t"
-//# define QUOTE "\"'"
+# define QUOTE "\"'"
 
 # define BANNER "\n\n\n\
      S  H  E  L  L          W  I  T  H          M  E\n\
@@ -64,11 +64,11 @@ typedef struct s_argument {
  */
 /* src/parser/tokenizer/token.c */
 char			*ft_strndup(const char *src, size_t n);
-t_token		*ft_init_token(char *pa_str, enum e_token_type token_type);
+t_token			*ft_init_token(char *pa_str, enum e_token_type token_type);
 void			ft_add_token(t_token **head, t_token *new_token);
-t_token		*ft_create_token_meta_char(char **str);
-t_token		*ft_create_token_argument(char **str);
-t_token		*ft_tokenization(char *str);
+t_token			*ft_create_token_meta_char(char **str);
+t_token			*ft_create_token_argument(char **str);
+t_token			*ft_tokenization(char *str);
 
 /*
  * #########################################################
@@ -81,8 +81,8 @@ t_token		*ft_tokenization(char *str);
 t_argument		*ft_init_argument(void);
 char			**ft_malloc_pa_argument(t_token *cur_token);
 void			ft_add_argument(t_argument **head, t_argument *argument);
-t_token		*ft_read_token(t_token *cur_token, t_argument *argument, int index);
-t_token		*ft_read_token_state_only_argument(t_token *cur_token, t_argument *argument, int index);
+t_token			*ft_read_token(t_token *cur_token, t_argument *argument, int index);
+t_token			*ft_read_token_state_only_argument(t_token *cur_token, t_argument *argument, int index);
 t_argument		*ft_create_argument(char *str, char ***env);
 void			ft_delete_token(t_token *token);
 void			ft_delete_argument(t_argument *arg);

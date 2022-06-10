@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 03:56:36 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 04:18:19 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,12 +119,12 @@ void	ft_combine_str(char **dst, char *src)
 	}
 }
 
-void	ft_quote(char **str, char **dst, char quote, int closed)
+void	ft_quote(char **str, char **dst, char quote)
 {
 	char	*s_pos;
 	char	*read_line;
+	char	*for_free;
 
-	++(*str);
 	s_pos = *str;
 	while (*(*str) != 0)
 	{
@@ -136,18 +136,21 @@ void	ft_quote(char **str, char **dst, char quote, int closed)
 		}
 		++(*str);
 	}
-	// TEST
+	ft_combine_str(dst, ft_strndup(s_pos, *str - s_pos));
 	if (quote == '"')
 		read_line = readline("dquote> ");
 	else
 		read_line = readline("quote> ");
-	free(read_line);
+	for_free = read_line;
+	ft_quote(&read_line, dst, quote);
+	free(for_free);
 }
 
 t_token	*ft_create_token_argument(char **str)
 {
 	char	*s_pos;
 	char	*pa_str;
+	char	quote;
 
 	s_pos = *str;
 	pa_str = 0;
@@ -161,7 +164,11 @@ t_token	*ft_create_token_argument(char **str)
 			++(*str);
 		ft_combine_str(&pa_str, ft_strndup(s_pos, *str - s_pos));
 		if (ft_strchr_except_null(QUOTE, *(*str)) != 0)
-			ft_quote(str, &pa_str, *(*str), 0);
+		{
+			quote = *(*str);
+			++(*str);
+			ft_quote(str, &pa_str, quote);
+		}
 		else if (ft_strchr_except_null(WHITE_SPACE, *(*str)) != 0
 				|| ft_strchr_except_null(METACHAR, *(*str)) != 0)
 			break ;

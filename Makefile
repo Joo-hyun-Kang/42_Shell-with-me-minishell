@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/10 15:12:00 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/11 02:03:43 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,7 @@ PARSER_DIR		=	src/parser
 PARSER_SRC		=	parser.c
 #--------------[ EXCUSE ]----------------
 EXCUSE_DIR		=	src/excuse_cmd
-EXCUSE_SRC		=	cmd.c
+EXCUSE_SRC		=	#cmd.c
 #--------------[ MINISHELL ]----------------
 NAME			=	minishell	
 OBJ_DIR			=	objects

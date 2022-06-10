@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 20:24:15 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 03:18:50 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,12 @@ typedef struct s_argument {
  * #########################################################
  */
 /* src/parser/tokenizer/token.c */
+char			*ft_strchr_except_null(const char *str, int c);
 char			*ft_strndup(const char *src, size_t n);
 t_token			*ft_init_token(char *pa_str, enum e_token_type token_type);
 void			ft_add_token(t_token **head, t_token *new_token);
+void			ft_combine_str(char **dst, char *src);
+void			ft_quote(char **str, char **dst, char quote, int closed);
 t_token			*ft_create_token_meta_char(char **str);
 t_token			*ft_create_token_argument(char **str);
 t_token			*ft_tokenization(char *str);

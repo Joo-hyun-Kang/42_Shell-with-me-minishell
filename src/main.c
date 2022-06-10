@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 09:19:42 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 14:41:38 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,6 @@
 #include "excuse_cmd/cmd.h"
 
 const char	*t_type_str_test[8] = {"ARGUMENT", "PIPE", "SEMICOLON", "LT", "DLT", "GT", "DGT", "EOL"};
-
-void	ft_print_env_test(char **env)
-{
-	int i = 0;
-	
-	while (env[i])
-	{
-		printf("%s\n", env[i]);
-		++i;
-	}
-}
 
 void	ft_show_argument_test(t_argument *arg)
 {
@@ -60,17 +49,18 @@ int main(int argc, char **argv, char **env)
 	{
 		str = readline("minishell-4.2$ ");
 		add_history(str);
-//		arg = ft_str_to_argument(str);
-//		environment = ft_set_env(environment, str, "ENV_FOR_TEST");
+		arg = ft_str_to_argument(str);
+#if 0
+		environment = ft_set_env(environment, str, "ENV_FOR_TEST");
 		environment = ft_unset_env(environment, str);
-#if 1
-		ft_print_env_test(environment);
+		ft_print_env(environment);
 #endif
-//		ft_show_argument_test(arg);
+		ft_show_argument_test(arg);
+		ft_delete_argument(arg);
 //		if (arg)
 //			ft_system(arg);
 		free(str);
-//		system("leaks minishell");
+		system("leaks minishell");
 	}
 	return (0);
 }

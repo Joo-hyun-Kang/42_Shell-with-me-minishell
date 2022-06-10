@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 18:25:52 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 02:20:24 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,8 @@ t_argument	*ft_create_argument(char *str, char ***env)
 	t_token	*head_token;
 	t_token	*cur_token;
 
-	head_arg = 0;
+	if (*str == 0)
+		return (0);
 	head_token = ft_tokenization(str);
 	cur_token = head_token;
 	while (cur_token->token_type != EOL)

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 14:41:38 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 17:59:21 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "excuse_cmd/cmd.h"
 
 const char	*t_type_str_test[8] = {"ARGUMENT", "PIPE", "SEMICOLON", "LT", "DLT", "GT", "DGT", "EOL"};
+char		**g_env;
 
 void	ft_show_argument_test(t_argument *arg)
 {
@@ -36,6 +37,21 @@ void	ft_show_argument_test(t_argument *arg)
 		arg = arg->next;
 	}
 }
+//
+//char	*ft_create_dict_test(char *key, char *value)
+//{
+//	const int	key_len = ft_strlen(key);
+//	const int	value_len = ft_strlen(value);
+//	char		*str;
+//
+//	str = (char *)malloc(sizeof(char) * (key_len + value_len + 2));
+//	if (str == 0)
+//		return (0);
+//	ft_strlcpy(str, key, key_len + 1);
+//	ft_strlcat(str, "=", key_len + 2);
+//	ft_strlcat(str, value, key_len + value_len + 2);
+//	return (str);
+//}
 
 int main(int argc, char **argv, char **env)
 {
@@ -44,23 +60,23 @@ int main(int argc, char **argv, char **env)
 	t_argument	*arg;
 
 	printf("%s", BANNER);
-	environment = ft_copy_env(env);
+	g_env = ft_copy_env(env);
 	while (1)
 	{
 		str = readline("minishell-4.2$ ");
 		add_history(str);
 		arg = ft_str_to_argument(str);
 #if 0
-		environment = ft_set_env(environment, str, "ENV_FOR_TEST");
+		environment = ft_set_env(environment, ft_create_dict_test(str, "ENV_FOR_TEST"));
 		environment = ft_unset_env(environment, str);
 		ft_print_env(environment);
 #endif
 		ft_show_argument_test(arg);
-		ft_delete_argument(arg);
+		ft_env_simple_command_test(arg);
 //		if (arg)
 //			ft_system(arg);
 		free(str);
-		system("leaks minishell");
+//		system("leaks minishell");
 	}
 	return (0);
 }

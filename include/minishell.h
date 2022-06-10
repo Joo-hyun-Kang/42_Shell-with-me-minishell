@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 14:33:55 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 16:11:24 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,20 @@ void			ft_delete_argument(t_argument *arg);
 /* src/environment.c */
 int				ft_strdplen(char **str);
 char			**ft_copy_env(char **env);
-char			*ft_get_env(char **env, char *key);
 int				ft_is_match_key(char *env, char *key);
+void			ft_delete_env(char **env);
 char			**ft_find_matched_key(char **env, char *key);
-char			*ft_create_dict(char *key, char *value);
 char			**ft_add_dict_to_env(char **env, char *str);
 char			**ft_remove_dict_from_env(char **env, char *key);
 char			**ft_unset_env(char **env, char *key);
-char			**ft_set_env(char **env, char *key, char *value);
+char			**ft_set_env(char **env, char *new_dict);
 void			ft_print_env(char **env);
+
+/* src/environment_execute.c */
+int				ft_strcmp(const char *s1, const char *s2);
+void			ft_execute_export(t_argument *arg);
+void			ft_execute_env(t_argument *arg);
+void			ft_execute_unset(t_argument *arg);
+void			ft_env_simple_command_test(t_argument *arg);
 
 #endif

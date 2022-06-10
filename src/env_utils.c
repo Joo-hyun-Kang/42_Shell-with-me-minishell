@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   environment.c                                      :+:      :+:    :+:   */
+/*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 16:52:07 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 14:33:06 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 17:55:13 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,39 +42,18 @@ char	**ft_copy_env(char **env)
 	return (duplicated);
 }
 
-char	*ft_get_env(char **env, char *key)
-{
-	int		i;
-	int		j;
-	char	*value;
-
-	i = 0;
-	value = 0;
-	while (env[i])
-	{
-		if (ft_is_match_key(env[i], key) == 1)
-		{
-			j = 0;
-			while (env[i][j] != '=')
-				++j;
-			++j;
-			return (ft_strdup(&env[i][j]));
-		}
-		++i;
-	}
-	return (value);
-}
-
 int	ft_is_match_key(char *env, char *key)
 {
-	while (*env)
+	int	i;
+
+	i = 0;
+	while (env[i] && key[i])
 	{
-		if (*key != *env)
+		if ((env[i] != key[i]) || env[i] == '=')
 			break ;
-		++key;
-		++env;
+		++i;
 	}
-	if (*env == '=')
+	if (env[i] == '=' && (key[i] == '=' || key[i] == 0))
 		return (1);
 	return (0);
 }
@@ -92,21 +71,6 @@ char	**ft_find_matched_key(char **env, char *key)
 		++i;
 	}
 	return (0);
-}
-
-char	*ft_create_dict(char *key, char *value)
-{
-	const int	key_len = ft_strlen(key);
-	const int	value_len = ft_strlen(value);
-	char		*str;
-
-	str = (char *)malloc(sizeof(char) * (key_len + value_len + 2));
-	if (str == 0)
-		return (0);
-	ft_strlcpy(str, key, key_len + 1);
-	ft_strlcat(str, "=", key_len + 2);
-	ft_strlcat(str, value, key_len + value_len + 2);
-	return (str);
 }
 
 void	ft_delete_env(char **env)
@@ -138,7 +102,7 @@ char	**ft_add_dict_to_env(char **env, char *new_dict)
 		new_env[i] = ft_strdup(env[i]);
 		++i;
 	}
-	new_env[i] = new_dict;
+	new_env[i] = ft_strdup(new_dict);
 	return (new_env);
 }
 
@@ -167,6 +131,7 @@ char	**ft_remove_dict_from_env(char **env, char *key)
 	return (new_env);
 }
 
+// Usage env = ft_unset_env(env, new_dict);
 char	**ft_unset_env(char **env, char *key)
 {
 	char	**new_env;
@@ -180,18 +145,17 @@ char	**ft_unset_env(char **env, char *key)
 	return (env);
 }
 
-char	**ft_set_env(char **env, char *key, char *value)
+// Usage env = ft_set_env(env, new_dict);
+char	**ft_set_env(char **env, char *new_dict)
 {
 	char	**find_env;
 	char	**new_env;
-	char	*new_dict;
 
-	new_dict = ft_create_dict(key, value);
-	find_env = ft_find_matched_key(env, key);
+	find_env = ft_find_matched_key(env, new_dict);
 	if (find_env != 0)
 	{
 		free(*find_env);
-		*find_env = new_dict;
+		*find_env = ft_strdup(new_dict);
 		return (env);
 	}
 	new_env = ft_add_dict_to_env(env, new_dict);

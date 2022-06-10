@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/09 14:21:14 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/10 14:40:10 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ char	**ft_malloc_pa_argument(t_token_lst *cur_token)
 	pa_argument = (char **)malloc(sizeof(char *) * (i + 1));
 	if (pa_argument == 0)
 		return (0);
+	ft_memset(pa_argument, 0, sizeof(char *) * (i + 1));
 	return (pa_argument);
 }
 
@@ -127,10 +128,18 @@ void	ft_delete_token(t_token_lst *token)
 void	ft_delete_argument(t_argument *arg)
 {
 	t_argument	*prev;
+	int			i;
 
 	prev = arg;
 	while (arg != 0)
 	{
+		i = 0;
+		while (arg->pa_argument[i] != 0)
+		{
+			free(arg->pa_argument[i]);
+			++i;
+		}
+		free(arg->pa_argument);
 		arg = arg->next;
 		free(prev);
 		prev = arg;

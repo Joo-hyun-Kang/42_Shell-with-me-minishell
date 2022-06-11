@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 05:13:04 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 15:23:39 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,11 +70,6 @@ int main(int argc, char **argv, char **env)
 			free(str);
 			continue ;
 		}
-#if 0
-		environment = ft_set_env(environment, ft_create_dict_test(str, "ENV_FOR_TEST"));
-		environment = ft_unset_env(environment, str);
-		ft_print_env(environment);
-#endif
 		ft_show_argument_test(arg);
 		ft_env_simple_command_test(arg);
 //		if (arg)

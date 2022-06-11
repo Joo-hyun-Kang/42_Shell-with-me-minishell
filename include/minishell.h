@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 03:42:21 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/12 03:50:03 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 # include <readline/history.h>
 
 # define METACHAR "|;><"
-# define WHITE_SPACE " \r\v\f\t\n"
+# define WHITE_SPACE " \r\v\f\t"
 # define QUOTE "\"'"
-# define SKIPCHAR "|;>< \r\v\f\t\n\"'$"
+# define SKIPCHAR "|;>< \r\v\f\t\"'$"
 
 # define BANNER "\n\n\n\
      S  H  E  L  L          W  I  T  H          M  E\n\
@@ -91,16 +91,16 @@ void			ft_merge_string(char **dst, char *src);
 t_argument		*ft_init_argument(void);
 char			**ft_init_pa_argument(t_token *cur_token);
 void			ft_add_argument_back(t_argument **head, t_argument *argument);
-char	*ft_get_token_type_char(enum e_token_type token_type);
-t_token	*ft_add_additional_pipe(t_token *cur_token, char **env);
-void	ft_heredoc(t_token *cur_token, char **env);
+char			*ft_get_token_type_char(enum e_token_type token_type);
+t_token			*ft_add_additional_pipe(t_token *cur_token, char **env);
+void			ft_heredoc(t_token *cur_token, char **env);
 t_token			*ft_read_token(t_token *cur_token, t_argument *argument, int index);
 t_token			*ft_read_token_initial_state(t_token *cur_token, t_argument *argument, int index);
 /* Interface */
-t_argument	*ft_parser(char *input_command, char ***environment);
+t_argument		*ft_parser(char *input_command, char ***environment);
 /* Clean up */
-void			ft_free_token_memory(t_token *token);
-void			ft_free_argument_memory(t_argument *arg);
+void			ft_free_token(t_token *token);
+void			ft_free_argument(t_argument *arg);
 
 /*
  * #########################################################

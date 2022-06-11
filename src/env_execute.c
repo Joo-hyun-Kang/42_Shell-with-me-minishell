@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:19:31 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/10 18:14:44 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/12 03:46:47 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,5 @@ void	ft_env_simple_command_test(t_argument *arg)
 		else if (ft_strcmp(arg->pa_argument[COMMAND_POSITION], "unset") == 0)
 			ft_execute_unset(arg);
 	}
-	ft_delete_argument(arg);
+	ft_free_argument(arg);
 }

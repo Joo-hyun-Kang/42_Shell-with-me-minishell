@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 03:29:10 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/12 03:51:07 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	ft_merge_environment(char **str, char **dst, char **env)
 
 	++(*str);
 	s_pos = *str;
-	while (ft_strchr(SKIPCHAR, *(*str)) == 0)
+	while (ft_strchr(SKIPCHAR, *(*str)) == 0 && *(*str) != '\n')
 		++(*str);
 	key = ft_strndup(s_pos, *str - s_pos);
 	value = ft_key_to_value(env, key);

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 16:52:07 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 05:11:26 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 12:47:49 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,15 @@ char	**ft_copy_env(char **env)
 	return (duplicated);
 }
 
+/*
+ * Environment variable.
+ * ASD=ASD
+ *
+ * Matchable situations with key arg.
+ * ASD=QWE
+ * ASD=
+ * ASD
+ */
 int	ft_is_match_key(char *env, char *key)
 {
 	int	i;
@@ -174,6 +183,7 @@ void	ft_print_env(char **env)
 	}
 }
 
+// for tokenization
 char	*ft_key_to_value(char **env, char *key)
 {
 	int		i;

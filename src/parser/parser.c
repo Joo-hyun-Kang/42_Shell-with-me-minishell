@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 15:36:45 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 15:42:56y kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,22 +58,6 @@ void	ft_add_argument(t_argument **head, t_argument *arg)
 	}
 }
 
-t_token	*ft_read_token(t_token *cur_token, t_argument *out_arg, int index)
-{
-	if (cur_token->token_type == ARGUMENT)
-	{
-		out_arg->pa_argument[index] = cur_token->pa_str;
-		return (ft_read_token(cur_token->next, out_arg, index + 1));
-	}
-	else
-	{
-		out_arg->next_token_type = cur_token->token_type;
-		if (cur_token->token_type == EOL)
-			return (cur_token);
-		return (cur_token->next);
-	}
-}
-
 char	*ft_return_type_char(enum e_token_type token_type)
 {
 	if (token_type == SEMICOLON)
@@ -90,23 +74,40 @@ char	*ft_return_type_char(enum e_token_type token_type)
 		return ("\\n");
 }
 
-/* Never in EOL */
-t_token	*ft_read_token_state_only_argument(t_token *cur_token, t_argument *out_arg, int index)
+t_token	*ft_read_token(t_token *cur_token, t_argument *out_arg, int index)
 {
-	if (cur_token->token_type == PIPE)
+	if (cur_token->token_type == ARGUMENT)
 	{
-		printf("minishell: parse error near `|'\n");
-		return (0);
+		out_arg->pa_argument[index] = cur_token->pa_str;
+		return (ft_read_token(cur_token->next, out_arg, index + 1));
 	}
-	if (cur_token->token_type != ARGUMENT)
+	else
 	{
 		out_arg->next_token_type = cur_token->token_type;
-		if (cur_token->next->token_type != ARGUMENT)
+		if (cur_token->token_type == EOL)
+			return (cur_token);
+		else if (cur_token->next->token_type != ARGUMENT)
 		{
-			printf("minishell: parse error near `%s'\n", ft_return_type_char(cur_token->next->token_type));
+			printf("minishell: parse error near `%s'\n", \
+				ft_return_type_char(cur_token->next->token_type));
 			return (0);
 		}
 		return (cur_token->next);
+	}
+}
+
+/* Never in EOL */
+t_token	*ft_read_token_state_only_argument(t_token *cur_token, t_argument *out_arg, int index)
+{
+	if (cur_token->token_type != ARGUMENT)
+	{
+		if (cur_token->token_type == PIPE)
+		{
+			printf("minishell: parse error near `|'\n");
+			return (0);
+		}
+		else
+			return (ft_read_token(cur_token, out_arg, index + 1));
 	}
 	else
 	{

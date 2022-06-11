@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 03:42:21 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/12 03:47:20 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,18 +182,18 @@ t_argument	*ft_parser(char *input_command, char ***environment)
 		cur_token = ft_read_token_initial_state(cur_token, cur_arg, 0);
 		if (cur_token == 0)
 		{
-			ft_free_argument_memory(head_arg);
-			ft_free_token_memory(head_token);
+			ft_free_argument(head_arg);
+			ft_free_token(head_token);
 			head_arg = 0;
 			return (0);
 		}
 		ft_add_argument_back(&head_arg, cur_arg);
 	}
-	ft_free_token_memory(head_token);
+	ft_free_token(head_token);
 	return (head_arg);
 }
 
-void	ft_free_token_memory(t_token *token)
+void	ft_free_token(t_token *token)
 {
 	t_token *prev;
 
@@ -206,7 +206,7 @@ void	ft_free_token_memory(t_token *token)
 	}
 }
 
-void	ft_free_argument_memory(t_argument *arg)
+void	ft_free_argument(t_argument *arg)
 {
 	t_argument	*prev;
 	int			i;

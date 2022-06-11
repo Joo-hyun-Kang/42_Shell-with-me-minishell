@@ -74,6 +74,17 @@ char	*ft_return_type_char(enum e_token_type token_type)
 		return ("\\n");
 }
 
+void	ft_combine_pipe_str(t_token *cur_token, char **env)
+{
+	char	*read_line;
+	t_token	*add;
+
+	read_line = readline("pipe> ");
+	add = ft_tokenization(read_line, env);
+	free(read_line);
+	cur_token->next = add;
+}
+
 t_token	*ft_read_token(t_token *cur_token, t_argument *out_arg, int index)
 {
 	if (cur_token->token_type == ARGUMENT)
@@ -88,9 +99,17 @@ t_token	*ft_read_token(t_token *cur_token, t_argument *out_arg, int index)
 			return (cur_token);
 		else if (cur_token->next->token_type != ARGUMENT)
 		{
-			printf("minishell: parse error near `%s'\n", \
-				ft_return_type_char(cur_token->next->token_type));
-			return (0);
+			if (cur_token->token_type == PIPE)
+			{
+				ft_combine_pipe_str(cur_token, *(out_arg->env));
+				return (cur_token->next);
+			}
+			else
+			{
+				printf("minishell: parse error near `%s'\n", \
+					ft_return_type_char(cur_token->next->token_type));
+				return (0);
+			}
 		}
 		return (cur_token->next);
 	}

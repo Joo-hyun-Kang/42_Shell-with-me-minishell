@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/11 20:24:55 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/12 00:17:10 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,11 +46,11 @@ CC				=	gcc
 CFLAGS			=	-g # -Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(EXCUSE_DIR)\
-					-I /Users/kanghyki/.brew/opt/readline/include
-					#-I /opt/homebrew/opt/readline/include
+					-I /opt/homebrew/opt/readline/include
+					#-I /Users/kanghyki/.brew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /Users/kanghyki/.brew/opt/readline/lib
-					#-l readline -L /opt/homebrew/opt/readline/lib
+					-l readline -L /opt/homebrew/opt/readline/lib
+					#-l readline -L /Users/kanghyki/.brew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 

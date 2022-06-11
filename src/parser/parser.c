@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 15:42:56y kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/12 03:21:06 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_argument	*ft_init_argument(void)
 	return (argument);
 }
 
-char	**ft_malloc_pa_argument(t_token *cur_token)
+char	**ft_init_pa_argument(t_token *cur_token)
 {
 	char	**pa_argument;
 	int		i;
@@ -58,7 +58,7 @@ void	ft_add_argument(t_argument **head, t_argument *arg)
 	}
 }
 
-char	*ft_return_type_char(enum e_token_type token_type)
+char	*ft_get_token_type_char(enum e_token_type token_type)
 {
 	if (token_type == SEMICOLON)
 		return (";");
@@ -74,18 +74,18 @@ char	*ft_return_type_char(enum e_token_type token_type)
 		return ("\\n");
 }
 
-void	ft_combine_pipe_str(t_token *cur_token, char **env)
+void	ft_add_additional_pipe(t_token *cur_token, char **env)
 {
 	char	*read_line;
 	t_token	*add;
 
 	read_line = readline("> ");
-	add = ft_tokenization(read_line, env);
+	add = ft_tokenizer(read_line, env);
 	free(read_line);
 	cur_token->next = add;
 }
 
-void	ft_replace_heredoc(t_token *cur_token, char **env)
+void	ft_heredoc(t_token *cur_token, char **env)
 {
 	char	*read_line;
 	char	*new_pa_str;
@@ -96,7 +96,7 @@ void	ft_replace_heredoc(t_token *cur_token, char **env)
 	read_line = readline("> ");
 	while (ft_strcmp(cur_token->next->pa_str, read_line) != 0)
 	{
-		ft_combine_str(&new_pa_str, read_line);
+		ft_merge_string(&new_pa_str, read_line);
 		for_free = new_pa_str;
 		new_pa_str = ft_strjoin(new_pa_str, "\n");
 		free(for_free);
@@ -106,7 +106,7 @@ void	ft_replace_heredoc(t_token *cur_token, char **env)
 	t_token	*next_next_token = cur_token->next->next;
 	free(cur_token->next->pa_str);
 	free(cur_token->next);
-	new_token = ft_tokenization(new_pa_str, env);
+	new_token = ft_tokenizer(new_pa_str, env);
 	free(new_pa_str);
 	cur_token->next = new_token;
 	while (new_token->next != 0)
@@ -130,24 +130,23 @@ t_token	*ft_read_token(t_token *cur_token, t_argument *out_arg, int index)
 		{
 			if (cur_token->token_type == PIPE)
 			{
-				ft_combine_pipe_str(cur_token, *(out_arg->env));
+				ft_add_additional_pipe(cur_token, *(out_arg->env));
 				return (cur_token->next);
 			}
 			else
 			{
 				printf("minishell: parse error near `%s'\n", \
-					ft_return_type_char(cur_token->next->token_type));
+					ft_get_token_type_char(cur_token->next->token_type));
 				return (0);
 			}
 		}
 		else if (cur_token->token_type == DGT)
-			ft_replace_heredoc(cur_token, *(out_arg->env));
+			ft_heredoc(cur_token, *(out_arg->env));
 		return (cur_token->next);
 	}
 }
 
-/* Never in EOL */
-t_token	*ft_read_token_state_only_argument(t_token *cur_token, t_argument *out_arg, int index)
+t_token	*ft_read_token_initial_state(t_token *cur_token, t_argument *out_arg, int index)
 {
 	if (cur_token->token_type != ARGUMENT)
 	{
@@ -166,24 +165,24 @@ t_token	*ft_read_token_state_only_argument(t_token *cur_token, t_argument *out_a
 	}
 }
 
-t_argument	*ft_create_argument(char *str, char ***env)
+t_argument	*ft_parser(char *input_command, char ***environment)
 {
-	t_argument	*head_arg;
-	t_argument	*cur_arg;
-	t_token	*head_token;
-	t_token	*cur_token;
+	t_argument		*head_arg;
+	t_argument		*cur_arg;
+	t_token			*head_token;
+	t_token			*cur_token;
 
-	if (*str == 0)
+	if (*input_command == 0)
 		return (0);
-	head_token = ft_tokenization(str, *env);
-	cur_token = head_token;
 	head_arg = 0;
+	head_token = ft_tokenizer(input_command, *environment);
+	cur_token = head_token;
 	while (cur_token->token_type != EOL)
 	{
 		cur_arg = ft_init_argument();
-		cur_arg->pa_argument = ft_malloc_pa_argument(cur_token);
-		cur_arg->env = env;
-		cur_token = ft_read_token_state_only_argument(cur_token, cur_arg, 0);
+		cur_arg->pa_argument = ft_init_pa_argument(cur_token);
+		cur_arg->env = environment;
+		cur_token = ft_read_token_initial_state(cur_token, cur_arg, 0);
 		if (cur_token == 0)
 		{
 			ft_delete_argument(head_arg);

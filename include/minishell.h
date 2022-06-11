@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 21:41:25 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/12 03:19:59 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # define METACHAR "|;><"
 # define WHITE_SPACE " \r\v\f\t\n"
 # define QUOTE "\"'"
+# define SKIPCHAR "|;>< \r\v\f\t\n\"'$"
 
 # define BANNER "\n\n\n\
      S  H  E  L  L          W  I  T  H          M  E\n\
@@ -55,6 +56,8 @@ typedef struct s_argument {
 	struct s_argument		*next;
 } t_argument;
 
+void	print_memory_test(char *dst, int size);
+
 /*
  * #########################################################
  * #                                                       #
@@ -63,17 +66,20 @@ typedef struct s_argument {
  * #########################################################
  */
 /* src/parser/tokenizer/token.c */
+t_token			*ft_init_token(char *pa_str, enum e_token_type token_type);
+void			ft_add_token_back(t_token **head, t_token *new_token);
+void			ft_merge_environment(char **str, char **dst, char **env);
+void			ft_quote(char **str, char **dst, char quote, char **env);
+t_token			*ft_create_token_type_metachar(char **str);
+t_token			*ft_create_token_type_argument(char **input_command, char **environment);
+/* Interface */
+t_token	*ft_tokenizer(char *input_command, char **environment);
+/* tokenizer utils */
 char			*ft_strchr_except_null(const char *str, int c);
 char			*ft_strndup(const char *src, size_t n);
-t_token			*ft_init_token(char *pa_str, enum e_token_type token_type);
-void			ft_add_token(t_token **head, t_token *new_token);
-void			ft_combine_str(char **dst, char *src);
-void			ft_replace_str_with_env(char **str, char **dst, char **env);
-void			ft_quote(char **str, char **dst, char quote, char **env);
-t_token			*ft_create_token_meta_char(char **str);
-t_token			*ft_create_token_argument(char **str, char **env);
-t_token			*ft_tokenization(char *str, char **env);
 
+/* tokenizer, parser utils */
+void			ft_merge_string(char **dst, char *src);
 /*
  * #########################################################
  * #                                                       #
@@ -83,11 +89,16 @@ t_token			*ft_tokenization(char *str, char **env);
  */
 /* src/parser/parser.c */
 t_argument		*ft_init_argument(void);
-char			**ft_malloc_pa_argument(t_token *cur_token);
+char			**ft_init_pa_argument(t_token *cur_token);
 void			ft_add_argument(t_argument **head, t_argument *argument);
+char	*ft_get_token_type_char(enum e_token_type token_type);
+void	ft_add_additional_pipe(t_token *cur_token, char **env);
+void	ft_heredoc(t_token *cur_token, char **env);
 t_token			*ft_read_token(t_token *cur_token, t_argument *argument, int index);
-t_token			*ft_read_token_state_only_argument(t_token *cur_token, t_argument *argument, int index);
-t_argument		*ft_create_argument(char *str, char ***env);
+t_token			*ft_read_token_initial_state(t_token *cur_token, t_argument *argument, int index);
+/* Interface */
+t_argument	*ft_parser(char *input_command, char ***environment);
+/* Clean up */
 void			ft_delete_token(t_token *token);
 void			ft_delete_argument(t_argument *arg);
 

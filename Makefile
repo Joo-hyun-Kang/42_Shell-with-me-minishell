@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/12 00:17:10 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/12 04:39:10 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,10 +22,15 @@ LIBFT_DIR		=	library/libft/
 LIBFT_INC		=	$(LIBFT_DIR)inc
 #--------------[ TOKENIZER ]-----------------
 TOKEN_DIR		=	src/parser/tokenizer
-TOKEN_SRC		=	token.c
+TOKEN_SRC		=	tokenizer.c\
+					tokenizer_utils.c
 #--------------[ PARSER ]----------------
 PARSER_DIR		=	src/parser
-PARSER_SRC		=	parser.c
+PARSER_SRC		=	parser.c\
+					parser_utils.c\
+					parser_common_utils.c\
+					parser_free_utils.c\
+					parser_additional.c
 #--------------[ EXCUSE ]----------------
 EXCUSE_DIR		=	src/excuse_cmd
 EXCUSE_SRC		=	#cmd.c

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 15:08:24 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 17:52:41 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <readline/history.h>
 
 # define METACHAR "|;><"
-# define WHITE_SPACE " \r\v\f\n\t"
+# define WHITE_SPACE " \r\v\f\t"
 # define QUOTE "\"'"
 
 # define BANNER "\n\n\n\
@@ -68,6 +68,7 @@ char			*ft_strndup(const char *src, size_t n);
 t_token			*ft_init_token(char *pa_str, enum e_token_type token_type);
 void			ft_add_token(t_token **head, t_token *new_token);
 void			ft_combine_str(char **dst, char *src);
+void			ft_replace_str_with_env(char **str, char **dst, char **env);
 void			ft_quote(char **str, char **dst, char quote, char **env);
 t_token			*ft_create_token_meta_char(char **str);
 t_token			*ft_create_token_argument(char **str, char **env);

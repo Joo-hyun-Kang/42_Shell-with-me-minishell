@@ -85,6 +85,42 @@ void	ft_combine_pipe_str(t_token *cur_token, char **env)
 	cur_token->next = add;
 }
 
+void	ft_combine_str_for_heredoc(char **dst, char *src)
+{
+	char	*new_str;
+
+	if (*dst == 0)
+		*dst = src;
+	else
+	{
+		new_str = ft_strjoin(*dst, src);
+		free(*dst);
+		free(src);
+		*dst = new_str;
+	}
+}
+
+void	ft_replace_heredoc(t_token *cur_token, char **env)
+{
+	char	*read_line;
+	char	*new_pa_str;
+	char	*for_free;
+
+	new_pa_str = ft_strdup("");
+	read_line = readline("> ");
+	while (ft_strcmp(cur_token->next->pa_str, read_line) != 0)
+	{
+		ft_combine_str_for_heredoc(&new_pa_str, read_line);
+		for_free = new_pa_str;
+		new_pa_str = ft_strjoin(new_pa_str, "\n");
+		free(for_free);
+		read_line = readline("> ");
+	}
+	free(read_line);
+	free(cur_token->next->pa_str);
+	cur_token->next->pa_str = new_pa_str;
+}
+
 t_token	*ft_read_token(t_token *cur_token, t_argument *out_arg, int index)
 {
 	if (cur_token->token_type == ARGUMENT)
@@ -111,6 +147,8 @@ t_token	*ft_read_token(t_token *cur_token, t_argument *out_arg, int index)
 				return (0);
 			}
 		}
+		else if (cur_token->token_type == DGT)
+			ft_replace_heredoc(cur_token, *(out_arg->env));
 		return (cur_token->next);
 	}
 }
@@ -126,7 +164,7 @@ t_token	*ft_read_token_state_only_argument(t_token *cur_token, t_argument *out_a
 			return (0);
 		}
 		else
-			return (ft_read_token(cur_token, out_arg, index + 1));
+			return (ft_read_token(cur_token, out_arg, -1));
 	}
 	else
 	{

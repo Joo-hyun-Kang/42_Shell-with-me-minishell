@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 20:28:30 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 21:23:03 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -231,6 +231,6 @@ t_token	*ft_tokenization(char *str, char **env)
 		}
 	}
 	ft_add_token(&head, ft_init_token(0, EOL));
-	// ft_print_token_test(head);
+	ft_print_token_test(head);
 	return (head);
 }

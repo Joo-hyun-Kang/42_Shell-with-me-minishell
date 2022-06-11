@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 03:21:06 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/12 03:42:21 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	**ft_init_pa_argument(t_token *cur_token)
 	return (pa_argument);
 }
 
-void	ft_add_argument(t_argument **head, t_argument *arg)
+void	ft_add_argument_back(t_argument **head, t_argument *arg)
 {
 	t_argument	*iter;
 
@@ -74,7 +74,7 @@ char	*ft_get_token_type_char(enum e_token_type token_type)
 		return ("\\n");
 }
 
-void	ft_add_additional_pipe(t_token *cur_token, char **env)
+t_token	*ft_add_additional_pipe(t_token *cur_token, char **env)
 {
 	char	*read_line;
 	t_token	*add;
@@ -83,6 +83,7 @@ void	ft_add_additional_pipe(t_token *cur_token, char **env)
 	add = ft_tokenizer(read_line, env);
 	free(read_line);
 	cur_token->next = add;
+	return (cur_token->next);
 }
 
 void	ft_heredoc(t_token *cur_token, char **env)
@@ -126,17 +127,13 @@ t_token	*ft_read_token(t_token *cur_token, t_argument *out_arg, int index)
 		out_arg->next_token_type = cur_token->token_type;
 		if (cur_token->token_type == EOL)
 			return (cur_token);
-		else if (cur_token->next->token_type != ARGUMENT)
+		if (cur_token->next->token_type != ARGUMENT)
 		{
 			if (cur_token->token_type == PIPE)
-			{
-				ft_add_additional_pipe(cur_token, *(out_arg->env));
-				return (cur_token->next);
-			}
+				return (ft_add_additional_pipe(cur_token, *(out_arg->env)));
 			else
 			{
-				printf("minishell: parse error near `%s'\n", \
-					ft_get_token_type_char(cur_token->next->token_type));
+				printf("minishell: parse error near `%s'\n", ft_get_token_type_char(cur_token->next->token_type));
 				return (0);
 			}
 		}
@@ -185,16 +182,18 @@ t_argument	*ft_parser(char *input_command, char ***environment)
 		cur_token = ft_read_token_initial_state(cur_token, cur_arg, 0);
 		if (cur_token == 0)
 		{
-			ft_delete_argument(head_arg);
-			break ;
+			ft_free_argument_memory(head_arg);
+			ft_free_token_memory(head_token);
+			head_arg = 0;
+			return (0);
 		}
-		ft_add_argument(&head_arg, cur_arg);
+		ft_add_argument_back(&head_arg, cur_arg);
 	}
-	ft_delete_token(head_token);
+	ft_free_token_memory(head_token);
 	return (head_arg);
 }
 
-void	ft_delete_token(t_token *token)
+void	ft_free_token_memory(t_token *token)
 {
 	t_token *prev;
 
@@ -207,7 +206,7 @@ void	ft_delete_token(t_token *token)
 	}
 }
 
-void	ft_delete_argument(t_argument *arg)
+void	ft_free_argument_memory(t_argument *arg)
 {
 	t_argument	*prev;
 	int			i;

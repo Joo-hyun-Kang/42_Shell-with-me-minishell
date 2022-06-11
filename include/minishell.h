@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 03:19:59 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/12 03:42:21 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,17 +90,17 @@ void			ft_merge_string(char **dst, char *src);
 /* src/parser/parser.c */
 t_argument		*ft_init_argument(void);
 char			**ft_init_pa_argument(t_token *cur_token);
-void			ft_add_argument(t_argument **head, t_argument *argument);
+void			ft_add_argument_back(t_argument **head, t_argument *argument);
 char	*ft_get_token_type_char(enum e_token_type token_type);
-void	ft_add_additional_pipe(t_token *cur_token, char **env);
+t_token	*ft_add_additional_pipe(t_token *cur_token, char **env);
 void	ft_heredoc(t_token *cur_token, char **env);
 t_token			*ft_read_token(t_token *cur_token, t_argument *argument, int index);
 t_token			*ft_read_token_initial_state(t_token *cur_token, t_argument *argument, int index);
 /* Interface */
 t_argument	*ft_parser(char *input_command, char ***environment);
 /* Clean up */
-void			ft_delete_token(t_token *token);
-void			ft_delete_argument(t_argument *arg);
+void			ft_free_token_memory(t_token *token);
+void			ft_free_argument_memory(t_argument *arg);
 
 /*
  * #########################################################

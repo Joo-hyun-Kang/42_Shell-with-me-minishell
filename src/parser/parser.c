@@ -79,7 +79,7 @@ void	ft_combine_pipe_str(t_token *cur_token, char **env)
 	char	*read_line;
 	t_token	*add;
 
-	read_line = readline("pipe> ");
+	read_line = readline("> ");
 	add = ft_tokenization(read_line, env);
 	free(read_line);
 	cur_token->next = add;

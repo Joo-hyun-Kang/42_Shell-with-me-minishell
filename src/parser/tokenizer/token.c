@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 04:52:03 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 14:55:18 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,10 +93,10 @@ t_token	*ft_create_token_meta_char(char **str)
 	}
 	else if (*(*str) == '>')
 	{
-		token_type = GT;
+		token_type = LT;
 		if (*(*str + 1) == '>')
 		{
-			token_type = DGT;
+			token_type = DLT;
 			++(*str);
 		}
 	}

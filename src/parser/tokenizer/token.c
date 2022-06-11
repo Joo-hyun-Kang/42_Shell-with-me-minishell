@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 15:28:01 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 16:04:34 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,7 @@ t_token	*ft_create_token_argument(char **str, char **env)
 	return (ft_init_token(pa_str, ARGUMENT));
 }
 
+void	ft_print_token_test(t_token *head);
 t_token	*ft_tokenization(char *str, char **env)
 {
 	t_token	*head;
@@ -223,5 +224,17 @@ t_token	*ft_tokenization(char *str, char **env)
 		}
 	}
 	ft_add_token(&head, ft_init_token(0, EOL));
+	ft_print_token_test(head);
 	return (head);
+}
+
+void	ft_print_token_test(t_token *head)
+{
+	const char	*t_type_str_test[8] = {"ARGUMENT", "PIPE", "SEMICOLON", "LT", "DLT", "GT", "DGT", "EOL"};
+
+	while (head)
+	{
+		printf("{token type:%s, token value:%s\n", t_type_str_test[head->token_type], head->pa_str);
+		head = head->next;
+	}
 }

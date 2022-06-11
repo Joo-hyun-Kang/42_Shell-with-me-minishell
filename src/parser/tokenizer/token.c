@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 16:23:41 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 17:09:16 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,10 +161,7 @@ void	ft_quote(char **str, char **dst, char quote, char **env)
 	for_free = *dst;
 	*dst = ft_strjoin(*dst, "\n");
 	free(for_free);
-	if (quote == '"')
-		read_line = readline("dquote> ");
-	else
-		read_line = readline("quote> ");
+	read_line = readline("> ");
 	for_free = read_line;
 	ft_quote(&read_line, dst, quote, env);
 	free(for_free);
@@ -234,6 +231,6 @@ t_token	*ft_tokenization(char *str, char **env)
 		}
 	}
 	ft_add_token(&head, ft_init_token(0, EOL));
-	ft_print_token_test(head);
+	// ft_print_token_test(head);
 	return (head);
 }

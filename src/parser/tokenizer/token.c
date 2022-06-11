@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 21:23:03 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/12 03:22:36 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ t_token	*ft_init_token(char *pa_str, enum e_token_type token_type)
 	return (new_token);
 }
 
-void	ft_add_token(t_token **head, t_token *new_token)
+void	ft_add_token_back(t_token **head, t_token *new_token)
 {
 	t_token	*iter;
 
@@ -73,7 +73,7 @@ void	ft_add_token(t_token **head, t_token *new_token)
 	}
 }
 
-t_token	*ft_create_token_meta_char(char **str)
+t_token	*ft_create_token_type_metachar(char **str)
 {
 	enum e_token_type	token_type;
 
@@ -104,7 +104,7 @@ t_token	*ft_create_token_meta_char(char **str)
 	return (ft_init_token(0, token_type));
 }
 
-void	ft_combine_str(char **dst, char *src)
+void	ft_merge_string(char **dst, char *src)
 {
 	char	*new_str;
 
@@ -119,7 +119,7 @@ void	ft_combine_str(char **dst, char *src)
 	}
 }
 
-void	ft_replace_str_with_env(char **str, char **dst, char **env)
+void	ft_merge_environment(char **str, char **dst, char **env)
 {
 	char	*s_pos;
 	char	*key;
@@ -127,37 +127,36 @@ void	ft_replace_str_with_env(char **str, char **dst, char **env)
 
 	++(*str);
 	s_pos = *str;
-	while (*(*str) != 0
-			&& ft_strchr_except_null(WHITE_SPACE, *(*str)) == 0
-			&& ft_strchr_except_null(METACHAR, *(*str)) == 0
-			&& ft_strchr_except_null(QUOTE, *(*str)) == 0)
+	while (ft_strchr(SKIPCHAR, *(*str)) == 0)
 		++(*str);
 	key = ft_strndup(s_pos, *str - s_pos);
 	value = ft_key_to_value(env, key);
 	free(key);
-	ft_combine_str(dst, value);
+	ft_merge_string(dst, value);
 }
 
-void	ft_quote(char **str, char **dst, char quote, char **env)
+void	ft_quote(char **input_command, char **dst, char quote, char **env)
 {
 	char	*s_pos;
 	char	*read_line;
 	char	*for_free;
 
-	s_pos = *str;
-	while (*(*str) != 0)
+	s_pos = *input_command;
+	while (*(*input_command) != 0)
 	{
-		if (*(*str) == quote)
+		if (*(*input_command) == quote)
 		{
-			ft_combine_str(dst, ft_strndup(s_pos, *str - s_pos));
-			++(*str);
+			ft_merge_string(dst, ft_strndup(s_pos, *input_command - s_pos));
+			++(*input_command);
+			if (*(*input_command) != 0)
+				ft_merge_string(dst, ft_strdup(*input_command));
 			return ;
 		}
-		else if (*(*str) == '$')
-			ft_replace_str_with_env(str, dst, env);
-		++(*str);
+		else if (quote == '"' && *(*input_command) == '$')
+			ft_merge_environment(input_command, dst, env);
+		++(*input_command);
 	}
-	ft_combine_str(dst, ft_strndup(s_pos, *str - s_pos));
+	ft_merge_string(dst, ft_strndup(s_pos, *input_command - s_pos));
 	for_free = *dst;
 	*dst = ft_strjoin(*dst, "\n");
 	free(for_free);
@@ -167,37 +166,55 @@ void	ft_quote(char **str, char **dst, char quote, char **env)
 	free(for_free);
 }
 
-t_token	*ft_create_token_argument(char **str, char **env)
+t_token	*ft_create_token_type_argument(char **input_command, char **environment)
 {
 	char	*s_pos;
-	char	*pa_str;
-	char	quote;
+	char	*new_string;
 
-	s_pos = *str;
-	pa_str = 0;
-	while (*(*str) != 0)
+	new_string = 0;
+	s_pos = *input_command;
+	while (*(*input_command) != 0)
 	{
-		s_pos = *str;
-		while (*(*str) != 0
-				&& ft_strchr_except_null(WHITE_SPACE, *(*str)) == 0
-				&& ft_strchr_except_null(METACHAR, *(*str)) == 0
-				&& ft_strchr_except_null(QUOTE, *(*str)) == 0
-				&& *(*str) != '$')
-			++(*str);
-		ft_combine_str(&pa_str, ft_strndup(s_pos, *str - s_pos));
-		if (ft_strchr_except_null(QUOTE, *(*str)) != 0)
+		s_pos = *input_command;
+		while (ft_strchr(SKIPCHAR, *(*input_command)) == 0)
+			++(*input_command);
+		ft_merge_string(&new_string, ft_strndup(s_pos, *input_command - s_pos));
+		if (ft_strchr_except_null(QUOTE, *(*input_command)) != 0)
 		{
-			quote = *(*str);
-			++(*str);
-			ft_quote(str, &pa_str, quote, env);
+			++(*input_command);
+			ft_quote(input_command, &new_string, *((*input_command) - 1), environment);
 		}
-		else if (*(*str) == '$')
-			ft_replace_str_with_env(str, &pa_str, env);
-		else if (ft_strchr_except_null(WHITE_SPACE, *(*str)) != 0
-				|| ft_strchr_except_null(METACHAR, *(*str)) != 0)
+		else if (*(*input_command) == '$')
+			ft_merge_environment(input_command, &new_string, environment);
+		else if (ft_strchr_except_null(WHITE_SPACE, *(*input_command)) != 0
+				|| ft_strchr_except_null(METACHAR, *(*input_command)) != 0)
 			break ;
 	}
-	return (ft_init_token(pa_str, ARGUMENT));
+	return (ft_init_token(new_string, ARGUMENT));
+}
+
+/* Interface */
+t_token	*ft_tokenizer(char *input_command, char **environment)
+{
+	t_token	*head;
+	t_token	*new_token;
+
+	head = 0;
+	while (*input_command != 0)
+	{
+		while (ft_strchr_except_null(WHITE_SPACE, *input_command) != 0)
+			++input_command;
+		if (*input_command != 0)
+		{
+			if (ft_strchr_except_null(METACHAR, *input_command) != 0)
+				new_token = ft_create_token_type_metachar(&input_command);
+			else
+				new_token = ft_create_token_type_argument(&input_command, environment);
+			ft_add_token_back(&head, new_token);
+		}
+	}
+	ft_add_token_back(&head, ft_init_token(0, EOL));
+	return (head);
 }
 
 void	ft_print_token_test(t_token *head)
@@ -209,28 +226,4 @@ void	ft_print_token_test(t_token *head)
 		printf("{token type:%s, token value:%s\n", t_type_str_test[head->token_type], head->pa_str);
 		head = head->next;
 	}
-}
-
-t_token	*ft_tokenization(char *str, char **env)
-{
-	t_token	*head;
-	t_token	*new_token;
-
-	head = 0;
-	while (*str != 0)
-	{
-		while (ft_strchr_except_null(WHITE_SPACE, *str) != 0)
-			++str;
-		if (*str != 0)
-		{
-			if (ft_strchr_except_null(METACHAR, *str) != 0)
-				new_token = ft_create_token_meta_char(&str);
-			else
-				new_token = ft_create_token_argument(&str, env);
-			ft_add_token(&head, new_token);
-		}
-	}
-	ft_add_token(&head, ft_init_token(0, EOL));
-	ft_print_token_test(head);
-	return (head);
 }

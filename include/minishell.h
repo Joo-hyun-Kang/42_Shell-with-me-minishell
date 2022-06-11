@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 04:42:38 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 15:08:24 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,8 @@ enum e_token_type {
 };
 
 typedef struct s_token {
-	char					*pa_str;
 	enum e_token_type		token_type;
+	char					*pa_str;
 	struct s_token			*next;
 } t_token;
 

@@ -85,40 +85,33 @@ void	ft_combine_pipe_str(t_token *cur_token, char **env)
 	cur_token->next = add;
 }
 
-void	ft_combine_str_for_heredoc(char **dst, char *src)
-{
-	char	*new_str;
-
-	if (*dst == 0)
-		*dst = src;
-	else
-	{
-		new_str = ft_strjoin(*dst, src);
-		free(*dst);
-		free(src);
-		*dst = new_str;
-	}
-}
-
 void	ft_replace_heredoc(t_token *cur_token, char **env)
 {
 	char	*read_line;
 	char	*new_pa_str;
 	char	*for_free;
+	t_token	*new_token;
 
 	new_pa_str = ft_strdup("");
 	read_line = readline("> ");
 	while (ft_strcmp(cur_token->next->pa_str, read_line) != 0)
 	{
-		ft_combine_str_for_heredoc(&new_pa_str, read_line);
+		ft_combine_str(&new_pa_str, read_line);
 		for_free = new_pa_str;
 		new_pa_str = ft_strjoin(new_pa_str, "\n");
 		free(for_free);
 		read_line = readline("> ");
 	}
 	free(read_line);
+	t_token	*next_next_token = cur_token->next->next;
 	free(cur_token->next->pa_str);
-	cur_token->next->pa_str = new_pa_str;
+	free(cur_token->next);
+	new_token = ft_tokenization(new_pa_str, env);
+	free(new_pa_str);
+	cur_token->next = new_token;
+	while (new_token->next != 0)
+		new_token = new_token->next;
+	new_token->next = next_next_token;
 }
 
 t_token	*ft_read_token(t_token *cur_token, t_argument *out_arg, int index)

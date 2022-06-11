@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/11 17:52:41 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/11 21:41:25 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <readline/history.h>
 
 # define METACHAR "|;><"
-# define WHITE_SPACE " \r\v\f\t"
+# define WHITE_SPACE " \r\v\f\t\n"
 # define QUOTE "\"'"
 
 # define BANNER "\n\n\n\

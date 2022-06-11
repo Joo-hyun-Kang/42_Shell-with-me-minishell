@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 03:22:36 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/12 03:29:10 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,6 +193,17 @@ t_token	*ft_create_token_type_argument(char **input_command, char **environment)
 	return (ft_init_token(new_string, ARGUMENT));
 }
 
+void	ft_print_token_test(t_token *head)
+{
+	const char	*t_type_str_test[8] = {"ARGUMENT", "PIPE", "SEMICOLON", "LT", "DLT", "GT", "DGT", "EOL"};
+
+	while (head)
+	{
+		printf("{token type:%s, token value:%s\n", t_type_str_test[head->token_type], head->pa_str);
+		head = head->next;
+	}
+}
+
 /* Interface */
 t_token	*ft_tokenizer(char *input_command, char **environment)
 {
@@ -214,16 +225,6 @@ t_token	*ft_tokenizer(char *input_command, char **environment)
 		}
 	}
 	ft_add_token_back(&head, ft_init_token(0, EOL));
+	ft_print_token_test(head);
 	return (head);
-}
-
-void	ft_print_token_test(t_token *head)
-{
-	const char	*t_type_str_test[8] = {"ARGUMENT", "PIPE", "SEMICOLON", "LT", "DLT", "GT", "DGT", "EOL"};
-
-	while (head)
-	{
-		printf("{token type:%s, token value:%s\n", t_type_str_test[head->token_type], head->pa_str);
-		head = head->next;
-	}
 }

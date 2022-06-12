@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <stdio.h>
+#include <dirent.h>
 
 #include "../../library/libft/inc/libft.h"
 #include "../../include/minishell.h"
@@ -17,6 +18,11 @@
 #define PIPE_MIDDLE (1)
 #define PIPE_END (2)
 
+#define NON_DIR_CHAR_BIT (5)
+
+// 테스팅용 전역 환경변수
+
+extern char **environ;
 
 /*
  * 그냥 에러를 출력하고 나가버리는데
@@ -94,16 +100,7 @@ void	ft_system(t_argument *argument)
 			}
 			else if (child_pid == 0 && is_pipe_on == PIPE_NONE)
 			{
-				int length = ft_get_length_2d_arr(argument->pa_argument);
-				printf("length = %d\n", length);
-				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
-				ft_get_sh_command(argument->pa_argument, pa_copy_argument);
-				//ft_free_command(pa_copy_argument);
-				for (int i = 0; i < length + 2; ++i)
-				{
-					printf("%s\n", pa_copy_argument[i]);
-				}
-				execve("/bin/sh", pa_copy_argument, NULL);
+				ft_execuse(argument->pa_argument);
 				printf("this is execuse Error");
 			}
 			else if (child_pid == 0 && is_pipe_on == PIPE_START)
@@ -119,14 +116,9 @@ void	ft_system(t_argument *argument)
 				close(fd_pipe1[PIPE_READ]);
 
 				int length = ft_get_length_2d_arr(argument->pa_argument);
-				printf("length = %d\n", length);
 				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
 				ft_get_sh_command(argument->pa_argument, pa_copy_argument);
 				//ft_free_command(pa_copy_argument);
-				for (int i = 0; i < length + 2; ++i)
-				{
-					printf("%s\n", pa_copy_argument[i]);
-				}
 				execve("/bin/sh", pa_copy_argument, NULL);
 			}
 			else if (child_pid == 0 && is_pipe_on == PIPE_MIDDLE)
@@ -145,14 +137,8 @@ void	ft_system(t_argument *argument)
 				
 				
 				int length = ft_get_length_2d_arr(argument->pa_argument);
-				printf("length = %d\n", length);
 				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
 				ft_get_sh_command(argument->pa_argument, pa_copy_argument);
-				//ft_free_command(pa_copy_argument);
-				for (int i = 0; i < length + 2; ++i)
-				{
-					printf("%s\n", pa_copy_argument[i]);
-				}
 				execve("/bin/sh", pa_copy_argument, NULL);
 			}
 			else if (child_pid == 0 && is_pipe_on == PIPE_END)
@@ -170,14 +156,8 @@ void	ft_system(t_argument *argument)
 				close(fd_pipe1[PIPE_READ]);
 			
 				int length = ft_get_length_2d_arr(argument->pa_argument);
-				printf("length = %d\n", length);
 				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
 				ft_get_sh_command(argument->pa_argument, pa_copy_argument);
-				//ft_free_command(pa_copy_argument);
-				for (int i = 0; i < length + 2; ++i)
-				{
-					printf("%s\n", pa_copy_argument[i]);
-				}
 				execve("/bin/sh", pa_copy_argument, NULL);
 			}
 
@@ -208,6 +188,108 @@ void	ft_system(t_argument *argument)
 	}
 
 	ft_free_argument(pa_orgin_argument);
+}
+
+void	ft_execuse(char **pa_argument)
+{
+	int		is_path;
+	char	*pa_path;
+	// 환경변수 다 지워도 ls는 bin에서는 실행되는데
+	// a.out은 현재 디렉토리에서 실행 안 되는 거 예외처리 하기
+	if (ft_strchr(pa_argument[COMMAND_POSITION], '/') != FALSE)
+		is_path = TRUE;
+	else
+		is_path = FALSE;
+
+	if (is_path)
+	{
+		execve(pa_argument[COMMAND_POSITION], pa_argument, NULL);
+		//에러처리
+		return ;
+	}
+	else
+	{
+		pa_path = ft_search_command_path_malloc(pa_argument[COMMAND_POSITION]);
+		if (pa_path == NULL)
+		{
+			ft_print_error();
+			free(pa_path);
+			return ;
+		}
+		execve(pa_path, pa_argument, NULL);
+		free(pa_path);
+		return ;
+	}	
+}
+
+char	*ft_search_command_path_malloc(char *command)
+{
+	char	**pp;
+	char	*env_path;
+	char	**pa_directories;
+	int		length;
+	int		i;
+	int		position;
+	char	*pa_command_with_path;
+
+	env_path = NULL;
+	pp = environ;
+	while (*pp != NULL)
+	{
+		//strcmp함수로 바꾸기
+		if (ft_strncmp(*pp, "PATH", 4) == 0)
+		{
+			env_path = *pp;
+			break;
+		}
+		pp++;
+	}
+
+	if (env_path != NULL)
+	{
+		env_path += NON_DIR_CHAR_BIT;
+		pa_directories = ft_split(env_path, ':');
+	}
+
+	//현재 디렉토리도 넣는 로직 추가
+	i = 0;
+	position = -1;
+	length = ft_strlen(command);
+	while (pa_directories[i] != NULL)
+	{
+		DIR *dir;
+		struct dirent *ent;
+		if ((dir = opendir(pa_directories[i])) != NULL) {
+			while ((ent = readdir (dir)) != NULL) 
+			{
+				if (ft_strncmp(command, ent->d_name, length) == 0)
+				{
+					position = i;
+					break;
+				}
+			}
+		closedir (dir);
+		} 
+		else 
+		{
+		/* could not open directory */
+			perror ("");
+			return NULL;
+		}
+		i++;
+		if (position > 0)
+		{
+			break;
+		}
+	}
+	if (position < 0)
+	{
+		ft_free_command(pa_directories);
+		return (NULL);
+	}
+	pa_command_with_path = ft_strjoin(pa_directories[position], command);
+	ft_free_command(pa_directories);
+	return (pa_command_with_path);
 }
 
 void	ft_free_argument(t_argument *pa_argument)
@@ -618,11 +700,25 @@ int	main(int argc, char **argv, char **environ)
 
 		printf("my output is \n");
 
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+		p->pa_argument[0] = ft_strdup("ls");
+		p->pa_argument[1] = NULL;
+		
+		ft_system(pa_arg);
+
+		/*
+		printf("execuse TEST\n");
+
+		pa_arg = (t_argument *)malloc(sizeof(t_argument));
+		p = pa_arg;
+
+		printf("my output is \n");
+
 		p->next_token_type = PIPE;
 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
 		p->pa_argument[0] = ft_strdup("sort");
 		p->pa_argument[1] = NULL;
-		
 		
 		p->next = (t_argument *)malloc(sizeof(t_argument));
 		p = p->next;
@@ -633,11 +729,11 @@ int	main(int argc, char **argv, char **environ)
 		
 		p->next = (t_argument *)malloc(sizeof(t_argument));
 		p = p->next;
-		p->next_token_type = EOL;
+		p->next_token_type = PIPE;
 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
 		p->pa_argument[0] = ft_strdup("sort");
 		p->pa_argument[1] = NULL;
-		/*
+		
 		p->next = (t_argument *)malloc(sizeof(t_argument));
 		p = p->next;
 		p->next_token_type = EOL;
@@ -645,9 +741,9 @@ int	main(int argc, char **argv, char **environ)
 		p->pa_argument[0] = ft_strdup("ls");
 		p->pa_argument[1] = NULL;
 		p->next = NULL;
-		*/
+		
 		ft_system(pa_arg);
-
+		*/
 		printf("END!\n");
 	}
 }

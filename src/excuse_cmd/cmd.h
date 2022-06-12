@@ -40,3 +40,6 @@ void	ft_free_argument(t_argument *pa_argument);
 int     ft_get_length_2d_arr(char **array);
 void	ft_get_sh_command(char **src_2d, char **out_dst);
 void	ft_free_command(char **pa_char);
+
+void	ft_execuse(char **pa_argument);
+char	*ft_search_command_path_malloc(char *command);

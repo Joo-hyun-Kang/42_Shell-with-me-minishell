@@ -43,26 +43,30 @@ void	ft_system(t_argument *argument)
 	pa_orgin_argument = argument;
 
 	// loop for execute command
-	/*
+	
 	is_pipe_on = PIPE_NONE;
-	mult_command = argument->next_token_type;
-	if (argument->next_token_type == PIPE)
-		is_pipe_on = PIPE_START;
-	*/
 	while (argument != NULL)
 	{
-		//do pipe setting
 		mult_command = argument->next_token_type;
-
-		if (argument->next_token_type == PIPE)
+		
+		if (mult_command == PIPE && is_pipe_on == PIPE_NONE)
 		{
-			is_pipe_on = PIPE_NOW;
+			is_pipe_on = PIPE_START;
+			pipe(fd_pipe1);
+			pipe(fd_pipe2);
+			fd_temp = fd_pipe1[PIPE_READ];
 		}
-		else if (is_pipe_on == PIPE_NOW && argument->next_token_type == EOL)
+		else if (mult_command == PIPE && is_pipe_on == PIPE_START)
+		{
+			is_pipe_on = PIPE_MIDDLE;
+			//pipe(fd_pipe2);
+			fd_temp = fd_pipe2[PIPE_READ];
+
+		}
+		else if (mult_command != PIPE && (is_pipe_on == PIPE_START || is_pipe_on == PIPE_MIDDLE))
 		{
 			is_pipe_on = PIPE_END;
 		}
-
 
 
 		//DGT, 세미콜론이라면 명령을 그냥 다음으로 가면 되고 eof라면 그냥 나가면 된다
@@ -102,10 +106,14 @@ void	ft_system(t_argument *argument)
 				execve("/bin/sh", pa_copy_argument, NULL);
 				printf("this is execuse Error");
 			}
-			else if (child_pid == 0 && is_pipe_on == PIPE_NOW && i == 0)
+			else if (child_pid == 0 && is_pipe_on == PIPE_START)
 			{
 				//FD1 : STDOUT -> PIPE OUT
 				// 파이프 실패 예외처리 해줄것
+				close(fd_pipe2[PIPE_WRITE]);
+				close(fd_pipe2[PIPE_READ]);
+
+
 				dup2(fd_pipe1[PIPE_WRITE], STDOUT_FILENO);
 				close(fd_pipe1[PIPE_WRITE]);
 				close(fd_pipe1[PIPE_READ]);
@@ -121,16 +129,20 @@ void	ft_system(t_argument *argument)
 				}
 				execve("/bin/sh", pa_copy_argument, NULL);
 			}
-			else if (child_pid == 0 && is_pipe_on == PIPE_NOW && i != 0)
+			else if (child_pid == 0 && is_pipe_on == PIPE_MIDDLE)
 			{
-				// 파이프 실패 예외처리 해줄것
-				dup2(fd_pipe1[PIPE_WRITE], STDOUT_FILENO);
 				close(fd_pipe1[PIPE_WRITE]);
-
+				
+				// 파이프 실패 예외처리 해줄것
+				dup2(fd_pipe2[PIPE_WRITE], STDOUT_FILENO);
+				close(fd_pipe2[PIPE_WRITE]);
+				close(fd_pipe2[PIPE_READ]);
 
 				// 파이프 실패 예외처리 해줄것
 				dup2(fd_pipe1[PIPE_READ], STDIN_FILENO);
 				close(fd_pipe1[PIPE_READ]);
+				close(fd_pipe1[PIPE_WRITE]);
+				
 				
 				int length = ft_get_length_2d_arr(argument->pa_argument);
 				printf("length = %d\n", length);
@@ -143,18 +155,20 @@ void	ft_system(t_argument *argument)
 				}
 				execve("/bin/sh", pa_copy_argument, NULL);
 			}
-			else if (child_pid == 0 && is_pipe_on == PIPE_END && i != 0)
+			else if (child_pid == 0 && is_pipe_on == PIPE_END)
 			{
-
-				
-
-				// 파이프 실패 예외처리 해줄것
-				dup2(fd_pipe1[PIPE_READ], STDIN_FILENO);
-				close(fd_pipe1[PIPE_READ]);
 				
 				close(fd_pipe1[PIPE_WRITE]);
+				close(fd_pipe2[PIPE_WRITE]);
 
+				// 파이프 실패 예외처리 해줄것
+				dup2(fd_temp, STDIN_FILENO);
+				close(fd_temp);
 
+				close(fd_pipe2[PIPE_READ]);
+
+				close(fd_pipe1[PIPE_READ]);
+			
 				int length = ft_get_length_2d_arr(argument->pa_argument);
 				printf("length = %d\n", length);
 				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
@@ -166,10 +180,6 @@ void	ft_system(t_argument *argument)
 				}
 				execve("/bin/sh", pa_copy_argument, NULL);
 			}
-
-
-
-
 
 
 
@@ -183,41 +193,19 @@ void	ft_system(t_argument *argument)
 			}
 		}
 		argument = argument->next;
+
 	}
 
 
 	close(fd_pipe1[PIPE_READ]);
 	close(fd_pipe1[PIPE_WRITE]);
-
-	/*
 	close(fd_pipe2[PIPE_READ]);
 	close(fd_pipe2[PIPE_WRITE]);
-	*/
+
 
 	while (wait(NULL) != -1)
 	{
 	}
-
-	/*
-	//FD0 : FIFE_IN -> STDIN
-	fd_pipe[PIPE_READ] = dup(STDIN_FILENO);
-
-	if (std_fd[PIPE_READ] != STDIN_FILENO)
-	{
-		dup2(std_fd[PIPE_READ], STDIN_FILENO);
-		close(std_fd[PIPE_READ]);
-	}
-	else
-	{
-		ft_print_error();
-	}
-	*/
-
-	//close(fd_pipe[PIPE_WRITE]);
-	//close(fd_pipe[PIPE_READ]);
-
-	dup2(fd_temp, STDIN_FILENO);
-	close(fd_temp);
 
 	ft_free_argument(pa_orgin_argument);
 }
@@ -632,9 +620,16 @@ int	main(int argc, char **argv, char **environ)
 
 		p->next_token_type = PIPE;
 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
-		p->pa_argument[0] = ft_strdup("ls");
+		p->pa_argument[0] = ft_strdup("sort");
 		p->pa_argument[1] = NULL;
 		
+		
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = PIPE;
+		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+		p->pa_argument[0] = ft_strdup("ls");
+		p->pa_argument[1] = NULL;
 		
 		p->next = (t_argument *)malloc(sizeof(t_argument));
 		p = p->next;
@@ -647,11 +642,10 @@ int	main(int argc, char **argv, char **environ)
 		p = p->next;
 		p->next_token_type = EOL;
 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
-		p->pa_argument[0] = ft_strdup("sort");
+		p->pa_argument[0] = ft_strdup("ls");
 		p->pa_argument[1] = NULL;
-		*/
 		p->next = NULL;
-
+		*/
 		ft_system(pa_arg);
 
 		printf("END!\n");

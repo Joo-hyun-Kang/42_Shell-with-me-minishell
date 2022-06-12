@@ -12,6 +12,12 @@
 #define PIPE_COUNT (2)
 #define PIPE_ERROR (-1)
 
+#define PIPE_NONE (-1)
+#define PIPE_START (0)
+#define PIPE_MIDDLE (1)
+#define PIPE_END (2)
+
+
 /*
  * 그냥 에러를 출력하고 나가버리는데
  * 후에 조금 더 구체화할 필요성이 있다
@@ -27,52 +33,37 @@ void	ft_system(t_argument *argument)
 	enum e_token_type		mult_command;
 	char					*command;
 	enum e_bulltein_type	bull_type;
-	int						fd_pipe[PIPE_COUNT];
+	int						fd_pipe1[PIPE_COUNT];
+	int						fd_pipe2[PIPE_COUNT];
+	int						fd_current_pipe[PIPE_COUNT];
 	int						fd_temp;
 	int						is_pipe_on;
-
-	// Create pipe
-	if (pipe(fd_pipe) == PIPE_ERROR)
-		ft_print_error();
 
 	// Reserve before argument's address for Free
 	pa_orgin_argument = argument;
 
 	// loop for execute command
-	is_pipe_on = FALSE;
+	/*
+	is_pipe_on = PIPE_NONE;
+	mult_command = argument->next_token_type;
+	if (argument->next_token_type == PIPE)
+		is_pipe_on = PIPE_START;
+	*/
 	while (argument != NULL)
 	{
 		//do pipe setting
 		mult_command = argument->next_token_type;
-		if (mult_command == PIPE || mult_command == LT || mult_command == DLT || mult_command == GT)
+
+		if (argument->next_token_type == PIPE)
 		{
-			is_pipe_on = TRUE;
-
-			//FD1 : STDOUT -> PIPE OUT
-			fd_temp = dup(STDOUT_FILENO);
-
-			// 파이프 실패 예외처리 해줄것
-			dup2(fd_pipe[PIPE_WRITE], STDOUT_FILENO);
-			close(fd_pipe[PIPE_WRITE]);
-		
+			is_pipe_on = PIPE_NOW;
 		}
-		else if (is_pipe_on && (mult_command == SEMICOLON || mult_command == DGT || mult_command == EOL || mult_command == ARGUMENT))
+		else if (is_pipe_on == PIPE_NOW && argument->next_token_type == EOL)
 		{
-			is_pipe_on = FALSE;
-
-
-			//FD1 : PIPE OUT -> STDOUT
-			// 파이프 실패 예외처리 해줄것
-			//fd_pipe[PIPE_WRITE] = dup(STDOUT_FILENO);
-			dup2(fd_temp, STDOUT_FILENO);
-			close(fd_temp);
-
-			//FD0 : STDIN -> PIPE IN
-			fd_temp = dup(STDIN_FILENO);
-			// 파이프 실패 예외처리 해줄것
-			dup2(fd_pipe[PIPE_READ], STDIN_FILENO);
-			close(fd_pipe[PIPE_READ]);
+			is_pipe_on = PIPE_END;
 		}
+
+
 
 		//DGT, 세미콜론이라면 명령을 그냥 다음으로 가면 되고 eof라면 그냥 나가면 된다
 		command = argument->pa_argument[COMMAND_POSITION];
@@ -97,7 +88,7 @@ void	ft_system(t_argument *argument)
 			{
 				ft_print_error();
 			}
-			else if (child_pid == 0)
+			else if (child_pid == 0 && is_pipe_on == PIPE_NONE)
 			{
 				int length = ft_get_length_2d_arr(argument->pa_argument);
 				printf("length = %d\n", length);
@@ -111,6 +102,77 @@ void	ft_system(t_argument *argument)
 				execve("/bin/sh", pa_copy_argument, NULL);
 				printf("this is execuse Error");
 			}
+			else if (child_pid == 0 && is_pipe_on == PIPE_NOW && i == 0)
+			{
+				//FD1 : STDOUT -> PIPE OUT
+				// 파이프 실패 예외처리 해줄것
+				dup2(fd_pipe1[PIPE_WRITE], STDOUT_FILENO);
+				close(fd_pipe1[PIPE_WRITE]);
+				close(fd_pipe1[PIPE_READ]);
+
+				int length = ft_get_length_2d_arr(argument->pa_argument);
+				printf("length = %d\n", length);
+				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
+				ft_get_sh_command(argument->pa_argument, pa_copy_argument);
+				//ft_free_command(pa_copy_argument);
+				for (int i = 0; i < length + 2; ++i)
+				{
+					printf("%s\n", pa_copy_argument[i]);
+				}
+				execve("/bin/sh", pa_copy_argument, NULL);
+			}
+			else if (child_pid == 0 && is_pipe_on == PIPE_NOW && i != 0)
+			{
+				// 파이프 실패 예외처리 해줄것
+				dup2(fd_pipe1[PIPE_WRITE], STDOUT_FILENO);
+				close(fd_pipe1[PIPE_WRITE]);
+
+
+				// 파이프 실패 예외처리 해줄것
+				dup2(fd_pipe1[PIPE_READ], STDIN_FILENO);
+				close(fd_pipe1[PIPE_READ]);
+				
+				int length = ft_get_length_2d_arr(argument->pa_argument);
+				printf("length = %d\n", length);
+				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
+				ft_get_sh_command(argument->pa_argument, pa_copy_argument);
+				//ft_free_command(pa_copy_argument);
+				for (int i = 0; i < length + 2; ++i)
+				{
+					printf("%s\n", pa_copy_argument[i]);
+				}
+				execve("/bin/sh", pa_copy_argument, NULL);
+			}
+			else if (child_pid == 0 && is_pipe_on == PIPE_END && i != 0)
+			{
+
+				
+
+				// 파이프 실패 예외처리 해줄것
+				dup2(fd_pipe1[PIPE_READ], STDIN_FILENO);
+				close(fd_pipe1[PIPE_READ]);
+				
+				close(fd_pipe1[PIPE_WRITE]);
+
+
+				int length = ft_get_length_2d_arr(argument->pa_argument);
+				printf("length = %d\n", length);
+				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
+				ft_get_sh_command(argument->pa_argument, pa_copy_argument);
+				//ft_free_command(pa_copy_argument);
+				for (int i = 0; i < length + 2; ++i)
+				{
+					printf("%s\n", pa_copy_argument[i]);
+				}
+				execve("/bin/sh", pa_copy_argument, NULL);
+			}
+
+
+
+
+
+
+
 			// 자식프로세스 제작해서 excuse
 			// 만약에 여기서 fork를 한다고 하면
 			// 어떻게 될까?
@@ -123,8 +185,18 @@ void	ft_system(t_argument *argument)
 		argument = argument->next;
 	}
 
-	wait(NULL);
-	wait(NULL);
+
+	close(fd_pipe1[PIPE_READ]);
+	close(fd_pipe1[PIPE_WRITE]);
+
+	/*
+	close(fd_pipe2[PIPE_READ]);
+	close(fd_pipe2[PIPE_WRITE]);
+	*/
+
+	while (wait(NULL) != -1)
+	{
+	}
 
 	/*
 	//FD0 : FIFE_IN -> STDIN
@@ -562,14 +634,22 @@ int	main(int argc, char **argv, char **environ)
 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
 		p->pa_argument[0] = ft_strdup("ls");
 		p->pa_argument[1] = NULL;
-
+		
+		
 		p->next = (t_argument *)malloc(sizeof(t_argument));
 		p = p->next;
 		p->next_token_type = EOL;
 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
 		p->pa_argument[0] = ft_strdup("sort");
 		p->pa_argument[1] = NULL;
-
+		/*
+		p->next = (t_argument *)malloc(sizeof(t_argument));
+		p = p->next;
+		p->next_token_type = EOL;
+		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+		p->pa_argument[0] = ft_strdup("sort");
+		p->pa_argument[1] = NULL;
+		*/
 		p->next = NULL;
 
 		ft_system(pa_arg);

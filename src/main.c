@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 05:26:24 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/12 15:57:01 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int main(int argc, char **argv, char **env)
 	t_argument	*arg;
 
 	printf("%s", BANNER);
-	environment = ft_copy_env(env);
+	environment = ft_envdup(env);
 	while (1)
 	{
 		str = readline("minishell-4.2$ ");
@@ -77,10 +77,9 @@ int main(int argc, char **argv, char **env)
 			free(str);
 			continue ;
 		}
-		ft_show_argument_test(arg);
+//		ft_show_argument_test(arg);
 		ft_env_simple_command_test(arg);
-//		if (arg)
-//			ft_system(arg);
+//		ft_system(arg);
 		free(str);
 //		system("leaks minishell");
 	}

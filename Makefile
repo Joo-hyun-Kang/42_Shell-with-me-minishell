@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/12 17:09:43 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/13 17:00:53 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,11 +35,12 @@ PARSER_SRC		=	parser.c\
 ENV_DIR			=	src/environment
 ENV_SRC			=	env.c\
 					env_utils.c\
+					env_utils_t.c\
 					env_free_utils.c\
 					env_execute.c
 #--------------[ EXCUSE ]----------------
 EXCUSE_DIR		=	src/excuse_cmd
-EXCUSE_SRC		=	#cmd.c
+EXCUSE_SRC		=	cmd.c
 #--------------[ MINISHELL ]----------------
 NAME			=	minishell	
 OBJ_DIR			=	objects
@@ -49,8 +50,8 @@ SRC				=	main.c
 OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(PARSER_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(TOKEN_SRC:.c=.o))\
-					$(addprefix $(OBJ_DIR)/, $(ENV_SRC:.c=.o))
-					#$(addprefix $(OBJ_DIR)/, $(EXCUSE_SRC:.c=.o))
+					$(addprefix $(OBJ_DIR)/, $(ENV_SRC:.c=.o))\
+					$(addprefix $(OBJ_DIR)/, $(EXCUSE_SRC:.c=.o))
 #-----------------[ CMD ]-------------------
 CC				=	gcc
 CFLAGS			=	-g # -Wall -Wextra -Werror
@@ -64,7 +65,7 @@ LDLIBS			=	-l ft -L $(LIBFT_DIR)\
 AR				=	ar -rcs
 RM				=	rm -rf
 
-vpath %.c $(SRC_DIR) $(TOKEN_DIR) $(PARSER_DIR) $(ENV_DIR) #$(EXCUSE_DIR)
+vpath %.c $(SRC_DIR) $(TOKEN_DIR) $(PARSER_DIR) $(ENV_DIR) $(EXCUSE_DIR)
 
 all: $(NAME)
 

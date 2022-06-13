@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:35:47 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 05:18:52 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/13 00:46:42 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	**ft_init_pa_argument(t_token *cur_token)
 	int		i;
 
 	i = 0;
-	while (cur_token->next)
+	while (cur_token->next != 0)
 	{
 		if (cur_token->token_type != ARGUMENT)
 			break ;

@@ -18,7 +18,7 @@
 #define PIPE_MIDDLE (1)
 #define PIPE_END (2)
 
-#define NON_DIR_CHAR_BIT (5)
+#define ENV_PATH_NAME_LENGTH (5)
 
 // 테스팅용 전역 환경변수
 
@@ -94,6 +94,8 @@ void	ft_system(t_argument *argument)
 			pid_t child_pid;
 			child_pid = fork();
 
+			//ft_execuse(argument->pa_argument);
+			
 			if (child_pid == -1)
 			{
 				ft_print_error();
@@ -194,8 +196,11 @@ void	ft_execuse(char **pa_argument)
 {
 	int		is_path;
 	char	*pa_path;
+	
 	// 환경변수 다 지워도 ls는 bin에서는 실행되는데
 	// a.out은 현재 디렉토리에서 실행 안 되는 거 예외처리 하기
+
+
 	if (ft_strchr(pa_argument[COMMAND_POSITION], '/') != FALSE)
 		is_path = TRUE;
 	else
@@ -216,7 +221,13 @@ void	ft_execuse(char **pa_argument)
 			free(pa_path);
 			return ;
 		}
+
+		//swap pa_argument
+		free(pa_argument[COMMAND_POSITION]);
+		pa_argument[COMMAND_POSITION] = pa_path;
+
 		execve(pa_path, pa_argument, NULL);
+		printf("%s\n", "excuse fail");
 		free(pa_path);
 		return ;
 	}	
@@ -230,13 +241,13 @@ char	*ft_search_command_path_malloc(char *command)
 	int		length;
 	int		i;
 	int		position;
+	char	*pa_temp;
 	char	*pa_command_with_path;
 
 	env_path = NULL;
 	pp = environ;
 	while (*pp != NULL)
 	{
-		//strcmp함수로 바꾸기
 		if (ft_strncmp(*pp, "PATH", 4) == 0)
 		{
 			env_path = *pp;
@@ -247,7 +258,15 @@ char	*ft_search_command_path_malloc(char *command)
 
 	if (env_path != NULL)
 	{
-		env_path += NON_DIR_CHAR_BIT;
+		int env_path_length = ft_strlen(env_path);
+		if (env_path_length > ENV_PATH_NAME_LENGTH)
+		{
+			env_path += ENV_PATH_NAME_LENGTH;
+		}
+		else
+		{
+			return (NULL);
+		}
 		pa_directories = ft_split(env_path, ':');
 	}
 
@@ -262,7 +281,7 @@ char	*ft_search_command_path_malloc(char *command)
 		if ((dir = opendir(pa_directories[i])) != NULL) {
 			while ((ent = readdir (dir)) != NULL) 
 			{
-				if (ft_strncmp(command, ent->d_name, length) == 0)
+				if (ft_strcmp_temp(command, ent->d_name) == 0)
 				{
 					position = i;
 					break;
@@ -287,9 +306,25 @@ char	*ft_search_command_path_malloc(char *command)
 		ft_free_command(pa_directories);
 		return (NULL);
 	}
-	pa_command_with_path = ft_strjoin(pa_directories[position], command);
+	pa_temp = ft_strjoin(pa_directories[position], "/");
+	pa_command_with_path = ft_strjoin(pa_temp, command);
+	free(pa_temp);
 	ft_free_command(pa_directories);
 	return (pa_command_with_path);
+}
+
+int	ft_strcmp_temp(const char *s1, const char *s2)
+{
+	size_t	i;
+
+	i = 0;
+	while (s1[i] != 0 && s2[i] != 0)
+	{
+		if (s1[i] != s2[i])
+			break ;
+		++i;
+	}
+	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
 void	ft_free_argument(t_argument *pa_argument)
@@ -705,6 +740,8 @@ int	main(int argc, char **argv, char **environ)
 		p->pa_argument[0] = ft_strdup("ls");
 		p->pa_argument[1] = NULL;
 		
+		p->next = NULL;
+
 		ft_system(pa_arg);
 
 		/*

@@ -89,13 +89,9 @@ void	ft_system(t_argument *argument)
 		}
 		else
 		{
-			char **pa_copy_argument = NULL;
-
 			pid_t child_pid;
 			child_pid = fork();
 
-			//ft_execuse(argument->pa_argument);
-			
 			if (child_pid == -1)
 			{
 				ft_print_error();
@@ -103,7 +99,6 @@ void	ft_system(t_argument *argument)
 			else if (child_pid == 0 && is_pipe_on == PIPE_NONE)
 			{
 				ft_execuse(argument->pa_argument);
-				printf("this is execuse Error");
 			}
 			else if (child_pid == 0 && is_pipe_on == PIPE_START)
 			{
@@ -112,16 +107,11 @@ void	ft_system(t_argument *argument)
 				close(fd_pipe2[PIPE_WRITE]);
 				close(fd_pipe2[PIPE_READ]);
 
-
 				dup2(fd_pipe1[PIPE_WRITE], STDOUT_FILENO);
 				close(fd_pipe1[PIPE_WRITE]);
 				close(fd_pipe1[PIPE_READ]);
 
-				int length = ft_get_length_2d_arr(argument->pa_argument);
-				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
-				ft_get_sh_command(argument->pa_argument, pa_copy_argument);
-				//ft_free_command(pa_copy_argument);
-				execve("/bin/sh", pa_copy_argument, NULL);
+				ft_execuse(argument->pa_argument);
 			}
 			else if (child_pid == 0 && is_pipe_on == PIPE_MIDDLE)
 			{
@@ -138,10 +128,7 @@ void	ft_system(t_argument *argument)
 				close(fd_pipe1[PIPE_WRITE]);
 				
 				
-				int length = ft_get_length_2d_arr(argument->pa_argument);
-				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
-				ft_get_sh_command(argument->pa_argument, pa_copy_argument);
-				execve("/bin/sh", pa_copy_argument, NULL);
+				ft_execuse(argument->pa_argument);
 			}
 			else if (child_pid == 0 && is_pipe_on == PIPE_END)
 			{
@@ -154,30 +141,13 @@ void	ft_system(t_argument *argument)
 				close(fd_temp);
 
 				close(fd_pipe2[PIPE_READ]);
-
 				close(fd_pipe1[PIPE_READ]);
 			
-				int length = ft_get_length_2d_arr(argument->pa_argument);
-				pa_copy_argument = (char **)malloc(sizeof(char *) * (length + NULL_POSITOIN + BIN_SH_POSIOTON + BIN_SH_POSIOTON));
-				ft_get_sh_command(argument->pa_argument, pa_copy_argument);
-				execve("/bin/sh", pa_copy_argument, NULL);
-			}
-
-
-
-			// 자식프로세스 제작해서 excuse
-			// 만약에 여기서 fork를 한다고 하면
-			// 어떻게 될까?
-			// 내장 명령어에서 파이프를 쓴다고 하면 자식 프로세스 간의 가
-			if (pa_copy_argument != NULL)
-			{
-				ft_free_command(pa_copy_argument);
+				ft_execuse(argument->pa_argument);
 			}
 		}
 		argument = argument->next;
-
 	}
-
 
 	close(fd_pipe1[PIPE_READ]);
 	close(fd_pipe1[PIPE_WRITE]);
@@ -197,10 +167,7 @@ void	ft_execuse(char **pa_argument)
 	int		is_path;
 	char	*pa_path;
 	
-	// 환경변수 다 지워도 ls는 bin에서는 실행되는데
-	// a.out은 현재 디렉토리에서 실행 안 되는 거 예외처리 하기
-
-
+	//CASE1 : 절대 경로나 상대경로로 들어오는 경우
 	if (ft_strchr(pa_argument[COMMAND_POSITION], '/') != FALSE)
 		is_path = TRUE;
 	else
@@ -209,28 +176,102 @@ void	ft_execuse(char **pa_argument)
 	if (is_path)
 	{
 		execve(pa_argument[COMMAND_POSITION], pa_argument, NULL);
-		//에러처리
+		printf("bash: %s: No such file or directory\n", pa_argument[COMMAND_POSITION]);
 		return ;
 	}
-	else
+	
+	//CASE2 : 경로 없이 COMMAND만 들어왔는데 환경변수를 훑었을 때 명령어가 있는 경우
+	pa_path = ft_search_command_path_malloc(pa_argument[COMMAND_POSITION]);
+	if (pa_path != NULL)
 	{
-		pa_path = ft_search_command_path_malloc(pa_argument[COMMAND_POSITION]);
-		if (pa_path == NULL)
-		{
-			ft_print_error();
-			free(pa_path);
-			return ;
-		}
-
 		//swap pa_argument
+		char *pa_orgin_command = ft_strdup(pa_argument[COMMAND_POSITION]);
 		free(pa_argument[COMMAND_POSITION]);
 		pa_argument[COMMAND_POSITION] = pa_path;
 
 		execve(pa_path, pa_argument, NULL);
-		printf("%s\n", "excuse fail");
+		printf("bash: %s: No such file or directory\n", pa_orgin_command);
 		free(pa_path);
+		free(pa_orgin_command);
 		return ;
-	}	
+	}
+
+	//CASE3 : 커맨드이고 현재 디렉토리가 커맨드가 있는 곳(일반적으로 환경변수에 등록되는 곳)인 경우
+	//	      커맨드와 현재 디렉토리 내에 있으면 그냥 실행함
+	if (ft_is_command_dir())
+	{
+		const int	SIZE = 0;
+		int	is_command_exist = FALSE;
+		char *pa_current_path = getcwd(NULL, SIZE);
+		
+		DIR *dir;
+		struct dirent *ent;
+		if ((dir = opendir(pa_current_path)) != NULL) {
+			while ((ent = readdir (dir)) != NULL) 
+			{
+				if (ft_strcmp_temp(pa_argument[COMMAND_POSITION], ent->d_name) == 0)
+				{
+					is_command_exist = TRUE;
+					break;
+				}
+			}
+		closedir (dir);
+		} 
+		else 
+		{
+		/* could not open directory */
+			perror ("");
+		}
+
+		//get PATH + COMMAND
+		pa_path = ft_join_path_command_malloc(pa_current_path, pa_argument[COMMAND_POSITION]);
+		free(pa_current_path);
+		
+		char *pa_orgin_command = ft_strdup(pa_argument[COMMAND_POSITION]);
+		free(pa_argument[COMMAND_POSITION]);
+		
+		//swap pa_argument
+		pa_argument[COMMAND_POSITION] = pa_path;
+
+		execve(pa_path, pa_argument, NULL);
+		printf("bash: %s: No such file or directory\n", pa_orgin_command);
+		free(pa_path);
+		free(pa_orgin_command);
+	}
+	printf("bash: %s: command not found\n", pa_argument[COMMAND_POSITION]);
+}
+
+int	ft_is_command_dir()
+{
+	char		*pa_path;
+	const int	SIZE = 0;
+
+	pa_path = getcwd(NULL, SIZE);
+	if (ft_strcmp_temp(pa_path, "/usr/local/bin") == 0)
+	{
+		return (TRUE);
+	}
+	if (ft_strcmp_temp(pa_path, "/usr/bin") == 0)
+	{
+		return (TRUE);
+	}
+	if (ft_strcmp_temp(pa_path, "/bin") == 0)
+	{
+		return (TRUE);
+	}
+	if (ft_strcmp_temp(pa_path, "/usr/sbin") == 0)
+	{
+		return (TRUE);
+	}
+	if (ft_strcmp_temp(pa_path, "/sbin") == 0)
+	{
+		return (TRUE);
+	}
+	if (ft_strcmp_temp(pa_path, "/usr/local/munki") == 0)
+	{
+		return (TRUE);
+	}
+	return (FALSE);
 }
 
 char	*ft_search_command_path_malloc(char *command)
@@ -256,6 +297,12 @@ char	*ft_search_command_path_malloc(char *command)
 		pp++;
 	}
 
+	if (env_path == NULL)
+	{
+		//환경변수 PATH가 없는 상태
+		return (NULL);
+	}
+
 	if (env_path != NULL)
 	{
 		int env_path_length = ft_strlen(env_path);
@@ -265,6 +312,7 @@ char	*ft_search_command_path_malloc(char *command)
 		}
 		else
 		{
+			//환경 변수 'PATH='인 상태 
 			return (NULL);
 		}
 		pa_directories = ft_split(env_path, ':');
@@ -306,11 +354,21 @@ char	*ft_search_command_path_malloc(char *command)
 		ft_free_command(pa_directories);
 		return (NULL);
 	}
-	pa_temp = ft_strjoin(pa_directories[position], "/");
-	pa_command_with_path = ft_strjoin(pa_temp, command);
-	free(pa_temp);
+
+	pa_command_with_path = ft_join_path_command_malloc(pa_directories[position], command);
 	ft_free_command(pa_directories);
 	return (pa_command_with_path);
+}
+
+char	*ft_join_path_command_malloc(char *path, char *command)
+{
+	char	*pa_temp;
+	char	*pa_path_with_command;
+	
+	pa_temp = ft_strjoin(path, "/");
+	pa_path_with_command = ft_strjoin(pa_temp, command);
+	free(pa_temp);
+	return (pa_path_with_command);
 }
 
 int	ft_strcmp_temp(const char *s1, const char *s2)
@@ -509,7 +567,6 @@ int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 
 int	main(int argc, char **argv, char **environ)
 {
-	
 	//Test Code
 	t_argument *pa_arg;
 	t_argument *p;
@@ -737,14 +794,14 @@ int	main(int argc, char **argv, char **environ)
 
 		p->next_token_type = EOL;
 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
-		p->pa_argument[0] = ft_strdup("ls");
+		p->pa_argument[0] = ft_strdup("../main");
 		p->pa_argument[1] = NULL;
 		
 		p->next = NULL;
 
 		ft_system(pa_arg);
 
-		/*
+		
 		printf("execuse TEST\n");
 
 		pa_arg = (t_argument *)malloc(sizeof(t_argument));
@@ -780,7 +837,7 @@ int	main(int argc, char **argv, char **environ)
 		p->next = NULL;
 		
 		ft_system(pa_arg);
-		*/
+		
 		printf("END!\n");
 	}
 }

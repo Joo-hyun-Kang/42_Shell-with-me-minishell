@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 17:06:57 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/13 17:01:36 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <termios.h>
 
 # define METACHAR "|;><"
 # define WHITE_SPACE " \r\v\f\t"
@@ -81,7 +82,7 @@ void			ft_add_token_back(t_token **head, t_token *new_token);
 /*
  * #########################################################
  * #                                                       #
- * #                       src/parser/                     #
+ * #                      src/parser/                      #
  * #                                                       #
  * #########################################################
  */
@@ -93,7 +94,7 @@ t_argument		*ft_parser(char *input_command, char ***environment); /* API */
 
 /* parser_free_utils.c */
 void			ft_free_token(t_token *token);
-void			ft_free_argument(t_argument *arg);
+//void			ft_free_argument(t_argument *arg);
 
 /* parser_utils.c */
 t_argument		*ft_init_argument(t_token *cur_token, char ***env);
@@ -110,14 +111,12 @@ void			ft_merge_string(char **dst, char *src);
 /*
  * #########################################################
  * #                                                       #
- * #                          src/                         #
+ * #                    src/environment/                   #
  * #                                                       #
  * #########################################################
  */
 /* src/environment/env.c */
-char			**ft_add_env(char **env, char *str);
-char			**ft_remove_env(char **env, char *key);
-void			ft_print_env(char **env);
+void			ft_print_env(char **env); /* API */
 char			**ft_unset_env(char **env, char *key); /* API */
 char			**ft_set_env(char **env, char *new_dict); /* API */
 
@@ -127,6 +126,11 @@ char			**ft_envdup(char **env);
 int				ft_is_key_match(char *env, char *key);
 char			**ft_find_match_key(char **env, char *key);
 char			*ft_get_value_from_env(char **env, char *key); /* API */
+
+/* src/environment/env_utils_t.c */
+char			**ft_add_env(char **env, char *str);
+char			**ft_remove_env(char **env, char *key);
+char			*ft_extract_key_from_dict(char *new_dict);
 
 /* src/environment/env_free_utils.c */
 void			ft_free_env(char **env);

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:03:15 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 04:44:43 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/13 00:47:34 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_strchr_except_null(const char *str, int c)
 {
-	while (*str)
+	while (*str != 0)
 	{
 		if (*str == (char)c)
 			return ((char *)str);

@@ -6,23 +6,32 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:12:34 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/14 21:32:20 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 00:27:30 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_merge_string(char **dst, char *src)
+char	*ft_merge_str(char *s1, char *s2)
 {
-	char	*new_str;
+	size_t	s1_size;
+	size_t	s2_size;
+	char	*str;
 
-	if (*dst == NULL)
-		*dst = src;
-	else
-	{
-		new_str = ft_strjoin(*dst, src);
-		free(*dst);
-		free(src);
-		*dst = new_str;
-	}
+	if (!s1 && !s2)
+		return (0);
+	else if (s1 == NULL)
+		return (ft_strdup(s2));
+	else if (s2 == NULL)
+		return (ft_strdup(s1));
+	s1_size = ft_strlen(s1);
+	s2_size = ft_strlen(s2);
+	str = (char *)malloc(sizeof(char) * (s1_size + s2_size + 1));
+	if (str == NULL)
+		return (NULL);
+	ft_strlcpy(str, s1, s1_size + 1);
+	ft_strlcat(str, s2, s1_size + s2_size + 1);
+	free(s1);
+	free(s2);
+	return (str);
 }

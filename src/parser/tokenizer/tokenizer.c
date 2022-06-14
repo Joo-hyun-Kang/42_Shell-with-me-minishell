@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/14 22:09:52 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 00:26:25 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	ft_merge_environment(char **str, char **dst, char **env)
 	key = ft_strndup(s_pos, *str - s_pos);
 	value = ft_get_value_from_env(env, key);
 	free(key);
-	ft_merge_string(dst, value);
+	*dst = ft_merge_str(*dst, value);
 }
 
 void	ft_quote(char **input_command, char **dst, char quote, char **env)
@@ -66,18 +66,16 @@ void	ft_quote(char **input_command, char **dst, char quote, char **env)
 	{
 		if (*(*input_command) == quote)
 		{
-			ft_merge_string(dst, ft_strndup(s_pos, *input_command - s_pos));
+			*dst = ft_merge_str(*dst, ft_strndup(s_pos, *input_command - s_pos));
 			if (*(++(*input_command)) != '\0')
-				ft_merge_string(dst, ft_strdup(*input_command));
+				*dst = ft_merge_str(*dst, ft_strndup(s_pos, *input_command - s_pos));
 			return ;
 		}
 		else if (quote == '"' && *(*input_command) == '$')
 			ft_merge_environment(input_command, dst, env);
 		++(*input_command);
 	}
-	tmp = ft_strndup(s_pos, *input_command - s_pos);
-	ft_merge_string(dst, ft_strjoin(tmp, "\n"));
-	free(tmp);
+	*dst = ft_merge_str(*dst, ft_merge_str(ft_strndup(s_pos, *input_command - s_pos), ft_strdup("\n")));
 	read_line = readline("> ");
 	tmp = read_line;
 	ft_quote(&read_line, dst, quote, env);
@@ -97,7 +95,7 @@ t_token	*ft_create_token_type_argument(char **input_command, char **environment)
 		s_pos = *input_command;
 		while (ft_strchr(SKIPCHAR, *(*input_command)) == 0)
 			++(*input_command);
-		ft_merge_string(&new_string, ft_strndup(s_pos, *input_command - s_pos));
+		new_string = ft_merge_str(new_string, ft_strndup(s_pos, *input_command - s_pos));
 		if (ft_strchr_except_null(QUOTE, *(*input_command)) != 0)
 		{
 			quote = *(*input_command);
@@ -106,8 +104,7 @@ t_token	*ft_create_token_type_argument(char **input_command, char **environment)
 		}
 		else if (*(*input_command) == '~')
 		{
-			ft_merge_string(&new_string, \
-					ft_get_value_from_env(environment, "HOME"));
+			new_string = ft_merge_str(new_string, ft_get_value_from_env(environment, "HOME"));
 			++(*input_command);
 		}
 		else if (*(*input_command) == '$')

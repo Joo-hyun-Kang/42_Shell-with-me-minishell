@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 00:20:39 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 00:27:43 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ t_token			*ft_add_additional_pipe(t_token *cur_token, char **env);
 void			ft_heredoc(t_token *cur_token, char **env);
 
 /* parser_common_utils.c */
-void			ft_merge_string(char **dst, char *src);
 char			*ft_merge_str(char *s1, char *s2);
 
 /*

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/13 17:01:36 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/14 16:17:05 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,12 +25,14 @@
 # define QUOTE "\"'"
 # define SKIPCHAR "|;>< \r\v\f\t\"'$"
 
-# define BANNER "\n\n\n\
+# define BANNER "\
+                                                    \n\n\
      S  H  E  L  L          W  I  T  H          M  E\n\
      -  -  -  -  -          -  -  -  -          -  -\n\
                                                     \n\
                                    Jokang   Kanghyki\n\
-                                   ------ & --------\n\n"
+                                   ------ & --------\n\
+                                                v0.0\n"
 
 enum e_token_type {
 	ARGUMENT,
@@ -94,7 +96,7 @@ t_argument		*ft_parser(char *input_command, char ***environment); /* API */
 
 /* parser_free_utils.c */
 void			ft_free_token(t_token *token);
-//void			ft_free_argument(t_argument *arg);
+void			ft_free_argument(t_argument *arg);
 
 /* parser_utils.c */
 t_argument		*ft_init_argument(t_token *cur_token, char ***env);

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/14 16:17:05 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:50:12 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,16 @@ typedef struct s_argument {
 } t_argument;
 
 void	print_memory_test(char *dst, int size);
+/*
+ * #########################################################
+ * #                                                       #
+ * #                       src/signal/                     #
+ * #                                                       #
+ * #########################################################
+ */
+/* src/signal/signal.c */
+void			sigint_handler(int sig);
+void			sigint_handler_after_parsing(int sig);
 
 /*
  * #########################################################

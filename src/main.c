@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/14 16:09:54 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:47:56 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,33 +58,6 @@ void	ft_show_argument_test(t_argument *arg)
 	ft_show_argument_test(arg->next);
 }
 
-// TODO:
-static void	sig_handler(int sig)
-{
-	static size_t	count = 0;
-
-	if (sig == SIGINT)
-	{
-		rl_replace_line("", 0);
-		printf("\n");
-		rl_on_new_line();
-		rl_redisplay();
-	}
-	else if (sig == SIGTERM)
-		printf("CTRL + D\n");
-	else if (sig == SIGQUIT)
-		printf("CTRL + /\n");
-}
-
-// TODO:
-static void	sig_after_handler(int sig)
-{
-	static size_t	count = 0;
-
-	if (sig == SIGINT)
-		rl_replace_line("", 0);
-}
-
 int main(int argc, char **argv, char **env)
 {
 	char        *str;
@@ -95,10 +68,10 @@ int main(int argc, char **argv, char **env)
 	environment = ft_envdup(env);
 	while (1)
 	{
-		signal(SIGINT, sig_handler);
+		signal(SIGINT, sigint_handler);
 		str = readline("minishell-4.2$ ");
 		if (!str)
-			str = ft_strdup("exit");
+			exit(0);
 		ft_print_memory(str, ft_strlen(str));
 		add_history(str);
 		arg = ft_parser(str, &environment);
@@ -108,10 +81,11 @@ int main(int argc, char **argv, char **env)
 			continue ;
 		}
 		ft_show_argument_test(arg);
-		signal(SIGINT, sig_after_handler);
+		signal(SIGINT, sigint_handler_after_parsing);
 		ft_system(arg);
 		free(str);
 //		system("leaks minishell");
 	}
+	free(env);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 00:27:43 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 00:37:44 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,8 @@
 
 # include "../library/libft/inc/libft.h"
 # include <stdio.h>
-# include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include <termios.h>
 
 # define METACHAR "|;><"
 # define WHITE_SPACE " \r\v\f\t"

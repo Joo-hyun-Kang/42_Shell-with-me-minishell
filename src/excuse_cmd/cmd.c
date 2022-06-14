@@ -149,11 +149,13 @@ void	ft_system(t_argument *argument)
 		argument = argument->next;
 	}
 
-	close(fd_pipe1[PIPE_READ]);
-	close(fd_pipe1[PIPE_WRITE]);
-	close(fd_pipe2[PIPE_READ]);
-	close(fd_pipe2[PIPE_WRITE]);
-
+	if (is_pipe_on == PIPE_END)
+	{
+		close(fd_pipe1[PIPE_READ]);
+		close(fd_pipe1[PIPE_WRITE]);
+		close(fd_pipe2[PIPE_READ]);
+		close(fd_pipe2[PIPE_WRITE]);
+	}
 
 	while (wait(NULL) != -1)
 	{
@@ -565,11 +567,11 @@ int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 }
 
 
-int	main(int argc, char **argv, char **environ)
-{
-	//Test Code
-	t_argument *pa_arg;
-	t_argument *p;
+// int	main(int argc, char **argv, char **environ)
+// {
+// 	//Test Code
+// 	t_argument *pa_arg;
+// 	t_argument *p;
 	
 // 	/*
 // 	//echo
@@ -784,60 +786,64 @@ int	main(int argc, char **argv, char **environ)
 // 	*/
 
 	
-	{
-		printf("execuse TEST\n");
+// 	{
+// 		printf("execuse TEST\n");
 
-		pa_arg = (t_argument *)malloc(sizeof(t_argument));
-		p = pa_arg;
+// 		pa_arg = (t_argument *)malloc(sizeof(t_argument));
+// 		p = pa_arg;
 
-		printf("my output is \n");
+// 		printf("my output is \n");
 
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
-		p->pa_argument[0] = ft_strdup("../main");
-		p->pa_argument[1] = NULL;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+// 		p->pa_argument[0] = ft_strdup("../main");
+// 		p->pa_argument[1] = NULL;
 		
-		p->next = NULL;
+// 		p->next = NULL;
 
-		ft_system(pa_arg);
+// 		ft_system(pa_arg);
 
-		
-		printf("execuse TEST\n");
+// 		printf("END!\n");
+// 	}
 
-		pa_arg = (t_argument *)malloc(sizeof(t_argument));
-		p = pa_arg;
+// 	{
+// 		printf("MULT PIPE TEST\n");
 
-		printf("my output is \n");
+// 		pa_arg = (t_argument *)malloc(sizeof(t_argument));
+// 		p = pa_arg;
 
-		p->next_token_type = PIPE;
-		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
-		p->pa_argument[0] = ft_strdup("sort");
-		p->pa_argument[1] = NULL;
+// 		printf("my output is \n");
+
+// 		p->next_token_type = PIPE;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+// 		p->pa_argument[0] = ft_strdup("sort");
+// 		p->pa_argument[1] = NULL;
 		
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = PIPE;
-		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
-		p->pa_argument[0] = ft_strdup("ls");
-		p->pa_argument[1] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = PIPE;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+// 		p->pa_argument[0] = ft_strdup("ls");
+// 		p->pa_argument[1] = NULL;
 		
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = PIPE;
-		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
-		p->pa_argument[0] = ft_strdup("sort");
-		p->pa_argument[1] = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = PIPE;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+// 		p->pa_argument[0] = ft_strdup("sort");
+// 		p->pa_argument[1] = NULL;
 		
-		p->next = (t_argument *)malloc(sizeof(t_argument));
-		p = p->next;
-		p->next_token_type = EOL;
-		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
-		p->pa_argument[0] = ft_strdup("ls");
-		p->pa_argument[1] = NULL;
-		p->next = NULL;
+// 		p->next = (t_argument *)malloc(sizeof(t_argument));
+// 		p = p->next;
+// 		p->next_token_type = EOL;
+// 		p->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+// 		p->pa_argument[0] = ft_strdup("ls");
+// 		p->pa_argument[1] = NULL;
+// 		p->next = NULL;
 		
-		ft_system(pa_arg);
+// 		ft_system(pa_arg);
 		
-		printf("END!\n");
-	}
-}
+// 		printf("END!\n");
+		
+// 	}
+// }

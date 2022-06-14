@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/13 16:59:43 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/14 16:09:54 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	ft_show_argument_test(t_argument *arg)
 	ft_show_argument_test(arg->next);
 }
 
+// TODO:
 static void	sig_handler(int sig)
 {
 	static size_t	count = 0;
@@ -69,6 +70,19 @@ static void	sig_handler(int sig)
 		rl_on_new_line();
 		rl_redisplay();
 	}
+	else if (sig == SIGTERM)
+		printf("CTRL + D\n");
+	else if (sig == SIGQUIT)
+		printf("CTRL + /\n");
+}
+
+// TODO:
+static void	sig_after_handler(int sig)
+{
+	static size_t	count = 0;
+
+	if (sig == SIGINT)
+		rl_replace_line("", 0);
 }
 
 int main(int argc, char **argv, char **env)
@@ -76,19 +90,15 @@ int main(int argc, char **argv, char **env)
 	char        *str;
 	char		**environment;
 	t_argument	*arg;
-	struct termios term;
-
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~ICANON;    // non-canonical input 설정
-	term.c_cc[VMIN] = 1;        // 최소 입력 버퍼 크기
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 
 	printf("%s", BANNER);
-	signal(SIGINT, sig_handler);
 	environment = ft_envdup(env);
 	while (1)
 	{
+		signal(SIGINT, sig_handler);
 		str = readline("minishell-4.2$ ");
+		if (!str)
+			str = ft_strdup("exit");
 		ft_print_memory(str, ft_strlen(str));
 		add_history(str);
 		arg = ft_parser(str, &environment);
@@ -98,7 +108,7 @@ int main(int argc, char **argv, char **env)
 			continue ;
 		}
 		ft_show_argument_test(arg);
-//		ft_env_simple_command_test(arg);
+		signal(SIGINT, sig_after_handler);
 		ft_system(arg);
 		free(str);
 //		system("leaks minishell");

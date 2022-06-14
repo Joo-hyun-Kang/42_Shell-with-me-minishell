@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:34:39 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/13 17:01:29 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/14 16:12:08 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,23 +25,23 @@ void	ft_free_token(t_token *token)
 	}
 }
 
-//void	ft_free_argument(t_argument *arg)
-//{
-//	t_argument	*prev;
-//	int			i;
-//
-//	prev = arg;
-//	while (arg != 0)
-//	{
-//		i = 0;
-//		while (arg->pa_argument[i] != 0)
-//		{
-//			free(arg->pa_argument[i]);
-//			++i;
-//		}
-//		free(arg->pa_argument);
-//		arg = arg->next;
-//		free(prev);
-//		prev = arg;
-//	}
-//}
+void	ft_free_argument(t_argument *arg)
+{
+	t_argument	*prev;
+	int			i;
+
+	prev = arg;
+	while (arg != 0)
+	{
+		i = 0;
+		while (arg->pa_argument[i] != 0)
+		{
+			free(arg->pa_argument[i]);
+			++i;
+		}
+		free(arg->pa_argument);
+		arg = arg->next;
+		free(prev);
+		prev = arg;
+	}
+}

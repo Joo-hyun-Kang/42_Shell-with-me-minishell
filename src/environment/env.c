@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 16:01:19 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/13 13:17:57 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:36:12 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_print_env(char **env)
 {
-	while (*env != 0)
+	while (*env != NULL)
 		printf("%s\n", *(env++));
 }
 
@@ -40,7 +40,7 @@ char	**ft_set_env(char **env, char *new_dict)
 	key = ft_extract_key_from_dict(new_dict);
 	find_env = ft_find_match_key(env, key);
 	free(key);
-	if (find_env != 0)
+	if (find_env != NULL)
 	{
 		free(*find_env);
 		*find_env = ft_strdup(new_dict);

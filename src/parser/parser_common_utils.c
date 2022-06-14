@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:12:34 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 04:12:40 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:32:20 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	ft_merge_string(char **dst, char *src)
 {
 	char	*new_str;
 
-	if (*dst == 0)
+	if (*dst == NULL)
 		*dst = src;
 	else
 	{

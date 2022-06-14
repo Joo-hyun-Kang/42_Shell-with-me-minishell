@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:03:15 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/13 00:47:34 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:30:33 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 char	*ft_strchr_except_null(const char *str, int c)
 {
-	while (*str != 0)
+	while (*str != '\0')
 	{
 		if (*str == (char)c)
 			return ((char *)str);
 		++str;
 	}
-	return (0);
+	return (NULL);
 }
 
 char	*ft_strndup(const char *src, size_t n)
@@ -34,8 +34,8 @@ char	*ft_strndup(const char *src, size_t n)
 	if (src_size < n)
 		n = src_size;
 	dup = (char *)malloc(sizeof(char) * (n + 1));
-	if (dup == 0)
-		return (0);
+	if (dup == NULL)
+		return (NULL);
 	while (i < n)
 	{
 		dup[i] = src[i];
@@ -50,8 +50,8 @@ t_token	*ft_init_token(char *str, enum e_token_type token_type)
 	t_token	*new_token;
 
 	new_token = (t_token *)malloc(sizeof(t_token));
-	if (new_token == 0)
-		return (0);
+	if (new_token == NULL)
+		return (NULL);
 	ft_memset(new_token, 0, sizeof(t_token));
 	new_token->pa_str = str;
 	new_token->token_type = token_type;
@@ -62,12 +62,12 @@ void	ft_add_token_back(t_token **head, t_token *new_token)
 {
 	t_token	*iter;
 
-	if (*head == 0)
+	if (*head == NULL)
 		*head = new_token;
 	else
 	{
 		iter = *head;
-		while (iter->next != 0)
+		while (iter->next != NULL)
 			iter = iter->next;
 		iter->next = new_token;
 	}

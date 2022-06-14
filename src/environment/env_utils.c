@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 16:52:07 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/13 13:25:45 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:39:23 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_strdplen(char **str)
 	int	i;
 
 	i = 0;
-	while (str[i] != 0)
+	while (str[i] != NULL)
 		++i;
 	return (i);
 }
@@ -31,10 +31,10 @@ char	**ft_envdup(char **env)
 	i = 0;
 	env_len = ft_strdplen(env);
 	new_env = (char **)malloc(sizeof(char *) * (env_len + 1));
-	if (new_env == 0)
-		return (0);
-	new_env[env_len] = 0;
-	while (env[i] != 0)
+	if (new_env == NULL)
+		return (NULL);
+	new_env[env_len] = NULL;
+	while (env[i] != NULL)
 	{
 		new_env[i] = ft_strdup(env[i]);
 		++i;
@@ -47,13 +47,13 @@ int	ft_is_key_match(char *env, char *key)
 	int	i;
 
 	i = 0;
-	while (env[i] != 0 && key[i] != 0)
+	while (env[i] != '\0' && key[i] != '\0')
 	{
 		if (env[i] != key[i])
 			break ;
 		++i;
 	}
-	if (env[i] == '=' && key[i] == 0)
+	if (env[i] == '=' && key[i] == '\0')
 		return (1);
 	return (0);
 }
@@ -64,7 +64,7 @@ char	**ft_find_match_key(char **env, char *key)
 	char	*value;
 
 	i = 0;
-	while (env[i] != 0)
+	while (env[i] != NULL)
 	{
 		if (ft_is_key_match(env[i], key) == 1)
 			return (&env[i]);
@@ -79,7 +79,7 @@ char	*ft_get_value_from_env(char **env, char *key)
 	char	*value;
 
 	i = 0;
-	while (*env != 0)
+	while (*env != NULL)
 	{
 		if (ft_is_key_match(*env, key) == 1)
 		{

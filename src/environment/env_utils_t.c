@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/13 13:16:23 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/13 13:39:59 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:41:36 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,11 @@ char	**ft_add_env(char **env, char *new_dict)
 	int			i;
 
 	new_env = (char **)malloc(sizeof(char *) * (env_len + 2));
-	if (new_env == 0)
-		return (0);
-	new_env[env_len + 1] = 0;
+	if (new_env == NULL)
+		return (NULL);
+	new_env[env_len + 1] = NULL;
 	i = 0;
-	while (env[i] != 0)
+	while (env[i] != NULL)
 	{
 		new_env[i] = ft_strdup(env[i]);
 		++i;
@@ -39,11 +39,11 @@ char	**ft_remove_env(char **env, char *key)
 	int			i;
 
 	new_env = (char **)malloc(sizeof(char *) * (env_len));
-	if (new_env == 0)
-		return (0);
-	new_env[env_len - 1] = 0;
+	if (new_env == NULL)
+		return (NULL);
+	new_env[env_len - 1] = NULL;
 	i = 0;
-	while (*env != 0)
+	while (*env != NULL)
 	{
 		if (ft_is_key_match(*env, key) == 0)
 		{
@@ -62,7 +62,7 @@ char	*ft_extract_key_from_dict(char *new_dict)
 	int	i;
 
 	i = 0;
-	while (new_dict[i] != 0 && new_dict[i] != '=')
+	while (new_dict[i] != '\0' && new_dict[i] != '=')
 		++i;
 	return (ft_strndup(new_dict, i));
 }

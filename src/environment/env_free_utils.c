@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 16:04:09 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/13 00:49:28 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:38:13 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_free_env(char **env)
 	int	i;
 
 	i = 0;
-	while (env[i] != 0)
+	while (env[i] != NULL)
 	{
 		free(env[i]);
 		++i;

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 15:57:18 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/14 21:34:56 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_token	*ft_create_token_type_metachar(char **str)
 {
 	enum e_token_type	token_type;
 
-	token_type = 0;
+	token_type = -1;
 	if (*(*str) == ';')
 		token_type = SEMICOLON;
 	else if (*(*str) == '|')
@@ -36,7 +36,7 @@ t_token	*ft_create_token_type_metachar(char **str)
 	if (token_type == DLT || token_type == DGT)
 		++(*str);
 	++(*str);
-	return (ft_init_token(0, token_type));
+	return (ft_init_token(NULL, token_type));
 }
 
 void	ft_merge_environment(char **str, char **dst, char **env)
@@ -62,12 +62,12 @@ void	ft_quote(char **input_command, char **dst, char quote, char **env)
 	char	*tmp;
 
 	s_pos = *input_command;
-	while (*(*input_command) != 0)
+	while (*(*input_command) != '\0')
 	{
 		if (*(*input_command) == quote)
 		{
 			ft_merge_string(dst, ft_strndup(s_pos, *input_command - s_pos));
-			if (*(++(*input_command)) != 0)
+			if (*(++(*input_command)) != '\0')
 				ft_merge_string(dst, ft_strdup(*input_command));
 			return ;
 		}
@@ -92,7 +92,7 @@ t_token	*ft_create_token_type_argument(char **input_command, char **environment)
 
 	new_string = 0;
 	s_pos = *input_command;
-	while (*(*input_command) != 0)
+	while (*(*input_command) != '\0')
 	{
 		s_pos = *input_command;
 		while (ft_strchr(SKIPCHAR, *(*input_command)) == 0)
@@ -120,11 +120,11 @@ t_token	*ft_tokenizer(char *input_command, char **environment)
 	t_token	*new_token;
 
 	head = 0;
-	while (*input_command != 0)
+	while (*input_command != '\0')
 	{
 		while (ft_strchr_except_null(WHITE_SPACE, *input_command) != 0)
 			++input_command;
-		if (*input_command != 0)
+		if (*input_command != '\0')
 		{
 			if (ft_strchr_except_null(METACHAR, *input_command) != 0)
 				new_token = ft_create_token_type_metachar(&input_command);
@@ -134,6 +134,6 @@ t_token	*ft_tokenizer(char *input_command, char **environment)
 			ft_add_token_back(&head, new_token);
 		}
 	}
-	ft_add_token_back(&head, ft_init_token(0, EOL));
+	ft_add_token_back(&head, ft_init_token(NULL, EOL));
 	return (head);
 }

@@ -36,7 +36,7 @@ void	ft_execute_cd(t_argument *argument);
 int		is_bulletin(char *command, enum e_bulltein_type *out_type);
 
 void	ft_print_error();
-void	ft_free_argument(t_argument *pa_argument);
+//void	ft_free_argument(t_argument *pa_argument);
 int     ft_get_length_2d_arr(char **array);
 void	ft_get_sh_command(char **src_2d, char **out_dst);
 void	ft_free_command(char **pa_char);

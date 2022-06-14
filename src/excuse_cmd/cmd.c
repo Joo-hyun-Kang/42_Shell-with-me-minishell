@@ -387,27 +387,27 @@ int	ft_strcmp_temp(const char *s1, const char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-void	ft_free_argument(t_argument *pa_argument)
-{
-	t_argument 	*p;
-	t_argument 	*temp;
-	int			i;
-
-	p = pa_argument;
-	while (p->next != NULL)
-	{
-		i = 0;
-		while (p->pa_argument[i] != NULL)
-		{
-			free(p->pa_argument[i]);
-			i++;
-		}
-		free(p->pa_argument);
-		temp = p->next;
-		free(p);
-		p = temp;
-	}
-}
+//void	ft_free_argument(t_argument *pa_argument)
+//{
+//	t_argument 	*p;
+//	t_argument 	*temp;
+//	int			i;
+//
+//	p = pa_argument;
+//	while (p->next != NULL)
+//	{
+//		i = 0;
+//		while (p->pa_argument[i] != NULL)
+//		{
+//			free(p->pa_argument[i]);
+//			i++;
+//		}
+//		free(p->pa_argument);
+//		temp = p->next;
+//		free(p);
+//		p = temp;
+//	}
+//}
 
 void	ft_free_command(char **pa_char)
 {
@@ -565,7 +565,6 @@ int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 		return (FALSE);
 	return(TRUE);
 }
-
 
 // int	main(int argc, char **argv, char **environ)
 // {

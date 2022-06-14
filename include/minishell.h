@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/14 21:50:12 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 00:20:39 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # define METACHAR "|;><"
 # define WHITE_SPACE " \r\v\f\t"
 # define QUOTE "\"'"
-# define SKIPCHAR "|;>< \r\v\f\t\"'$"
+# define SKIPCHAR "|;>< \r\v\f\t\"'$~"
 
 # define BANNER "\
                                                     \n\n\
@@ -119,6 +119,7 @@ void			ft_heredoc(t_token *cur_token, char **env);
 
 /* parser_common_utils.c */
 void			ft_merge_string(char **dst, char *src);
+char			*ft_merge_str(char *s1, char *s2);
 
 /*
  * #########################################################

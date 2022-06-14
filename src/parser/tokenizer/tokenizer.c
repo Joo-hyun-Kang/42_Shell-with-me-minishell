@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/14 21:34:56 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/14 22:09:52 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,12 @@ t_token	*ft_create_token_type_argument(char **input_command, char **environment)
 			quote = *(*input_command);
 			++(*input_command);
 			ft_quote(input_command, &new_string, quote, environment);
+		}
+		else if (*(*input_command) == '~')
+		{
+			ft_merge_string(&new_string, \
+					ft_get_value_from_env(environment, "HOME"));
+			++(*input_command);
 		}
 		else if (*(*input_command) == '$')
 			ft_merge_environment(input_command, &new_string, environment);

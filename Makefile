@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/13 17:00:53 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/15 11:39:23 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,9 @@ CLEAR			=	"\x1b[1A\x1b[M"
 LIBFT			=	$(LIBFT_DIR)libft.a
 LIBFT_DIR		=	library/libft/
 LIBFT_INC		=	$(LIBFT_DIR)inc
+#--------------[ SIGNAL ]-----------------
+SIG_DIR			=	src/signal
+SIG_SRC			=	signal.c
 #--------------[ TOKENIZER ]-----------------
 TOKEN_DIR		=	src/parser/tokenizer
 TOKEN_SRC		=	tokenizer.c\
@@ -51,6 +54,7 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(PARSER_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(TOKEN_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(ENV_SRC:.c=.o))\
+					$(addprefix $(OBJ_DIR)/, $(SIG_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(EXCUSE_SRC:.c=.o))
 #-----------------[ CMD ]-------------------
 CC				=	gcc
@@ -65,7 +69,7 @@ LDLIBS			=	-l ft -L $(LIBFT_DIR)\
 AR				=	ar -rcs
 RM				=	rm -rf
 
-vpath %.c $(SRC_DIR) $(TOKEN_DIR) $(PARSER_DIR) $(ENV_DIR) $(EXCUSE_DIR)
+vpath %.c $(SRC_DIR) $(TOKEN_DIR) $(PARSER_DIR) $(ENV_DIR) $(SIG_DIR) $(EXCUSE_DIR)
 
 all: $(NAME)
 

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 17:57:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 19:50:11 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 05:13:29 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,17 +38,19 @@ t_env	*ft_init_env_node(char *key, char *value)
 
 void	ft_env_replace_value(t_env *node, char *new_value)
 {
+	free(node->pa_value);
 	node->pa_value = new_value;
 }
 
-void	ft_env_insert_recursive(char *key, char *value, t_env *cur_node)
+int	ft_env_insert_recursive(char *key, char *value, t_env *cur_node)
 {
 	if (ft_strcmp(key, cur_node->pa_key) < 0)
 	{
 		if (cur_node->left == NULL)
 		{
 			cur_node->left = ft_init_env_node(key, value);
-			cur_node->is_del = 0;
+			cur_node->left->parent = cur_node;
+			return (1);
 		}
 		return (ft_env_insert_recursive(key, value, cur_node->left));
 	}
@@ -57,15 +59,13 @@ void	ft_env_insert_recursive(char *key, char *value, t_env *cur_node)
 		if (cur_node->right == NULL)
 		{
 			cur_node->right = ft_init_env_node(key, value);
-			cur_node->is_del = 0;
+			cur_node->right->parent = cur_node;
+			return (1);
 		}
 		return (ft_env_insert_recursive(key, value, cur_node->right));
 	}
-	else
-	{
-		ft_env_replace_value(cur_node, value);
-		cur_node->is_del = 0;
-	}
+	ft_env_replace_value(cur_node, value);
+	return (0);
 }
 
 void	ft_env_insert(t_env_root *root, char *key, char *value)
@@ -73,28 +73,21 @@ void	ft_env_insert(t_env_root *root, char *key, char *value)
 	if (root->root == NULL)
 		root->root = ft_init_env_node(key, value);
 	else
-		ft_env_insert_recursive(key, value, root->root);
-}
-
-void	ft_print_env_in_order(t_env *cur_node)
-{
-	if (cur_node == NULL)
-		return ;
-	ft_print_env_in_order(cur_node->left);
-	if (cur_node->is_del == 0)
-		printf("declare -x %s=\"%s\"\n", cur_node->pa_key, cur_node->pa_value);
-	ft_print_env_in_order(cur_node->right);
+	{
+		if (ft_env_insert_recursive(key, value, root->root) == 0)
+			free(key);
+	}
 }
 
 t_env	*ft_env_search_recursive(t_env *cur_node, char *key)
 {
+	if (cur_node == NULL)
+		return (NULL);
 	if (ft_strcmp(key, cur_node->pa_key) < 0)
 		return (ft_env_search_recursive(cur_node->left, key));
 	else if (ft_strcmp(key, cur_node->pa_key) > 0)
 		return (ft_env_search_recursive(cur_node->right, key));
-	if (cur_node->is_del == 0)
-		return (cur_node);
-	return (NULL);
+	return (cur_node);
 }
 
 t_env	*ft_env_search(t_env_root *root, char *key)
@@ -106,12 +99,71 @@ t_env	*ft_env_search(t_env_root *root, char *key)
 
 void	ft_env_delete(t_env_root *root, char *key)
 {
-	t_env	*del_node;
+	t_env	*cur_node;
 
-	del_node = ft_env_search(root, key);
-	if (del_node == NULL)
+	cur_node = ft_env_search(root, key);
+	if (cur_node == NULL)
 		return ;
-	del_node->is_del = 1;
+	if (cur_node->left == NULL && cur_node->right == NULL)
+	{
+		if (cur_node->parent == NULL)
+			root->root = NULL;
+		else
+		{
+			if (cur_node->parent->left == cur_node)
+				cur_node->parent->left = NULL;
+			else
+				cur_node->parent->right = NULL;
+		}
+	}
+	else if (cur_node->left == NULL)
+	{
+		if (cur_node->parent == NULL)
+			root->root = cur_node->right;
+		else
+		{
+			if (cur_node->parent->left == cur_node)
+				cur_node->parent->left = cur_node->right;
+			else
+				cur_node->parent->right = cur_node->right;
+		}
+	}
+	else if (cur_node->right == NULL)
+	{
+		if (cur_node->parent == NULL)
+			root->root = cur_node->left;
+		else
+		{
+			if (cur_node->parent->left == cur_node)
+				cur_node->parent->left = cur_node->left;
+			else
+				cur_node->parent->right = cur_node->left;
+		}
+	}
+	else
+	{
+		t_env *replace_node = cur_node->right;
+		while (replace_node->left)
+			replace_node = replace_node->left;
+
+		if (replace_node->parent->left == cur_node)
+			replace_node->parent->left = NULL;
+		else
+			replace_node->parent->right = NULL;
+
+		if (cur_node->parent == NULL)
+			root->root = replace_node;
+		else
+		{
+			if (cur_node->parent->left == cur_node)
+				cur_node->parent->left = replace_node;
+			else
+				cur_node->parent->right = replace_node;
+		}
+		replace_node->left = cur_node->left;
+		replace_node->right = cur_node->right;
+	}
+	ft_free_env_node(cur_node);
 }
 
 char	*ft_extract_value_from_node(t_env *node)
@@ -130,7 +182,7 @@ int		ft_is_dictionary(char *str)
 	return (0);
 }
 
-// ft_is_dictionary 가 선행되어야 함
+// ft_is_dictionary == 1 가 선행되어야 함
 char	*ft_extract_key_from_str(char *str)
 {
 	char	*rtn_str;
@@ -142,7 +194,7 @@ char	*ft_extract_key_from_str(char *str)
 	return (ft_strndup(s_pos, str - s_pos));
 }
 
-// ft_is_dictionary가 선행되어야 함
+// ft_is_dictionary == 1 가 선행되어야 함
 char	*ft_extract_value_from_str(char *str)
 {
 	char	*rtn_str;
@@ -153,27 +205,12 @@ char	*ft_extract_value_from_str(char *str)
 	return (ft_strdup(str));
 }
 
-//void	ft_free_env_node(t_env *node)
-//{
-//	free(node->pa_key);
-//	free(node->pa_value);
-//	free(node);
-//}
-//
-//void	ft_free_env_recursive(t_env *cur_node)
-//{
-//	if (cur_node == NULL)
-//		return ;
-//	ft_free_env_recursive(cur_node->left);
-//	ft_free_env_recursive(cur_node->right);
-//	free(cur_node);
-//}
-//
-//void	ft_free_env(t_env_root *root)
-//{
-//	ft_free_env_recursive(root->root);
-//	free(root);
-//}
+void	ft_free_env_node(t_env *node)
+{
+	free(node->pa_key);
+	free(node->pa_value);
+	free(node);
+}
 
 t_env_root	*ft_dpenv_to_bstenv(char **env)
 {

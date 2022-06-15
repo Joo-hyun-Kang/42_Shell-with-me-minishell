@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 23:31:58 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 05:16:32 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ enum e_token_type {
 typedef struct s_env {
 	char					*pa_key;
 	char					*pa_value;
-	int						is_del;
+	struct s_env			*parent;
 	struct s_env			*left;
 	struct s_env			*right;
 } t_env;
@@ -161,18 +161,17 @@ char			*ft_merge_str(char *s1, char *s2);
  */
 
 /* src/environment/env_execute.c */
-//void			ft_execute_export(t_argument *arg);
-//void			ft_execute_env(t_argument *arg);
-//void			ft_execute_unset(t_argument *arg);
-//void			ft_env_simple_command_test(t_argument *arg);
+void			ft_execute_export(t_argument *arg);
+void			ft_execute_env(t_argument *arg);
+void			ft_execute_unset(t_argument *arg);
+void			ft_env_simple_command_test(t_argument *arg);
 
 /* src/environment/env_tree.c */
 t_env_root		*ft_init_env_root(void);
 t_env			*ft_init_env_node(char *key, char *value);
 void			ft_env_replace_value(t_env *node, char *new_value);
-void			ft_env_insert_recursive(char *key, char *value, t_env *cur_node);
+int				ft_env_insert_recursive(char *key, char *value, t_env *cur_node);
 void			ft_env_insert(t_env_root *root, char *key, char *value);
-void			ft_print_env_in_order(t_env *cur_node);
 t_env			*ft_env_search_recursive(t_env *cur_node, char *key);
 t_env			*ft_env_search(t_env_root *root, char *key);
 void			ft_env_delete(t_env_root *root, char *key);
@@ -180,9 +179,7 @@ int				ft_is_dictionary(char *str);
 char			*ft_extract_value_from_node(t_env *node);
 char			*ft_extract_key_from_str(char *str);
 char			*ft_extract_value_from_str(char *str);
-//void			ft_free_env_node(t_env *node);
-//void			ft_free_env_recursive(t_env *cur_node);
-//void			ft_free_env(t_env_root *root);
+void			ft_free_env_node(t_env *node);
 t_env_root		*ft_dpenv_to_bstenv(char **env);
 
 #endif

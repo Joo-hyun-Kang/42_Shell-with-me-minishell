@@ -41,7 +41,7 @@ int     ft_get_length_2d_arr(char **array);
 void	ft_get_sh_command(char **src_2d, char **out_dst);
 void	ft_free_command(char **pa_char);
 
-void	ft_execuse(char **pa_argument);
+void	ft_execuse(t_argument *argument);
 char	*ft_search_command_path_malloc(char *command);
 int     ft_strcmp_temp(const char *s1, const char *s2);
 char	*ft_join_path_command_malloc(char *path, char *command);

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:19:31 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 11:54:21 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 17:32:06 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,6 @@ void	ft_execute_export(t_argument *arg)
 
 void	ft_execute_env(t_argument *arg)
 {
-	char	*dict;
-
-	dict = arg->pa_argument[1];
-	if (dict != NULL)
-		*(arg->env) = ft_set_env(*(arg->env), dict);
 	ft_print_env(*(arg->env));
 }
 

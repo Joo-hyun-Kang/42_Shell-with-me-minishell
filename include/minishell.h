@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 17:16:23 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 19:02:32 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,18 @@ enum e_token_type {
 	DGT,					// <<
 	EOL
 };
+
+typedef struct s_env {
+	char					*pa_key;
+	char					*pa_value;
+	int						is_del;
+	struct s_env			*left;
+	struct s_env			*right;
+} t_env;
+
+typedef struct s_env_root {
+	struct s_env			*root;
+} t_env_root;
 
 typedef struct s_token {
 	enum e_token_type		token_type;
@@ -140,14 +152,14 @@ char			**ft_set_env(char **env, char *new_dict); /* API */
 /* src/environment/env_utils.c */
 int				ft_strdplen(char **str);
 char			**ft_envdup(char **env);
-int				ft_is_key_match(char *env, char *key);
-char			**ft_find_match_key(char **env, char *key);
+int				ft_is_key_matched(char *env, char *key);
+char			**ft_find_matched_key(char **env, char *key);
 char			*ft_get_value_from_env(char **env, char *key); /* API */
 
 /* src/environment/env_utils_t.c */
 char			**ft_add_env(char **env, char *str);
 char			**ft_remove_env(char **env, char *key);
-char			*ft_extract_key_from_dict(char *new_dict);
+char			*ft_extract_key_from_dict(char *dict);
 
 /* src/environment/env_free_utils.c */
 void			ft_free_env(char **env);
@@ -158,5 +170,16 @@ void			ft_execute_export(t_argument *arg);
 void			ft_execute_env(t_argument *arg);
 void			ft_execute_unset(t_argument *arg);
 void			ft_env_simple_command_test(t_argument *arg);
+
+/* src/environment/env_tree.c */
+t_env_root		*ft_init_env_root(void);
+t_env			*ft_init_env_node(char *key, char *value);
+void			ft_env_replace_value(t_env *node, char *new_value);
+void			ft_env_insert_recursive(char *key, char *value, t_env *cur_node);
+void			ft_env_insert(t_env_root *root, char *key, char *value);
+void			ft_print_env_in_order(t_env *cur_node);
+t_env			*ft_env_search_recursive(t_env *cur_node, char *key);
+t_env			*ft_env_search(t_env_root *root, char *key);
+void			ft_env_delete(t_env_root *root, char *key);
 
 #endif

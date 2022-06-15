@@ -55,9 +55,17 @@ void	ft_system(t_argument *argument)
 
 		//DGT, 세미콜론이라면 명령을 그냥 다음으로 가면 되고 eof라면 그냥 나가면 된다
 
+		//자식 쉘 생성 전에 부모 쉘 종료시키는 경우
+		if (ft_try_exit_parent(argument) == FALSE)
+		{
+			argument = argument->next;
+			continue;
+		}
+	
 		pid_t child_pid;
 		child_pid = fork();
-
+		
+		//자식 쉘을 생성한다
 		if (child_pid == -1)
 		{
 			ft_print_error();
@@ -365,27 +373,27 @@ int	ft_strcmp_temp(const char *s1, const char *s2)
 	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
 }
 
-//void	ft_free_argument(t_argument *argument->pa_argument)
-//{
-//	t_argument 	*p;
-//	t_argument 	*temp;
-//	int			i;
-//
-//	p = argument->pa_argument;
-//	while (p->next != NULL)
-//	{
-//		i = 0;
-//		while (p->argument->pa_argument[i] != NULL)
-//		{
-//			free(p->argument->pa_argument[i]);
-//			i++;
-//		}
-//		free(p->argument->pa_argument);
-//		temp = p->next;
-//		free(p);
-//		p = temp;
-//	}
-//}
+// void	ft_free_argument(t_argument *pa_argument)
+// {
+// 	t_argument 	*p;
+// 	t_argument 	*temp;
+// 	int			i;
+
+// 	p = pa_argument;
+// 	while (p->next != NULL)
+// 	{
+// 		i = 0;
+// 		while (p->pa_argument[i] != NULL)
+// 		{
+// 			free(p->pa_argument[i]);
+// 			i++;
+// 		}
+// 		free(p->pa_argument);
+// 		temp = p->next;
+// 		free(p);
+// 		p = temp;
+// 	}
+// }
 
 void	ft_free_command(char **pa_char)
 {

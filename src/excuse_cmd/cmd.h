@@ -48,9 +48,11 @@ enum e_bulltein_type {
 void	ft_system(t_argument *argument);
 
 void	ft_bulletin(t_argument *argument, enum e_bulltein_type bull_type);
+int     ft_try_exit_parent(t_argument *argumnet);
 void	ft_execute_echo(t_argument *argument);
 void	ft_execute_pwd(t_argument *argument);
 void	ft_execute_cd(t_argument *argument);
+void	ft_execute_exit(t_argument *argument);
 
 int		is_bulletin(char *command, enum e_bulltein_type *out_type);
 

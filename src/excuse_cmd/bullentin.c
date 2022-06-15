@@ -24,6 +24,21 @@ int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 	return(TRUE);
 }
 
+int    ft_try_exit_parent(t_argument *argumnet)
+{
+    char    *command;
+
+    command = argumnet->pa_argument[COMMAND_POSITION];
+    if (ft_strcmp_temp(command, "exit") == 0)
+    {
+        printf("exit\n");
+		exit(0);
+        return(FALSE);
+    }
+    printf("bash: %s: No such file or directory\n", command);
+    return (FALSE);
+}
+
 void	ft_bulletin(t_argument *argument, enum e_bulltein_type bull_type)
 {
 	//내장 명령어 실행
@@ -33,6 +48,8 @@ void	ft_bulletin(t_argument *argument, enum e_bulltein_type bull_type)
 		ft_execute_cd(argument);
 	else if (bull_type == BUL_PWD)
 		ft_execute_pwd(argument);
+    else if (bull_type == BUL_EXIT)
+        ft_execute_exit(argument);
 }
 
 void	ft_execute_echo(t_argument *argument)
@@ -121,4 +138,9 @@ void	ft_execute_cd(t_argument *argument)
 		ft_putstr_fd(argument->pa_argument[length - 1], STDOUT_FILENO);
 		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
 	}
+}
+
+void	ft_execute_exit(t_argument *argument)
+{
+    exit(0);
 }

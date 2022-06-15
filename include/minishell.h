@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 05:16:32 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 06:12:12 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,8 +146,10 @@ char			**ft_init_pa_argument(t_token *cur_token);
 void			ft_add_argument_back(t_argument **head, t_argument *arg);
 
 /* parser_additional.c */
-t_token			*ft_add_pipe(t_token *cur_token, t_env_root *root_env);
-void			ft_replace_heredoc(t_token *cur_token, t_env_root *root_env);
+t_token			*ft_read_additional_pipe(t_token *cur_token, t_env_root *root_env);
+char			*ft_replace_env_heredoc(char *str, t_env_root *root_env);
+void			ft_merge_env_heredoc(char **str, char **dst, t_env_root *root_env);
+void			ft_read_additional_heredoc(t_token *cur_token, t_env_root *root_env);
 
 /* parser_common_utils.c */
 char			*ft_merge_str(char *s1, char *s2);

@@ -55,11 +55,19 @@ void	ft_system(t_argument *argument)
 
 		//DGT, 세미콜론이라면 명령을 그냥 다음으로 가면 되고 eof라면 그냥 나가면 된다
 
-		//부모 쉘을 종료시키는 경우
-		if (pipe_state == PIPE_NONE && ft_try_exit_parent(argument) == TRUE)
+		//파이프 없이 부모 쉘에서만 실행되는 경우
+		if (pipe_state == PIPE_NONE)
 		{
-			argument = argument->next;
-			continue;
+			if (ft_try_exit_parent(argument) == TRUE)
+			{
+				argument = argument->next;
+				continue;
+			}
+			else if (ft_try_cd_parent(argument) == TRUE)
+			{
+				argument = argument->next;
+				continue;
+			}
 		}
 	
 		// 자식 쉘을 생성하는 경우
@@ -228,6 +236,7 @@ void	ft_execuse(t_argument *argument)
 		free(pa_orgin_command);
 	}
 	printf("bash: %s: command not found\n", argument->pa_argument[COMMAND_POSITION]);
+	ft_execute_exit(0);
 }
 
 int	ft_is_command_dir()

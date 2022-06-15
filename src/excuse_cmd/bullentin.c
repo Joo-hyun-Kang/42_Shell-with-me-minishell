@@ -51,13 +51,38 @@ int    ft_try_exit_parent(t_argument *argumnet)
     return (FALSE);
 }
 
+int    ft_try_cd_parent(t_argument *argumnet)
+{
+	char    *command;
+	int		is_not_cd_str;
+	int		is_not_cd;
+
+    command = argumnet->pa_argument[COMMAND_POSITION];
+	
+	is_not_cd_str = ft_strncmp(command, "cd", 4);
+	if (is_not_cd_str == FALSE)
+	{
+		is_not_cd = ft_strcmp_temp(command, "cd");
+		if (is_not_cd == FALSE)
+		{
+			ft_execute_cd(argumnet, TRUE);
+		}
+		else
+		{
+			printf("bash: %s: No such file or directory\n", command);
+		}
+		return (TRUE);
+	}
+    return (FALSE);
+}
+
 void	ft_bulletin(t_argument *argument, enum e_bulltein_type bull_type)
 {
 	//내장 명령어 실행
 	if (bull_type == BUL_ECHO)
 		ft_execute_echo(argument);
 	else if (bull_type == BUL_CD)
-		ft_execute_cd(argument);
+		ft_execute_cd(argument, FALSE);
 	else if (bull_type == BUL_PWD)
 		ft_execute_pwd(argument);
     else if (bull_type == BUL_EXIT)
@@ -116,7 +141,7 @@ void	ft_execute_pwd(t_argument *argument)
 	ft_execute_exit(0);
 }
 
-void	ft_execute_cd(t_argument *argument)
+void	ft_execute_cd(t_argument *argument, int is_parent)
 {
 	int			result;
 	int			length;
@@ -130,7 +155,10 @@ void	ft_execute_cd(t_argument *argument)
 		ft_putstr_fd("cd: ", STDOUT_FILENO);
 		ft_putstr_fd(argument->pa_argument[SECOND_ARG], STDOUT_FILENO);
 		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
-		ft_execute_exit(0);
+		if (is_parent)
+			return ;
+		else
+			ft_execute_exit(0);
 	}
 
 	if (length == 1)
@@ -151,10 +179,13 @@ void	ft_execute_cd(t_argument *argument)
 		ft_putstr_fd(argument->pa_argument[length - 1], STDOUT_FILENO);
 		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
 	}
-	ft_execute_exit(0);
+	if (is_parent)
+		return ;
+	else
+		ft_execute_exit(0);
 }
 
-void	ft_execute_exit(int num)
+void	ft_execute_exit(int error_num)
 {
-    exit(num);
+    exit(error_num);
 }

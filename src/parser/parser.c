@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 22:34:32 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 06:13:12 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	*ft_get_token_type_char(enum e_token_type token_type)
 t_token	*ft_no_eol(t_token *cur_token, t_argument *arg)
 {
 	if (cur_token->token_type == PIPE)
-		return (ft_add_pipe(cur_token, arg->env));
+		return (ft_read_additional_pipe(cur_token, arg->env));
 	printf("minishell: parse error near `%s'\n", \
 			ft_get_token_type_char(cur_token->next->token_type));
 	return (NULL);
@@ -50,7 +50,7 @@ t_token	*ft_read_token(t_token *cur_token, t_argument *arg, int idx)
 	else if (cur_token->next->token_type != ARGUMENT)
 		return (ft_no_eol(cur_token, arg));
 	else if (cur_token->token_type == DGT)
-		ft_replace_heredoc(cur_token->next, arg->env);
+		ft_read_additional_heredoc(cur_token->next, arg->env);
 	return (cur_token->next);
 }
 

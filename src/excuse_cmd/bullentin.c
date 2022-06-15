@@ -27,15 +27,27 @@ int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 int    ft_try_exit_parent(t_argument *argumnet)
 {
     char    *command;
+	int		is_not_exit_str;
+	int		is_not_exit;
 
     command = argumnet->pa_argument[COMMAND_POSITION];
-    if (ft_strcmp_temp(command, "exit") == 0)
-    {
-        printf("exit\n");
-		exit(0);
-        return(FALSE);
-    }
-    printf("bash: %s: No such file or directory\n", command);
+	
+	//exit2313와 같이 처음 4글자가 exit인지 체크
+	is_not_exit_str = ft_strncmp(command, "exit", 4);
+	if (is_not_exit_str == FALSE)
+	{
+		is_not_exit = ft_strcmp_temp(command, "exit");
+		if (is_not_exit == FALSE)
+		{
+			printf("exit\n");
+			exit(0);
+		}
+		else
+		{
+			printf("bash: %s: No such file or directory\n", command);
+		}
+		return (TRUE);
+	}
     return (FALSE);
 }
 
@@ -49,7 +61,7 @@ void	ft_bulletin(t_argument *argument, enum e_bulltein_type bull_type)
 	else if (bull_type == BUL_PWD)
 		ft_execute_pwd(argument);
     else if (bull_type == BUL_EXIT)
-        ft_execute_exit(argument);
+        ft_execute_exit(0);
 }
 
 void	ft_execute_echo(t_argument *argument)
@@ -61,7 +73,7 @@ void	ft_execute_echo(t_argument *argument)
 	is_newline = TRUE;
 	i = COMMAND_ARG_POSITION;
 	if (argument->pa_argument[i] != NULL && \
-	ft_strncmp(argument->pa_argument[COMMAND_ARG_POSITION], "-n", 2) == 0)
+	ft_strcmp_temp(argument->pa_argument[COMMAND_ARG_POSITION], "-n") == 0)
 	{
 		is_newline = FALSE;
 		i++;
@@ -75,6 +87,7 @@ void	ft_execute_echo(t_argument *argument)
 	{
 		ft_putchar_fd('\n', STDOUT_FILENO);
 	}
+	ft_execute_exit(0);
 }
 
 void	ft_execute_pwd(t_argument *argument)
@@ -100,6 +113,7 @@ void	ft_execute_pwd(t_argument *argument)
 
 	ft_putstr_fd(pa_path, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
+	ft_execute_exit(0);
 }
 
 void	ft_execute_cd(t_argument *argument)
@@ -116,7 +130,7 @@ void	ft_execute_cd(t_argument *argument)
 		ft_putstr_fd("cd: ", STDOUT_FILENO);
 		ft_putstr_fd(argument->pa_argument[SECOND_ARG], STDOUT_FILENO);
 		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
-		return ;
+		ft_execute_exit(0);
 	}
 
 	if (length == 1)
@@ -131,16 +145,16 @@ void	ft_execute_cd(t_argument *argument)
 	{
 		ft_print_error();
 	}
-
 	if (result == CHDIR_ERROR)
 	{
 		ft_putstr_fd("cd: ", STDOUT_FILENO);
 		ft_putstr_fd(argument->pa_argument[length - 1], STDOUT_FILENO);
 		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
 	}
+	ft_execute_exit(0);
 }
 
-void	ft_execute_exit(t_argument *argument)
+void	ft_execute_exit(int num)
 {
-    exit(0);
+    exit(num);
 }

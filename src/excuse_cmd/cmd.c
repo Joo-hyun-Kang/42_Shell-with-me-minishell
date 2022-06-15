@@ -22,46 +22,47 @@ void	ft_system(t_argument *argument)
 	int						fd_pipe2[PIPE_COUNT];
 	int						fd_current_pipe[PIPE_COUNT];
 	int						fd_temp;
-	int						is_pipe_on;
+	int						pipe_state;
 
 	// Reserve before argument's address for Free
 	pa_orgin_argument = argument;
 
 	// loop for execute command
 	
-	is_pipe_on = PIPE_NONE;
+	pipe_state = PIPE_NONE;
 	while (argument != NULL)
 	{
 		mult_command = argument->next_token_type;
 		
-		if (mult_command == PIPE && is_pipe_on == PIPE_NONE)
+		if (mult_command == PIPE && pipe_state == PIPE_NONE)
 		{
-			is_pipe_on = PIPE_START;
+			pipe_state = PIPE_START;
 			pipe(fd_pipe1);
 			pipe(fd_pipe2);
 			fd_temp = fd_pipe1[PIPE_READ];
 		}
-		else if (mult_command == PIPE && is_pipe_on == PIPE_START)
+		else if (mult_command == PIPE && pipe_state == PIPE_START)
 		{
-			is_pipe_on = PIPE_MIDDLE;
+			pipe_state = PIPE_MIDDLE;
 			//pipe(fd_pipe2);
 			fd_temp = fd_pipe2[PIPE_READ];
 
 		}
-		else if (mult_command != PIPE && (is_pipe_on == PIPE_START || is_pipe_on == PIPE_MIDDLE))
+		else if (mult_command != PIPE && (pipe_state == PIPE_START || pipe_state == PIPE_MIDDLE))
 		{
-			is_pipe_on = PIPE_END;
+			pipe_state = PIPE_END;
 		}
 
 		//DGT, 세미콜론이라면 명령을 그냥 다음으로 가면 되고 eof라면 그냥 나가면 된다
 
-		//자식 쉘 생성 전에 부모 쉘 종료시키는 경우
-		if (ft_try_exit_parent(argument) == FALSE)
+		//부모 쉘을 종료시키는 경우
+		if (pipe_state == PIPE_NONE && ft_try_exit_parent(argument) == TRUE)
 		{
 			argument = argument->next;
 			continue;
 		}
 	
+		// 자식 쉘을 생성하는 경우
 		pid_t child_pid;
 		child_pid = fork();
 		
@@ -72,11 +73,11 @@ void	ft_system(t_argument *argument)
 		}
 		if (child_pid == 0)
 		{
-			if (is_pipe_on == PIPE_NONE)
+			if (pipe_state == PIPE_NONE)
 			{
 				ft_execuse(argument);
 			}
-			else if (is_pipe_on == PIPE_START)
+			else if (pipe_state == PIPE_START)
 			{
 				//FD1 : STDOUT -> PIPE OUT
 				// 파이프 실패 예외처리 해줄것
@@ -89,7 +90,7 @@ void	ft_system(t_argument *argument)
 
 				ft_execuse(argument);
 			}
-			else if (is_pipe_on == PIPE_MIDDLE)
+			else if (pipe_state == PIPE_MIDDLE)
 			{
 				close(fd_pipe1[PIPE_WRITE]);
 				
@@ -104,7 +105,7 @@ void	ft_system(t_argument *argument)
 					
 				ft_execuse(argument);
 			}
-			else if (is_pipe_on == PIPE_END)
+			else if (pipe_state == PIPE_END)
 			{
 				
 				close(fd_pipe1[PIPE_WRITE]);
@@ -123,7 +124,7 @@ void	ft_system(t_argument *argument)
 		argument = argument->next;
 	}
 
-	if (is_pipe_on == PIPE_END)
+	if (pipe_state == PIPE_END)
 	{
 		close(fd_pipe1[PIPE_READ]);
 		close(fd_pipe1[PIPE_WRITE]);

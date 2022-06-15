@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 11:38:18 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 14:13:46 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int main(int argc, char **argv, char **env)
 		signal(SIGINT, sigint_handler);
 		str = readline("minishell-4.2$ ");
 		if (!str)
-			str = ft_strdup("exit");
+			exit(1);
 		ft_print_memory(str, ft_strlen(str));
 		add_history(str);
 		arg = ft_parser(str, &environment);

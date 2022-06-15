@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 21:48:20 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 00:32:21 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 17:16:53 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,4 +24,3 @@ void	sigint_handler_after_parsing(int sig)
 {
 	rl_replace_line("", 0);
 }
-

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/09 16:52:07 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 11:55:58 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 17:24:10 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	**ft_envdup(char **env)
 	return (new_env);
 }
 
-int	ft_is_key_match(char *env, char *key)
+int	ft_is_key_matched(char *env, char *key)
 {
 	int	i;
 
@@ -58,7 +58,7 @@ int	ft_is_key_match(char *env, char *key)
 	return (0);
 }
 
-char	**ft_find_match_key(char **env, char *key)
+char	**ft_find_matched_key(char **env, char *key)
 {
 	int		i;
 	char	*value;
@@ -66,7 +66,7 @@ char	**ft_find_match_key(char **env, char *key)
 	i = 0;
 	while (env[i] != NULL)
 	{
-		if (ft_is_key_match(env[i], key) == 1)
+		if (ft_is_key_matched(env[i], key) == 1)
 			return (&env[i]);
 		++i;
 	}
@@ -81,7 +81,7 @@ char	*ft_get_value_from_env(char **env, char *key)
 	i = 0;
 	while (*env != NULL)
 	{
-		if (ft_is_key_match(*env, key) == 1)
+		if (ft_is_key_matched(*env, key) == 1)
 		{
 			while ((*env)[i] != '=')
 				++i;

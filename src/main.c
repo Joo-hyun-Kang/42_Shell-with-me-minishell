@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 22:50:17 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 23:31:22 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,6 @@ int main(int argc, char **argv, char **env)
 		ft_show_argument_test(arg);
 		signal(SIGINT, sigint_handler_after_parsing);
 		ft_system(arg);
-		free(str);
 //		system("leaks minishell");
 	}
 	return (0);

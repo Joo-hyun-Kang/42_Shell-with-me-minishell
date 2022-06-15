@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 22:55:30 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 23:31:58 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ typedef struct s_env_root {
 	struct s_env			*root;
 } t_env_root;
 
+typedef struct s_lexer {
+	char		*cmd_str;
+	int			cmd_str_size;
+	int			read_idx;
+} t_lexer;
+
 typedef struct s_token {
 	enum e_token_type		token_type;
 	char					*pa_str;
@@ -96,17 +102,26 @@ void			sigint_handler_after_parsing(int sig);
 t_token			*ft_tokenizer(char *cmd_str, t_env_root *root_env);
 
 /* src/parser/tokenizer/tokenizer_core.c */
-void			ft_merge_env_str(char **cmd_str, char **dst, t_env_root *root_env);
-void			ft_merge_home_str(char **cmd_str, char **dst, t_env_root *root_env);
-void			ft_merge_quote_str(char **cmd_str, char **dst, t_env_root *root_env, char quote);
-t_token			*ft_create_token_type_metachar(char **cmd_str);
-t_token			*ft_create_token_type_argument(char **cmd_str, t_env_root *root_env);
+void			ft_merge_env_str(t_lexer *lexer, char **dst, t_env_root *root_env);
+void			ft_merge_home_str(t_lexer *lexer, char **dst, t_env_root *root_env);
+void			ft_merge_quote_str(t_lexer *lexer, char **dst, t_env_root *root_env, char quote);
+t_token			*ft_create_token_type_metachar(t_lexer *lexer);
+t_token			*ft_create_token_type_argument(t_lexer *lexer, t_env_root *root_env);
 
-/* tokenizer_utils.c */
+/* src/parser/tokenizer/tokenizer_utils.c */
 char			*ft_strchr_except_null(const char *str, int c);
 char			*ft_strndup(const char *src, size_t n);
 t_token			*ft_init_token(char *str, enum e_token_type token_type);
 void			ft_add_token_back(t_token **head, t_token *new_token);
+
+/* src/parser/tokenizer/lexer.c */
+t_lexer			*ft_init_lexer(char *cmd_str);
+void			ft_free_lexer(t_lexer *lexer);
+void			ft_read_lexer(t_lexer *lexer);
+char			ft_cur_char(t_lexer *lexer);
+char			*ft_cur_ptr(t_lexer *lexer);
+char			ft_next_char(t_lexer *lexer);
+void			ft_replace_lexer_cmd_str(t_lexer *lexer, char *new_cmd_str);
 
 /*
  * #########################################################

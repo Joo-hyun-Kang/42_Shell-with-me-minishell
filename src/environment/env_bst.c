@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 17:57:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 19:02:16 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 19:50:11 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,6 @@ t_env	*ft_init_env_node(char *key, char *value)
 
 void	ft_env_replace_value(t_env *node, char *new_value)
 {
-	if (node->pa_value != NULL)
-		free(node->pa_value);
 	node->pa_value = new_value;
 }
 
@@ -67,7 +65,6 @@ void	ft_env_insert_recursive(char *key, char *value, t_env *cur_node)
 	{
 		ft_env_replace_value(cur_node, value);
 		cur_node->is_del = 0;
-		free(key);
 	}
 }
 
@@ -85,7 +82,7 @@ void	ft_print_env_in_order(t_env *cur_node)
 		return ;
 	ft_print_env_in_order(cur_node->left);
 	if (cur_node->is_del == 0)
-		printf("%s=%s\n", cur_node->pa_key, cur_node->pa_value);
+		printf("declare -x %s=\"%s\"\n", cur_node->pa_key, cur_node->pa_value);
 	ft_print_env_in_order(cur_node->right);
 }
 
@@ -95,7 +92,9 @@ t_env	*ft_env_search_recursive(t_env *cur_node, char *key)
 		return (ft_env_search_recursive(cur_node->left, key));
 	else if (ft_strcmp(key, cur_node->pa_key) > 0)
 		return (ft_env_search_recursive(cur_node->right, key));
-	return (cur_node);
+	if (cur_node->is_del == 0)
+		return (cur_node);
+	return (NULL);
 }
 
 t_env	*ft_env_search(t_env_root *root, char *key)
@@ -113,4 +112,85 @@ void	ft_env_delete(t_env_root *root, char *key)
 	if (del_node == NULL)
 		return ;
 	del_node->is_del = 1;
+}
+
+char	*ft_extract_value_from_node(t_env *node)
+{
+	return (node->pa_value);
+}
+
+int		ft_is_dictionary(char *str)
+{
+	while (*str != '\0')
+	{
+		if (*str == '=')
+			return (1);
+		++str;
+	}
+	return (0);
+}
+
+// ft_is_dictionary 가 선행되어야 함
+char	*ft_extract_key_from_str(char *str)
+{
+	char	*rtn_str;
+	char	*s_pos;
+
+	s_pos = str;
+	while (*str != '=')
+		++str;
+	return (ft_strndup(s_pos, str - s_pos));
+}
+
+// ft_is_dictionary가 선행되어야 함
+char	*ft_extract_value_from_str(char *str)
+{
+	char	*rtn_str;
+
+	while (*str != '=')
+		++str;
+	++str;
+	return (ft_strdup(str));
+}
+
+//void	ft_free_env_node(t_env *node)
+//{
+//	free(node->pa_key);
+//	free(node->pa_value);
+//	free(node);
+//}
+//
+//void	ft_free_env_recursive(t_env *cur_node)
+//{
+//	if (cur_node == NULL)
+//		return ;
+//	ft_free_env_recursive(cur_node->left);
+//	ft_free_env_recursive(cur_node->right);
+//	free(cur_node);
+//}
+//
+//void	ft_free_env(t_env_root *root)
+//{
+//	ft_free_env_recursive(root->root);
+//	free(root);
+//}
+
+t_env_root	*ft_dpenv_to_bstenv(char **env)
+{
+	t_env_root	*root;
+	char		*key;
+	char		*value;
+
+	root = ft_init_env_root();
+	while (*env != NULL)
+	{
+		if (ft_is_dictionary(*env) == 1)
+		{
+			key = ft_extract_key_from_str(*env);
+			value = ft_extract_value_from_str(*env);
+			ft_env_insert(root, key, value);
+		}
+		++env;
+	}
+	return (root);
 }

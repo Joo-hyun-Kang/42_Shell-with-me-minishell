@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 19:02:32 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 19:45:17 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ char			**ft_remove_env(char **env, char *key);
 char			*ft_extract_key_from_dict(char *dict);
 
 /* src/environment/env_free_utils.c */
-void			ft_free_env(char **env);
+//void			ft_free_env(char **env);
 
 /* src/environment/env_execute.c */
 int				ft_strcmp(const char *s1, const char *s2);
@@ -181,5 +181,13 @@ void			ft_print_env_in_order(t_env *cur_node);
 t_env			*ft_env_search_recursive(t_env *cur_node, char *key);
 t_env			*ft_env_search(t_env_root *root, char *key);
 void			ft_env_delete(t_env_root *root, char *key);
+int				ft_is_dictionary(char *str);
+char			*ft_extract_value_from_node(t_env *node);
+char			*ft_extract_key_from_str(char *str);
+char			*ft_extract_value_from_str(char *str);
+//void			ft_free_env_node(t_env *node);
+//void			ft_free_env_recursive(t_env *cur_node);
+//void			ft_free_env(t_env_root *root);
+t_env_root		*ft_dpenv_to_bstenv(char **env);
 
 #endif

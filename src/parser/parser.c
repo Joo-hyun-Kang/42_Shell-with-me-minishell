@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/14 16:12:57 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 11:51:20 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ t_token	*ft_read_token(t_token *cur_token, t_argument *out_arg, int index)
 			{
 				printf("minishell: parse error near `%s'\n", \
 						ft_get_token_type_char(cur_token->next->token_type));
-				return (0);
+				return (NULL);
 			}
 		}
 		else if (cur_token->token_type == DGT)
@@ -64,7 +64,7 @@ t_token	*ft_read_token_init(t_token *cur_token, t_argument *arg, int idx)
 		if (cur_token->token_type == PIPE)
 		{
 			printf("minishell: parse error near `|'\n");
-			return (0);
+			return (NULL);
 		}
 		else
 			return (ft_read_token(cur_token, arg, -1));
@@ -83,21 +83,21 @@ t_argument	*ft_parser(char *input_command, char ***environment)
 	t_token			*head_token;
 	t_token			*cur_token;
 
-	if (*input_command == 0)
-		return (0);
-	head_arg = 0;
+	if (*input_command == '\0')
+		return (NULL);
+	head_arg = NULL;
 	head_token = ft_tokenizer(input_command, *environment);
 	cur_token = head_token;
 	while (cur_token->token_type != EOL)
 	{
 		cur_arg = ft_init_argument(cur_token, environment);
 		cur_token = ft_read_token_init(cur_token, cur_arg, 0);
-		if (cur_token == 0)
+		if (cur_token == NULL)
 		{
 			ft_add_argument_back(&head_arg, cur_arg);
 			ft_free_argument(head_arg);
 			ft_free_token(head_token);
-			return (0);
+			return (NULL);
 		}
 		ft_add_argument_back(&head_arg, cur_arg);
 	}

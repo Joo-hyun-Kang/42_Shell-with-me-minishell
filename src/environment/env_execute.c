@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:19:31 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/14 16:13:11 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 11:54:21 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	ft_strcmp(const char *s1, const char *s2)
 	size_t	i;
 
 	i = 0;
-	while (s1[i] != 0 && s2[i] != 0)
+	while (s1[i] != '\0' && s2[i] != '\0')
 	{
 		if (s1[i] != s2[i])
 			break ;
@@ -32,13 +32,13 @@ void	ft_execute_export(t_argument *arg)
 	int		i;
 
 	dict = arg->pa_argument[1];
-	if (dict == 0)
+	if (dict == NULL)
 	{
 		ft_print_env(*(arg->env));
 		return ;
 	}
 	i = 0;
-	while (dict[i])
+	while (dict[i] != '\0')
 	{
 		if (i != 0 && dict[i] == '=')
 			break ;
@@ -49,7 +49,7 @@ void	ft_execute_export(t_argument *arg)
 		}
 		++i;
 	}
-	if (dict != 0)
+	if (dict != NULL)
 		*(arg->env) = ft_set_env(*(arg->env), dict);
 }
 
@@ -58,7 +58,7 @@ void	ft_execute_env(t_argument *arg)
 	char	*dict;
 
 	dict = arg->pa_argument[1];
-	if (dict != 0)
+	if (dict != NULL)
 		*(arg->env) = ft_set_env(*(arg->env), dict);
 	ft_print_env(*(arg->env));
 }
@@ -69,7 +69,7 @@ void	ft_execute_unset(t_argument *arg)
 	int		i;
 
 	key = arg->pa_argument[1];
-	if (key == 0)
+	if (key == NULL)
 		return ;
 	i = 0;
 	while (key[i])

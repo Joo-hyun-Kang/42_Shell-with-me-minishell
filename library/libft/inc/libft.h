@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 03:42:52 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/05/02 19:57:26 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 22:23:28 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,7 @@ t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 t_list	*ft_lstnew(void *content);
 int		ft_lstsize(t_list *lst);
+
+char	*ft_strndup(const char *src, size_t n);
+int		ft_strcmp(const char *s1, const char *s2);
 #endif

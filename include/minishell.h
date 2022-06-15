@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 11:42:45 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 12:01:17 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # define METACHAR "|;><"
 # define WHITE_SPACE " \r\v\f\t"
 # define QUOTE "\"'"
-# define SKIPCHAR "|;>< \r\v\f\t\"'$"
+# define SKIPCHAR "|;>< \r\v\f\t\"'$~"
 
 # define BANNER "\
                                                     \n\n\

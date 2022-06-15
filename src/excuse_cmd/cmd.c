@@ -77,6 +77,7 @@ void	ft_system(t_argument *argument)
 
 		//DGT, 세미콜론이라면 명령을 그냥 다음으로 가면 되고 eof라면 그냥 나가면 된다
 		command = argument->pa_argument[COMMAND_POSITION];
+		bull_type = INVAILD;
 		if (is_bulletin(command, &bull_type) == TRUE)
 		{
 			//내장 명령어 실행
@@ -98,6 +99,10 @@ void	ft_system(t_argument *argument)
 			}
 			else if (child_pid == 0 && is_pipe_on == PIPE_NONE)
 			{
+				if (is_bulletin(command, &bull_type))
+				{
+					ft_bulletin(argument, bull_type);	
+				}
 				ft_execuse(argument->pa_argument);
 			}
 			else if (child_pid == 0 && is_pipe_on == PIPE_START)
@@ -162,6 +167,17 @@ void	ft_system(t_argument *argument)
 	}
 
 	ft_free_argument(pa_orgin_argument);
+}
+
+void	ft_bulletin(t_argument *argument, enum e_bulltein_type bull_type)
+{
+	//내장 명령어 실행
+	if (bull_type == BUL_ECHO)
+		ft_execute_echo(argument);
+	else if (bull_type == BUL_CD)
+		ft_execute_cd(argument);
+	else if (bull_type == BUL_PWD)
+		ft_execute_pwd(argument);
 }
 
 void	ft_execuse(char **pa_argument)

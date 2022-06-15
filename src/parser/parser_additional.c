@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 04:52:43 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 11:44:19 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	ft_heredoc(t_token *cur_token, char **env)
 	read_line = readline("> ");
 	while (ft_strcmp(cur_token->next->pa_str, read_line) != 0)
 	{
-		ft_merge_string(&new_str, read_line);
+		new_str = ft_merge_str(new_str, read_line);
 		tmp = new_str;
 		new_str = ft_strjoin(new_str, "\n");
 		free(tmp);

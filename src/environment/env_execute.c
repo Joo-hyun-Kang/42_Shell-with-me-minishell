@@ -6,51 +6,56 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:19:31 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 22:55:50 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 05:23:17 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+void	ft_print_env_inorder(t_env *root_node, char *str)
+{
+	if (root_node == NULL)
+		return ;
+	ft_print_env_inorder(root_node->left, str);
+	printf("%s%s=\"%s\"\n", str, root_node->pa_key, root_node->pa_value);
+	ft_print_env_inorder(root_node->right, str);
+}
+
 void	ft_execute_export(t_argument *arg)
 {
-	char	*dict;
-	int		i;
+	const int	ARG = 1;
+	char		*key;
+	char		*value;
 
-	dict = arg->pa_argument[1];
-	if (dict == NULL)
+	if (arg->pa_argument[ARG] == NULL)
+		ft_print_env_inorder(arg->env->root, "declare -x ");
+	else
 	{
-		ft_print_env(*(arg->env));
-		return ;
-	}
-	i = 0;
-	while (dict[i] != '\0')
-	{
-		if (i != 0 && dict[i] == '=')
-			break ;
-		if (ft_isalnum(dict[i]) == 0)
+		if (ft_is_dictionary(arg->pa_argument[ARG]) == 1)
 		{
-			printf("minishell: unset: `%s': not a valid identifier\n", dict);
-			return ;
+			key = ft_extract_key_from_str(arg->pa_argument[ARG]);
+			value = ft_extract_value_from_str(arg->pa_argument[ARG]);
+			printf("key=%s, value=%s\n", key, value);
+			ft_env_insert(arg->env, key, value); 
 		}
-		++i;
 	}
-	if (dict != NULL)
-		*(arg->env) = ft_set_env(*(arg->env), dict);
 }
 
 void	ft_execute_env(t_argument *arg)
 {
-	ft_print_env(*(arg->env));
+	ft_print_env_inorder(arg->env->root, "");
 }
 
 void	ft_execute_unset(t_argument *arg)
 {
-	char	*key;
-	int		i;
+	const int	ARG = 1;
+	char		*key;
+	int			i;
 
-	key = arg->pa_argument[1];
-	if (key == NULL)
+	if (arg->pa_argument[ARG] == NULL)
+		return ;
+	key = arg->pa_argument[ARG];
+	if (key == 0)
 		return ;
 	i = 0;
 	while (key[i])
@@ -62,7 +67,7 @@ void	ft_execute_unset(t_argument *arg)
 		}
 		++i;
 	}
-	*(arg->env) = ft_unset_env(*(arg->env), key);
+	ft_env_delete(arg->env, key);
 }
 
 void	ft_env_simple_command_test(t_argument *arg)
@@ -80,5 +85,4 @@ void	ft_env_simple_command_test(t_argument *arg)
 		else if (ft_strcmp(arg->pa_argument[COMMAND_POSITION], "exit") == 0)
 			exit(1);
 	}
-	ft_free_argument(arg);
 }

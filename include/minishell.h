@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 12:01:17 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 17:16:23 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,16 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# define METACHAR "|;><"
-# define WHITE_SPACE " \r\v\f\t"
-# define QUOTE "\"'"
-# define SKIPCHAR "|;>< \r\v\f\t\"'$~"
+# define M_META		"|;><"
+# define M_SPACE	" \r\v\f\t"
+# define M_QUOTE	"\"'"
+# define M_ENV		'$'
+# define M_HOME		'~'
+# define M_SEP		"|;>< \r\v\f\t\"'$~"
 
 # define BANNER "\
-                                                    \n\n\
+                                                    \n\
+                                                    \n\
      S  H  E  L  L          W  I  T  H          M  E\n\
      -  -  -  -  -          -  -  -  -          -  -\n\
                                                     \n\
@@ -78,11 +81,14 @@ void			sigint_handler_after_parsing(int sig);
  * #########################################################
  */
 /* src/parser/tokenizer/tokenizer.c */
-void			ft_merge_environment(char **str, char **dst, char **env);
-void			ft_quote(char **str, char **dst, char quote, char **env);
-t_token			*ft_create_token_type_metachar(char **str);
-t_token			*ft_create_token_type_argument(char **input_command, char **environment);
-t_token			*ft_tokenizer(char *input_command, char **environment); /* API */
+t_token			*ft_tokenizer(char *cmd_str, char **env);
+
+/* src/parser/tokenizer/tokenizer_core.c */
+void			ft_merge_env_str(char **cmd_str, char **dst, char **env);
+void			ft_merge_home_str(char **cmd_str, char **dst, char **env);
+void			ft_merge_quote_str(char **cmd_str, char **dst, char **env, char quote);
+t_token			*ft_create_token_type_metachar(char **cmd_str);
+t_token			*ft_create_token_type_argument(char **cmd_str, char **env);
 
 /* tokenizer_utils.c */
 char			*ft_strchr_except_null(const char *str, int c);
@@ -99,9 +105,9 @@ void			ft_add_token_back(t_token **head, t_token *new_token);
  */
 /* src/parser/parser.c */
 char			*ft_get_token_type_char(enum e_token_type token_type);
-t_token			*ft_read_token(t_token *cur_token, t_argument *argument, int index);
+t_token			*ft_read_token(t_token *cur_token, t_argument *arg, int idx);
 t_token			*ft_read_token_init(t_token *cur_token, t_argument *arg, int idx);
-t_argument		*ft_parser(char *input_command, char ***environment); /* API */
+t_argument		*ft_parser(char *cmd_str, char ***env); /* API */
 
 /* parser_free_utils.c */
 void			ft_free_token(t_token *token);
@@ -113,8 +119,8 @@ char			**ft_init_pa_argument(t_token *cur_token);
 void			ft_add_argument_back(t_argument **head, t_argument *arg);
 
 /* parser_additional.c */
-t_token			*ft_add_additional_pipe(t_token *cur_token, char **env);
-void			ft_heredoc(t_token *cur_token, char **env);
+t_token			*ft_add_pipe(t_token *cur_token, char **env);
+void			ft_replace_heredoc(t_token *cur_token, char **env);
 
 /* parser_common_utils.c */
 char			*ft_merge_str(char *s1, char *s2);

@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/15 11:39:23 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/15 17:16:32 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ SIG_SRC			=	signal.c
 #--------------[ TOKENIZER ]-----------------
 TOKEN_DIR		=	src/parser/tokenizer
 TOKEN_SRC		=	tokenizer.c\
+					tokenizer_core.c\
 					tokenizer_utils.c
 #--------------[ PARSER ]----------------
 PARSER_DIR		=	src/parser

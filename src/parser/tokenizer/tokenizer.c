@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 15:57:18 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 11:43:35 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	ft_merge_environment(char **str, char **dst, char **env)
 	key = ft_strndup(s_pos, *str - s_pos);
 	value = ft_get_value_from_env(env, key);
 	free(key);
-	ft_merge_string(dst, value);
+	*dst = ft_merge_str(*dst, value);
 }
 
 void	ft_quote(char **input_command, char **dst, char quote, char **env)
@@ -66,9 +66,9 @@ void	ft_quote(char **input_command, char **dst, char quote, char **env)
 	{
 		if (*(*input_command) == quote)
 		{
-			ft_merge_string(dst, ft_strndup(s_pos, *input_command - s_pos));
+			*dst = ft_merge_str(*dst, ft_strndup(s_pos, *input_command - s_pos));
 			if (*(++(*input_command)) != 0)
-				ft_merge_string(dst, ft_strdup(*input_command));
+				*dst = ft_merge_str(*dst, ft_strdup(*input_command));
 			return ;
 		}
 		else if (quote == '"' && *(*input_command) == '$')
@@ -76,7 +76,7 @@ void	ft_quote(char **input_command, char **dst, char quote, char **env)
 		++(*input_command);
 	}
 	tmp = ft_strndup(s_pos, *input_command - s_pos);
-	ft_merge_string(dst, ft_strjoin(tmp, "\n"));
+	*dst = ft_merge_str(*dst, ft_strjoin(tmp, "\n"));
 	free(tmp);
 	read_line = readline("> ");
 	tmp = read_line;
@@ -97,7 +97,7 @@ t_token	*ft_create_token_type_argument(char **input_command, char **environment)
 		s_pos = *input_command;
 		while (ft_strchr(SKIPCHAR, *(*input_command)) == 0)
 			++(*input_command);
-		ft_merge_string(&new_string, ft_strndup(s_pos, *input_command - s_pos));
+		new_string = ft_merge_str(new_string, ft_strndup(s_pos, *input_command - s_pos));
 		if (ft_strchr_except_null(QUOTE, *(*input_command)) != 0)
 		{
 			quote = *(*input_command);

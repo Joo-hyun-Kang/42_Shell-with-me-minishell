@@ -6,25 +6,25 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 17:02:11 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 22:34:12 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_token	*ft_add_pipe(t_token *cur_token, char **env)
+t_token	*ft_add_pipe(t_token *cur_token, t_env_root *root_env)
 {
 	char	*read_line;
 	t_token	*add;
 
 	read_line = readline("> ");
-	add = ft_tokenizer(read_line, env);
+	add = ft_tokenizer(read_line, root_env);
 	free(read_line);
 	cur_token->next = add;
 	return (cur_token->next);
 }
 
-void	ft_replace_heredoc(t_token *cur_token, char **env)
+void	ft_replace_heredoc(t_token *cur_token, t_env_root *root_env)
 {
 	char	*read_line;
 	char	*new_str;

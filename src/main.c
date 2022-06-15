@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 14:13:46 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 22:50:17 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ void	ft_show_argument_test(t_argument *arg)
 int main(int argc, char **argv, char **env)
 {
 	char        *str;
-	char		**environment;
 	t_argument	*arg;
+	t_env_root	*root_env;
 
 	printf("%s", BANNER);
-	environment = ft_envdup(env);
+	root_env = ft_dpenv_to_bstenv(env);
 	while (1)
 	{
 		signal(SIGINT, sigint_handler);
@@ -74,7 +74,7 @@ int main(int argc, char **argv, char **env)
 			exit(1);
 		ft_print_memory(str, ft_strlen(str));
 		add_history(str);
-		arg = ft_parser(str, &environment);
+		arg = ft_parser(str, root_env);
 		if (arg == 0)
 		{
 			free(str);

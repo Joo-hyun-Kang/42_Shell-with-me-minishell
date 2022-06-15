@@ -6,13 +6,13 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:35:47 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 11:52:17 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/15 22:32:19 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-t_argument	*ft_init_argument(t_token *cur_token, char ***env)
+t_argument	*ft_init_argument(t_token *cur_token, t_env_root *root_env)
 {
 	t_argument	*argument;
 
@@ -21,7 +21,7 @@ t_argument	*ft_init_argument(t_token *cur_token, char ***env)
 		return (NULL);
 	ft_memset(argument, 0, sizeof(t_argument));
 	argument->pa_argument = ft_init_pa_argument(cur_token);
-	argument->env = env;
+	argument->env = root_env;
 	return (argument);
 }
 

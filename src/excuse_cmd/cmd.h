@@ -1,4 +1,10 @@
 #include "../../include/minishell.h"
+#include <unistd.h>
+#include <sys/wait.h>
+#include <stdio.h>
+#include <dirent.h>
+
+#include "../../library/libft/inc/libft.h"
 
 #ifndef TRUE
 #define TRUE (1)
@@ -14,6 +20,19 @@
 #define NULL_POSITOIN (1)
 #define BIN_SH_POSIOTON (1)
 #define BIN_SH_ARG_POSITION (1)
+
+#define COMMAND_POSITION (0)
+#define	COMMAND_ARG_POSITION (1)
+
+#define PIPE_COUNT (2)
+#define PIPE_ERROR (-1)
+
+#define PIPE_NONE (-1)
+#define PIPE_START (0)
+#define PIPE_MIDDLE (1)
+#define PIPE_END (2)
+
+#define ENV_PATH_NAME_LENGTH (5)
 
 enum e_bulltein_type {
     BUL_ECHO,

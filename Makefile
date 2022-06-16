@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/16 16:58:01 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/16 17:36:18 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,8 +40,14 @@ PARSER_SRC		=	parser.c\
 					ft_merge_str.c
 #--------------[ ENV ]----------------
 ENV_DIR			=	src/environment
-ENV_SRC			=	env_bst.c\
+ENV_SRC			=	env_utils.c\
 					env_execute.c
+#--------------[ ENV_bst ]----------------
+ENVBST_DIR		=	src/environment/environment_bst
+ENVBST_SRC		=	env_bst_init.c\
+					env_bst_insert.c\
+					env_bst_search.c\
+					env_bst_delete.c
 #--------------[ EXCUSE ]----------------
 EXCUSE_DIR		=	src/excuse_cmd
 EXCUSE_SRC		=	cmd.c
@@ -55,6 +61,7 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(PARSER_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(TOKEN_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(ENV_SRC:.c=.o))\
+					$(addprefix $(OBJ_DIR)/, $(ENVBST_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(SIG_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(EXCUSE_SRC:.c=.o))
 #-----------------[ CMD ]-------------------
@@ -62,15 +69,15 @@ CC				=	gcc
 CFLAGS			=	-g # -Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(EXCUSE_DIR)\
-					-I /opt/homebrew/opt/readline/include
-					#-I /Users/kanghyki/.brew/opt/readline/include
+					-I /Users/kanghyki/.brew/opt/readline/include
+					#-I /opt/homebrew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /opt/homebrew/opt/readline/lib
-					#-l readline -L /Users/kanghyki/.brew/opt/readline/lib
+					-l readline -L /Users/kanghyki/.brew/opt/readline/lib
+					#-l readline -L /opt/homebrew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 
-vpath %.c $(SRC_DIR) $(TOKEN_DIR) $(PARSER_DIR) $(ENV_DIR) $(SIG_DIR) $(EXCUSE_DIR)
+vpath %.c $(SRC_DIR) $(TOKEN_DIR) $(PARSER_DIR) $(ENV_DIR) $(ENVBST_DIR) $(SIG_DIR) $(EXCUSE_DIR)
 
 all: $(NAME)
 

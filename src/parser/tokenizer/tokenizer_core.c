@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 17:15:28 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 23:44:30 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 15:44:34 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,18 @@ void	ft_merge_home_str(t_lexer *lexer, char **dst, t_env_root *root_env)
 	*dst = ft_merge_str(*dst, ft_strdup(node->pa_value));
 }
 
+void	ft_no_quote(t_lexer *lexer, char **dst, t_env_root *root_env, char quote)
+{
+	char	*read_line;
+	char	*tmp;
+
+	read_line = readline("> ");
+	tmp = ft_strjoin(lexer->cmd_str, read_line);
+	free(read_line);
+	ft_replace_lexer_cmd_str(lexer, tmp);
+	ft_merge_quote_str(lexer, dst, root_env, quote);
+}
+
 void	ft_merge_quote_str(t_lexer *lexer, char **dst, t_env_root *root_env, char quote)
 {
 	char	*s_pos;
@@ -90,16 +102,16 @@ void	ft_merge_quote_str(t_lexer *lexer, char **dst, t_env_root *root_env, char q
 			return ;
 		}
 		else if (quote == '"' && ft_cur_char(lexer) == '$')
+		{
+			*dst = ft_merge_str(*dst, ft_strndup(s_pos, ft_cur_ptr(lexer) - s_pos));
 			ft_merge_env_str(lexer, dst, root_env);
+			s_pos = ft_cur_ptr(lexer);
+		}
 		else
 			ft_read_lexer(lexer);
 	}
-	*dst = ft_merge_str(*dst, \
-			ft_merge_str(ft_strndup(s_pos, ft_cur_ptr(lexer) - s_pos), ft_strdup("\n")));
-	read_line = readline("> ");
-	tmp = ft_strjoin(lexer->cmd_str, read_line);
-	ft_replace_lexer_cmd_str(lexer, tmp);
-	ft_merge_quote_str(lexer, dst, root_env, quote);
+	*dst = ft_merge_str(*dst, ft_merge_str(ft_strndup(s_pos, ft_cur_ptr(lexer) - s_pos), ft_strdup("\n")));
+	ft_no_quote(lexer, dst, root_env, quote);
 }
 
 t_token	*ft_create_token_type_argument(t_lexer *lexer, t_env_root *root_env)

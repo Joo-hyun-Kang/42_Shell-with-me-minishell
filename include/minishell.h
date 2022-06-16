@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 06:12:12 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 15:23:26 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,22 +136,22 @@ t_token			*ft_read_token(t_token *cur_token, t_argument *arg, int idx);
 t_token			*ft_read_token_init(t_token *cur_token, t_argument *arg, int idx);
 t_argument		*ft_parser(char *cmd_str, t_env_root *root_env); /* API */
 
-/* parser_free_utils.c */
+/* src/parser/parser_free_utils.c */
 void			ft_free_token(t_token *token);
 void			ft_free_argument(t_argument *arg);
 
-/* parser_utils.c */
+/* src/parser/parser_utils.c */
 t_argument		*ft_init_argument(t_token *cur_token, t_env_root *root_env);
 char			**ft_init_pa_argument(t_token *cur_token);
 void			ft_add_argument_back(t_argument **head, t_argument *arg);
 
-/* parser_additional.c */
+/* src/parser/parser_additional.c */
 t_token			*ft_read_additional_pipe(t_token *cur_token, t_env_root *root_env);
 char			*ft_replace_env_heredoc(char *str, t_env_root *root_env);
 void			ft_merge_env_heredoc(char **str, char **dst, t_env_root *root_env);
 void			ft_read_additional_heredoc(t_token *cur_token, t_env_root *root_env);
 
-/* parser_common_utils.c */
+/* src/parser/ft_merge_str.c */
 char			*ft_merge_str(char *s1, char *s2);
 
 /*

@@ -1,4 +1,10 @@
 #include "../../include/minishell.h"
+#include <unistd.h>
+#include <sys/wait.h>
+#include <stdio.h>
+#include <dirent.h>
+
+#include "../../library/libft/inc/libft.h"
 
 #ifndef TRUE
 #define TRUE (1)
@@ -15,6 +21,19 @@
 #define BIN_SH_POSIOTON (1)
 #define BIN_SH_ARG_POSITION (1)
 
+#define COMMAND_POSITION (0)
+#define	COMMAND_ARG_POSITION (1)
+
+#define PIPE_COUNT (2)
+#define PIPE_ERROR (-1)
+
+#define PIPE_NONE (-1)
+#define PIPE_START (0)
+#define PIPE_MIDDLE (1)
+#define PIPE_END (2)
+
+#define ENV_PATH_NAME_LENGTH (5)
+
 enum e_bulltein_type {
     BUL_ECHO,
     BUL_CD,
@@ -28,10 +47,13 @@ enum e_bulltein_type {
 
 void	ft_system(t_argument *argument);
 
-
+void	ft_bulletin(t_argument *argument, enum e_bulltein_type bull_type);
+int     ft_try_exit_parent(t_argument *argumnet);
+int     ft_try_cd_parent(t_argument *argumnet);
 void	ft_execute_echo(t_argument *argument);
 void	ft_execute_pwd(t_argument *argument);
-void	ft_execute_cd(t_argument *argument);
+void	ft_execute_cd(t_argument *argument, int is_parent);
+void	ft_execute_exit(int error_num);
 
 int		is_bulletin(char *command, enum e_bulltein_type *out_type);
 
@@ -41,7 +63,7 @@ int     ft_get_length_2d_arr(char **array);
 void	ft_get_sh_command(char **src_2d, char **out_dst);
 void	ft_free_command(char **pa_char);
 
-void	ft_execuse(char **pa_argument);
+void	ft_execuse(t_argument *argument);
 char	*ft_search_command_path_malloc(char *command);
 int     ft_strcmp_temp(const char *s1, const char *s2);
 char	*ft_join_path_command_malloc(char *path, char *command);

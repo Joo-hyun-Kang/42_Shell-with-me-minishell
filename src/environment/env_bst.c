@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 17:57:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 05:13:29 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 15:11:43 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ int	ft_env_insert_recursive(char *key, char *value, t_env *cur_node)
 	return (0);
 }
 
+// Unused key will be automatically freed.
 void	ft_env_insert(t_env_root *root, char *key, char *value)
 {
 	if (root->root == NULL)
@@ -90,13 +91,19 @@ t_env	*ft_env_search_recursive(t_env *cur_node, char *key)
 	return (cur_node);
 }
 
+// Key will be Automatically freed.
 t_env	*ft_env_search(t_env_root *root, char *key)
 {
+	t_env	*find_node;
+
 	if (root->root == NULL)
 		return (NULL);
-	return (ft_env_search_recursive(root->root, key));
+	find_node = ft_env_search_recursive(root->root, key);
+	free(key);
+	return (find_node);
 }
 
+// Key will be Automatically freed.
 void	ft_env_delete(t_env_root *root, char *key)
 {
 	t_env	*cur_node;

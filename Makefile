@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/16 05:17:15 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/16 15:22:53 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,9 +33,9 @@ TOKEN_SRC		=	tokenizer.c\
 PARSER_DIR		=	src/parser
 PARSER_SRC		=	parser.c\
 					parser_utils.c\
-					parser_common_utils.c\
 					parser_free_utils.c\
-					parser_additional.c
+					parser_additional.c\
+					ft_merge_str.c
 #--------------[ ENV ]----------------
 ENV_DIR			=	src/environment
 ENV_SRC			=	env_bst.c\

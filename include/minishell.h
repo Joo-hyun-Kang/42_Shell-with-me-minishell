@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 15:23:26 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 17:01:44 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,25 +99,29 @@ void			sigint_handler_after_parsing(int sig);
  * #########################################################
  */
 /* src/parser/tokenizer/tokenizer.c */
-t_token			*ft_tokenizer(char *cmd_str, t_env_root *root_env);
+t_token			*ft_tokenizer(char *cmd_str, t_env_root *env);
 
 /* src/parser/tokenizer/tokenizer_core.c */
-void			ft_merge_env_str(t_lexer *lexer, char **dst, t_env_root *root_env);
-void			ft_merge_home_str(t_lexer *lexer, char **dst, t_env_root *root_env);
-void			ft_merge_quote_str(t_lexer *lexer, char **dst, t_env_root *root_env, char quote);
 t_token			*ft_create_token_type_metachar(t_lexer *lexer);
-t_token			*ft_create_token_type_argument(t_lexer *lexer, t_env_root *root_env);
+t_token			*ft_create_token_type_argument(t_lexer *lexer, t_env_root *env);
+
+/* src/parser/tokenizer/tokenizer_merge.c */
+void			ft_merge_env(t_lexer *lexer, char **dst, t_env_root *env);
+void			ft_merge_home(t_lexer *lexer, char **dst, t_env_root *env);
+void			ft_merge_quote(t_lexer *lexer, char **dst, t_env_root *env, char quote);
+void			ft_no_quote(t_lexer *lexer, char **dst, t_env_root *env, char quote);
 
 /* src/parser/tokenizer/tokenizer_utils.c */
 char			*ft_strchr_except_null(const char *str, int c);
-char			*ft_strndup(const char *src, size_t n);
 t_token			*ft_init_token(char *str, enum e_token_type token_type);
 void			ft_add_token_back(t_token **head, t_token *new_token);
 
 /* src/parser/tokenizer/lexer.c */
 t_lexer			*ft_init_lexer(char *cmd_str);
 void			ft_free_lexer(t_lexer *lexer);
-void			ft_read_lexer(t_lexer *lexer);
+
+/* src/parser/tokenizer/lexer_utils.c */
+char			ft_read_lexer(t_lexer *lexer);
 char			ft_cur_char(t_lexer *lexer);
 char			*ft_cur_ptr(t_lexer *lexer);
 char			ft_next_char(t_lexer *lexer);
@@ -141,15 +145,13 @@ void			ft_free_token(t_token *token);
 void			ft_free_argument(t_argument *arg);
 
 /* src/parser/parser_utils.c */
-t_argument		*ft_init_argument(t_token *cur_token, t_env_root *root_env);
+t_argument		*ft_init_argument(t_token *cur_token, t_env_root *env);
 char			**ft_init_pa_argument(t_token *cur_token);
 void			ft_add_argument_back(t_argument **head, t_argument *arg);
 
 /* src/parser/parser_additional.c */
-t_token			*ft_read_additional_pipe(t_token *cur_token, t_env_root *root_env);
-char			*ft_replace_env_heredoc(char *str, t_env_root *root_env);
-void			ft_merge_env_heredoc(char **str, char **dst, t_env_root *root_env);
-void			ft_read_additional_heredoc(t_token *cur_token, t_env_root *root_env);
+t_token			*ft_read_additional_pipe(t_token *cur_token, t_env_root *env);
+void			ft_read_additional_heredoc(t_token *cur_token, t_env_root *env);
 
 /* src/parser/ft_merge_str.c */
 char			*ft_merge_str(char *s1, char *s2);

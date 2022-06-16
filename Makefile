@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/16 15:22:53 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/16 16:58:01 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,7 +28,9 @@ TOKEN_DIR		=	src/parser/tokenizer
 TOKEN_SRC		=	tokenizer.c\
 					tokenizer_core.c\
 					tokenizer_utils.c\
-					lexer.c
+					tokenizer_merge.c\
+					lexer.c\
+					lexer_utils.c
 #--------------[ PARSER ]----------------
 PARSER_DIR		=	src/parser
 PARSER_SRC		=	parser.c\
@@ -40,10 +42,6 @@ PARSER_SRC		=	parser.c\
 ENV_DIR			=	src/environment
 ENV_SRC			=	env_bst.c\
 					env_execute.c
-#					env.c\
-#					env_utils.c\
-#					env_utils_t.c\
-#					env_free_utils.c\
 #--------------[ EXCUSE ]----------------
 EXCUSE_DIR		=	src/excuse_cmd
 EXCUSE_SRC		=	cmd.c
@@ -106,4 +104,3 @@ re:
 	@make all
 
 .PHONY: all clean fclean re
-

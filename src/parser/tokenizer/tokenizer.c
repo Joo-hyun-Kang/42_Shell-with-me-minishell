@@ -6,13 +6,13 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 23:30:31 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 16:04:35 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-t_token	*ft_tokenizer(char *cmd_str, t_env_root *root_env)
+t_token	*ft_tokenizer(char *cmd_str, t_env_root *env)
 {
 	t_lexer	*lexer;
 	t_token	*head;
@@ -29,7 +29,7 @@ t_token	*ft_tokenizer(char *cmd_str, t_env_root *root_env)
 			if (ft_strchr_except_null(M_META, ft_cur_char(lexer)) != 0)
 				new_token = ft_create_token_type_metachar(lexer);
 			else
-				new_token = ft_create_token_type_argument(lexer, root_env);
+				new_token = ft_create_token_type_argument(lexer, env);
 			ft_add_token_back(&head, new_token);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 23:31:22 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 16:13:11 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,7 @@ int main(int argc, char **argv, char **env)
 		add_history(str);
 		arg = ft_parser(str, root_env);
 		if (arg == 0)
-		{
-			free(str);
 			continue ;
-		}
 		ft_show_argument_test(arg);
 		signal(SIGINT, sigint_handler_after_parsing);
 		ft_system(arg);

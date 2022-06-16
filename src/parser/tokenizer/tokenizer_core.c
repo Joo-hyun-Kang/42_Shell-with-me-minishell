@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 17:15:28 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 15:44:34 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 16:09:49 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,82 +39,7 @@ t_token	*ft_create_token_type_metachar(t_lexer *lexer)
 	return (ft_init_token(NULL, token_type));
 }
 
-void	ft_merge_env_str(t_lexer *lexer, char **dst, t_env_root *root_env)
-{
-	char	*s_pos;
-	char	*key;
-	char	*value;
-	t_env	*node;
-
-	ft_read_lexer(lexer);
-	// $? 구현 (임시)
-	if (ft_cur_char(lexer) == '?')
-	{
-		*dst = ft_merge_str(*dst, ft_strdup("127"));
-		ft_read_lexer(lexer);
-		return ;
-	}
-	s_pos = ft_cur_ptr(lexer);
-	while (ft_strchr(M_SEP, ft_cur_char(lexer)) == 0 && ft_cur_char(lexer) != '\n')
-		ft_read_lexer(lexer);
-	key = ft_strndup(s_pos, ft_cur_ptr(lexer) - s_pos);
-	node = ft_env_search(root_env, key);
-	if (node == NULL)
-		*dst = ft_merge_str(*dst, ft_strdup(""));
-	else
-		*dst = ft_merge_str(*dst, ft_strdup(node->pa_value));
-}
-
-void	ft_merge_home_str(t_lexer *lexer, char **dst, t_env_root *root_env)
-{
-	t_env	*node;
-
-	ft_read_lexer(lexer);
-	node = ft_env_search(root_env, "HOME");
-	*dst = ft_merge_str(*dst, ft_strdup(node->pa_value));
-}
-
-void	ft_no_quote(t_lexer *lexer, char **dst, t_env_root *root_env, char quote)
-{
-	char	*read_line;
-	char	*tmp;
-
-	read_line = readline("> ");
-	tmp = ft_strjoin(lexer->cmd_str, read_line);
-	free(read_line);
-	ft_replace_lexer_cmd_str(lexer, tmp);
-	ft_merge_quote_str(lexer, dst, root_env, quote);
-}
-
-void	ft_merge_quote_str(t_lexer *lexer, char **dst, t_env_root *root_env, char quote)
-{
-	char	*s_pos;
-	char	*read_line;
-	char	*tmp;
-
-	s_pos = ft_cur_ptr(lexer);
-	while (ft_cur_char(lexer) != '\0')
-	{
-		if (ft_cur_char(lexer) == quote)
-		{
-			*dst = ft_merge_str(*dst, ft_strndup(s_pos, ft_cur_ptr(lexer) - s_pos));
-			ft_read_lexer(lexer);
-			return ;
-		}
-		else if (quote == '"' && ft_cur_char(lexer) == '$')
-		{
-			*dst = ft_merge_str(*dst, ft_strndup(s_pos, ft_cur_ptr(lexer) - s_pos));
-			ft_merge_env_str(lexer, dst, root_env);
-			s_pos = ft_cur_ptr(lexer);
-		}
-		else
-			ft_read_lexer(lexer);
-	}
-	*dst = ft_merge_str(*dst, ft_merge_str(ft_strndup(s_pos, ft_cur_ptr(lexer) - s_pos), ft_strdup("\n")));
-	ft_no_quote(lexer, dst, root_env, quote);
-}
-
-t_token	*ft_create_token_type_argument(t_lexer *lexer, t_env_root *root_env)
+t_token	*ft_create_token_type_argument(t_lexer *lexer, t_env_root *env)
 {
 	char	*s_pos;
 	char	*rtn_str;
@@ -126,17 +51,14 @@ t_token	*ft_create_token_type_argument(t_lexer *lexer, t_env_root *root_env)
 		s_pos = ft_cur_ptr(lexer);
 		while (ft_strchr(M_SEP, ft_cur_char(lexer)) == 0)
 			ft_read_lexer(lexer);
-		rtn_str = ft_merge_str(rtn_str, ft_strndup(s_pos, ft_cur_ptr(lexer) - s_pos));
+		rtn_str = ft_merge_str(rtn_str, \
+				ft_strndup(s_pos, ft_cur_ptr(lexer) - s_pos));
 		if (ft_strchr_except_null(M_QUOTE, ft_cur_char(lexer)) != 0)
-		{
-			quote = ft_cur_char(lexer);
-			ft_read_lexer(lexer);
-			ft_merge_quote_str(lexer, &rtn_str, root_env, quote);
-		}
+			ft_merge_quote(lexer, &rtn_str, env, ft_read_lexer(lexer));
 		else if (ft_cur_char(lexer) == M_HOME)
-			ft_merge_home_str(lexer, &rtn_str, root_env);
+			ft_merge_home(lexer, &rtn_str, env);
 		else if (ft_cur_char(lexer) == M_ENV)
-			ft_merge_env_str(lexer, &rtn_str, root_env);
+			ft_merge_env(lexer, &rtn_str, env);
 		if (ft_strchr_except_null(M_SPACE, ft_cur_char(lexer)) != 0
 			|| ft_strchr_except_null(M_META, ft_cur_char(lexer)) != 0)
 			break ;

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:03:15 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 11:50:22 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 15:57:45 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,6 @@ char	*ft_strchr_except_null(const char *str, int c)
 		++str;
 	}
 	return (NULL);
-}
-
-char	*ft_strndup(const char *src, size_t n)
-{
-	size_t	i;
-	size_t	src_size;
-	char	*dup;
-
-	i = 0;
-	src_size = ft_strlen(src);
-	if (src_size < n)
-		n = src_size;
-	dup = (char *)malloc(sizeof(char) * (n + 1));
-	if (dup == NULL)
-		return (NULL);
-	while (i < n)
-	{
-		dup[i] = src[i];
-		++i;
-	}
-	dup[i] = 0;
-	return (dup);
 }
 
 t_token	*ft_init_token(char *str, enum e_token_type token_type)

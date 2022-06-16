@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 17:01:44 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 22:00:48 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
                                    Jokang   Kanghyki\n\
                                    ------ & --------\n\
                                                 v0.0\n"
+int	g_exit;
 
 enum e_token_type {
 	ARGUMENT,
@@ -77,6 +78,8 @@ typedef struct s_argument {
 	struct s_env_root		*env;
 	struct s_argument		*next;
 } t_argument;
+
+# include "../src/excuse_cmd/cmd.h"
 
 void	print_memory_test(char *dst, int size);
 

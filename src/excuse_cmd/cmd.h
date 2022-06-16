@@ -1,3 +1,5 @@
+#ifndef CMD_H
+# define CMD_H
 #include "../../include/minishell.h"
 #include <unistd.h>
 #include <sys/wait.h>
@@ -68,3 +70,5 @@ char	*ft_search_command_path_malloc(char *command);
 int     ft_strcmp_temp(const char *s1, const char *s2);
 char	*ft_join_path_command_malloc(char *path, char *command);
 int     ft_is_command_dir();
+
+#endif

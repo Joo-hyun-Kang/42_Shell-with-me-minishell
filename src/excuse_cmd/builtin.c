@@ -148,6 +148,7 @@ void	ft_execute_cd(t_argument *argument, int is_parent)
 	const int	CHDIR_ERROR = -1;
 	const int	SECOND_ARG = 1;
 
+	ft_env_insert(argument->env, ft_strdup("OLDPWD"), getcwd(NULL, 0));
 	length = ft_get_length_2d_arr(argument->pa_argument);
 	//Please check when argument 2 is, some cases is like no error
 	if (length > 2)

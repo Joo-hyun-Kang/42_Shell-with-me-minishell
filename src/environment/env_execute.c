@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:19:31 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 05:23:17 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 21:36:12 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,17 +72,17 @@ void	ft_execute_unset(t_argument *arg)
 
 void	ft_env_simple_command_test(t_argument *arg)
 {
-	const int	COMMAND_POSITION = 0;
+	const int	cmd_pos = 0;
 
-	if (arg->pa_argument[COMMAND_POSITION] != 0)
+	if (arg->pa_argument[cmd_pos] != 0)
 	{
-		if (ft_strcmp(arg->pa_argument[COMMAND_POSITION], "export") == 0)
+		if (ft_strcmp(arg->pa_argument[cmd_pos], "export") == 0)
 			ft_execute_export(arg);
-		else if (ft_strcmp(arg->pa_argument[COMMAND_POSITION], "env") == 0)
+		else if (ft_strcmp(arg->pa_argument[cmd_pos], "env") == 0)
 			ft_execute_env(arg);
-		else if (ft_strcmp(arg->pa_argument[COMMAND_POSITION], "unset") == 0)
+		else if (ft_strcmp(arg->pa_argument[cmd_pos], "unset") == 0)
 			ft_execute_unset(arg);
-		else if (ft_strcmp(arg->pa_argument[COMMAND_POSITION], "exit") == 0)
+		else if (ft_strcmp(arg->pa_argument[cmd_pos], "exit") == 0)
 			exit(1);
 	}
 }

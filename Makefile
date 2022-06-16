@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/16 17:36:18 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/16 21:32:54 by jokang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,7 +50,8 @@ ENVBST_SRC		=	env_bst_init.c\
 					env_bst_delete.c
 #--------------[ EXCUSE ]----------------
 EXCUSE_DIR		=	src/excuse_cmd
-EXCUSE_SRC		=	cmd.c
+EXCUSE_SRC		=	cmd.c\
+					builtin.c
 #--------------[ MINISHELL ]----------------
 NAME			=	minishell	
 OBJ_DIR			=	objects
@@ -69,10 +70,10 @@ CC				=	gcc
 CFLAGS			=	-g # -Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(EXCUSE_DIR)\
-					-I /Users/kanghyki/.brew/opt/readline/include
+					-I /Users/jokang/.brew/opt/readline/include
 					#-I /opt/homebrew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /Users/kanghyki/.brew/opt/readline/lib
+					-l readline -L /Users/jokang/.brew/opt/readline/lib
 					#-l readline -L /opt/homebrew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf

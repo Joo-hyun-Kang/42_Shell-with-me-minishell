@@ -6,11 +6,13 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 15:51:20 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 16:03:41 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 21:47:25 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
+
+extern int	g_code;
 
 void	ft_merge_env(t_lexer *lexer, char **dst, t_env_root *env)
 {
@@ -22,7 +24,7 @@ void	ft_merge_env(t_lexer *lexer, char **dst, t_env_root *env)
 	ft_read_lexer(lexer);
 	if (ft_cur_char(lexer) == '?')
 	{
-		*dst = ft_merge_str(*dst, ft_strdup("127"));
+		*dst = ft_merge_str(*dst, ft_itoa(g_exit));
 		ft_read_lexer(lexer);
 		return ;
 	}

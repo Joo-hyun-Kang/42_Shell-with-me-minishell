@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 16:58:23 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/16 22:22:16 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int main(int argc, char **argv, char **env)
 	t_argument	*arg;
 	t_env_root	*root_env;
 
+	g_exit = 0;
 	printf("%s", BANNER);
 	root_env = ft_dpenv_to_bstenv(env);
 	while (1)
@@ -79,7 +80,8 @@ int main(int argc, char **argv, char **env)
 			continue ;
 		ft_show_argument_test(arg);
 		signal(SIGINT, sigint_handler_after_parsing);
-		ft_system(arg);
+		ft_env_simple_command_test(arg);
+//		ft_system(arg);
 //		system("leaks minishell");
 	}
 	return (0);

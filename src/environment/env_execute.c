@@ -6,19 +6,28 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:19:31 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/17 09:09:21 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/17 12:59:07 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_print_env_inorder(t_env *root_node, char *str)
+void	ft_excute_export_print(t_env *root_node, char *str)
 {
 	if (root_node == NULL)
 		return ;
-	ft_print_env_inorder(root_node->left, str);
-	printf("%s%s=\"%s\"\n", str, root_node->pa_key, root_node->pa_value);
-	ft_print_env_inorder(root_node->right, str);
+	ft_excute_export_print(root_node->left, str);
+	printf("declare -x %s=\"%s\"\n", root_node->pa_key, root_node->pa_value);
+	ft_excute_export_print(root_node->right, str);
+}
+
+void	ft_excute_env_print(t_env *root_node, char *str)
+{
+	if (root_node == NULL)
+		return ;
+	ft_excute_env_print(root_node->left, str);
+	printf("%s=%s\n", root_node->pa_key, root_node->pa_value);
+	ft_excute_env_print(root_node->right, str);
 }
 
 void	ft_execute_export(t_argument *arg)
@@ -28,7 +37,7 @@ void	ft_execute_export(t_argument *arg)
 	char		*value;
 
 	if (arg->pa_argument[ARG] == NULL)
-		ft_print_env_inorder(arg->env->root, "declare -x ");
+		ft_excute_export_print(arg->env->root, "declare -x ");
 	else
 	{
 		if (ft_is_dictionary(arg->pa_argument[ARG]) == 1)
@@ -43,7 +52,7 @@ void	ft_execute_export(t_argument *arg)
 
 void	ft_execute_env(t_argument *arg)
 {
-	ft_print_env_inorder(arg->env->root, "");
+	ft_excute_env_print(arg->env->root, "");
 }
 
 void	ft_execute_unset(t_argument *arg)

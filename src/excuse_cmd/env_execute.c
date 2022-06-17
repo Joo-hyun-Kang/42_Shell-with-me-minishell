@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:19:31 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/17 12:59:07 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/17 17:08:59 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,13 @@ void	ft_execute_export(t_argument *arg)
 			ft_env_insert(arg->env, key, value);
 		}
 	}
+	exit(0);
 }
 
 void	ft_execute_env(t_argument *arg)
 {
 	ft_excute_env_print(arg->env->root, "");
+	exit(0);
 }
 
 void	ft_execute_unset(t_argument *arg)
@@ -77,21 +79,5 @@ void	ft_execute_unset(t_argument *arg)
 		++i;
 	}
 	ft_env_delete(arg->env, key);
-}
-
-void	ft_env_simple_command_test(t_argument *arg)
-{
-	const int	cmd_pos = 0;
-
-	if (arg->pa_argument[cmd_pos] != 0)
-	{
-		if (ft_strcmp(arg->pa_argument[cmd_pos], "export") == 0)
-			ft_execute_export(arg);
-		else if (ft_strcmp(arg->pa_argument[cmd_pos], "env") == 0)
-			ft_execute_env(arg);
-		else if (ft_strcmp(arg->pa_argument[cmd_pos], "unset") == 0)
-			ft_execute_unset(arg);
-		else if (ft_strcmp(arg->pa_argument[cmd_pos], "exit") == 0)
-			exit(1);
-	}
+	exit(0);
 }

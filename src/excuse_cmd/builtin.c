@@ -1,21 +1,51 @@
 #include "cmd.h"
 
+unsigned long long	ft_atoull(const char *str, int *is_numeric)
+{
+	unsigned long long	result;
+	int					minus;
+
+	result = 0;
+	minus = 1;
+	*is_numeric = 1;
+	while (*str && ft_strchr(" \n\t\v\r\f", *str))
+		++str;
+	if (*str && ft_strchr("+-", *str))
+	{
+		if (*str == '-')
+			minus = -1;
+		++str;
+	}
+	while (ft_isdigit(*str))
+	{
+		result = (result * 10) + (*(str) - '0');
+		if (minus == 1 && result > 9223372036854775808ULL)
+			*is_numeric = 0;
+		if (minus == 0 && result > 9223372036854775807ULL)
+			*is_numeric = 0;
+		++str;
+	}
+	if (*str != '\0')
+		*is_numeric = -1;
+	return ((unsigned long long)(result *= minus));
+}
+
 // 무지성 문자열 비교
 int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 {
-	if (ft_strncmp(command, "echo", 4) == 0)
+	if (ft_strcmp(command, "echo") == 0)
 		*out_type = BUL_ECHO;
-	else if (ft_strncmp(command, "cd", 2) == 0)
+	else if (ft_strcmp(command, "cd") == 0)
 		*out_type = BUL_CD;
-	else if (ft_strncmp(command, "pwd", 3) == 0)
+	else if (ft_strcmp(command, "pwd") == 0)
 		*out_type = BUL_PWD;
-	else if (ft_strncmp(command, "export", 6) == 0)
+	else if (ft_strcmp(command, "export") == 0)
 		*out_type = BUL_EXPORT;
-	else if (ft_strncmp(command, "unset", 5) == 0)
+	else if (ft_strcmp(command, "unset") == 0)
 		*out_type = BUL_UNSET;
-	else if (ft_strncmp(command, "env", 3) == 0)
+	else if (ft_strcmp(command, "env") == 0)
 		*out_type = BUL_ENV;
-	else if (ft_strncmp(command, "exit", 4) == 0)
+	else if (ft_strcmp(command, "exit") == 0)
 		*out_type = BUL_EXIT;
 	else
 		*out_type = INVAILD;
@@ -24,72 +54,70 @@ int	is_bulletin(char *command, enum e_bulltein_type *out_type)
 	return(TRUE);
 }
 
-int    ft_try_exit_parent(t_argument *argumnet)
+void    ft_execute_exit(t_argument *argument, int is_parent)
 {
-    char    *command;
-	int		is_not_exit_str;
-	int		is_not_exit;
+	unsigned long long	rtn;
+	int					is_numeric;
 
-    command = argumnet->pa_argument[COMMAND_POSITION];
-	
-	//exit2313와 같이 처음 4글자가 exit인지 체크
-	is_not_exit_str = ft_strncmp(command, "exit", 4);
-	if (is_not_exit_str == FALSE)
+	if (argument->pa_argument[1] == NULL)
 	{
-		is_not_exit = ft_strcmp_temp(command, "exit");
-		if (is_not_exit == FALSE)
-		{
+		if (is_parent != 0)
 			printf("exit\n");
-			exit(0);
-		}
-		else
-		{
-			printf("bash: %s: No such file or directory\n", command);
-		}
-		return (TRUE);
+		exit(0);
 	}
-    return (FALSE);
+	else
+	{
+		rtn = ft_atoull(argument->pa_argument[1], &is_numeric);
+		if (is_numeric != 1)
+		{
+			printf("bash: exit: %s: numeric argument required\n", argument->pa_argument[1]);
+			exit(255);
+		}
+		else if (argument->pa_argument[2] != NULL)
+		{
+			printf("bash: exit: too many arguments\n");
+			exit(1);
+		}	
+	}
+	exit(rtn % 256);
 }
 
 int    ft_try_cd_parent(t_argument *argumnet)
 {
 	char    *command;
-	int		is_not_cd_str;
-	int		is_not_cd;
+
 
     command = argumnet->pa_argument[COMMAND_POSITION];
 	
-	is_not_cd_str = ft_strncmp(command, "cd", 4);
-	if (is_not_cd_str == FALSE)
-	{
-		is_not_cd = ft_strcmp_temp(command, "cd");
-		if (is_not_cd == FALSE)
-		{
-			ft_execute_cd(argumnet, TRUE);
-		}
-		else
-		{
-			printf("bash: %s: No such file or directory\n", command);
-		}
-		return (TRUE);
-	}
-    return (FALSE);
+	if (ft_strcmp(command, "cd") == 0)
+		ft_execute_cd(argumnet, TRUE);
+	else
+		printf("bash: %s: No such file or directory\n", command);
+	return 0;
 }
 
-void	ft_bulletin(t_argument *argument, enum e_bulltein_type bull_type)
+void	ft_bulletin(t_argument *argument, enum e_bulltein_type bull_type, int is_parent)
 {
 	//내장 명령어 실행
 	if (bull_type == BUL_ECHO)
-		ft_execute_echo(argument);
+		ft_execute_echo(argument, is_parent);
 	else if (bull_type == BUL_CD)
 		ft_execute_cd(argument, FALSE);
 	else if (bull_type == BUL_PWD)
-		ft_execute_pwd(argument);
+		ft_execute_pwd(argument, is_parent);
     else if (bull_type == BUL_EXIT)
-        ft_execute_exit(0);
+        ft_execute_exit(argument, is_parent);
+	else if (bull_type == BUL_EXPORT )
+		ft_execute_export(argument);
+	else if (bull_type == BUL_ENV )
+		ft_execute_env(argument);
+	else if (bull_type == BUL_UNSET )
+		ft_execute_unset(argument);
+	else
+		printf("asdasdaslkdjasldkjasdkljasdljoi12390123129errrrrrrrrrrrrrror\n");
 }
 
-void	ft_execute_echo(t_argument *argument)
+void	ft_execute_echo(t_argument *argument, int is_parent)
 {
 	char	*p;
 	int		i;
@@ -98,7 +126,7 @@ void	ft_execute_echo(t_argument *argument)
 	is_newline = TRUE;
 	i = COMMAND_ARG_POSITION;
 	if (argument->pa_argument[i] != NULL && \
-	ft_strcmp_temp(argument->pa_argument[COMMAND_ARG_POSITION], "-n") == 0)
+	ft_strcmp(argument->pa_argument[COMMAND_ARG_POSITION], "-n") == 0)
 	{
 		is_newline = FALSE;
 		i++;
@@ -106,16 +134,19 @@ void	ft_execute_echo(t_argument *argument)
 	while (argument->pa_argument[i] != NULL)
 	{
 		ft_putstr_fd(argument->pa_argument[i], STDOUT_FILENO);
+		ft_putchar_fd(' ', STDOUT_FILENO);
 		i++;
 	}
 	if (is_newline)
 	{
 		ft_putchar_fd('\n', STDOUT_FILENO);
 	}
-	ft_execute_exit(0);
+	// FIXME:
+	if (is_parent == 0)
+		exit(0);
 }
 
-void	ft_execute_pwd(t_argument *argument)
+void	ft_execute_pwd(t_argument *argument, int is_parent)
 {
 	char		*pa_path;
 	int			length;
@@ -138,7 +169,9 @@ void	ft_execute_pwd(t_argument *argument)
 
 	ft_putstr_fd(pa_path, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
-	ft_execute_exit(0);
+	// FIXME:
+	if (is_parent == 0)
+		exit(0);
 }
 
 void	ft_execute_cd(t_argument *argument, int is_parent)
@@ -148,7 +181,6 @@ void	ft_execute_cd(t_argument *argument, int is_parent)
 	const int	CHDIR_ERROR = -1;
 	const int	SECOND_ARG = 1;
 
-	ft_env_insert(argument->env, ft_strdup("OLDPWD"), getcwd(NULL, 0));
 	length = ft_get_length_2d_arr(argument->pa_argument);
 	//Please check when argument 2 is, some cases is like no error
 	if (length > 2)
@@ -156,19 +188,38 @@ void	ft_execute_cd(t_argument *argument, int is_parent)
 		ft_putstr_fd("cd: ", STDOUT_FILENO);
 		ft_putstr_fd(argument->pa_argument[SECOND_ARG], STDOUT_FILENO);
 		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
-		if (is_parent)
-			return ;
-		else
-			ft_execute_exit(0);
+		if (is_parent == 0)
+			exit (1);
+		return ;
 	}
 
 	if (length == 1)
 	{
+		ft_env_insert(argument->env, ft_strdup("OLDPWD"), getcwd(NULL, 0));
 		result = chdir("/");
+		ft_env_insert(argument->env, ft_strdup("PWD"), getcwd(NULL, 0));
 	}
 	else if (length == 2)
 	{
-		result = chdir(argument->pa_argument[COMMAND_ARG_POSITION]);
+		if (ft_strcmp(argument->pa_argument[COMMAND_ARG_POSITION], "-") == 0)
+		{
+			t_env	*find = ft_env_search(argument->env, ft_strdup("OLDPWD"));
+			if (find == NULL)
+			{
+				printf("OLDPWD Blabla...\n");
+			}
+			else
+			{
+				ft_env_insert(argument->env, ft_strdup("OLDPWD"), getcwd(NULL, 0));
+				result = chdir(find->pa_value);
+			}
+		}
+		else
+		{
+			ft_env_insert(argument->env, ft_strdup("OLDPWD"), getcwd(NULL, 0));
+			result = chdir(argument->pa_argument[COMMAND_ARG_POSITION]);
+		}
+		ft_env_insert(argument->env, ft_strdup("PWD"), getcwd(NULL, 0));
 	}
 	else
 	{
@@ -180,13 +231,6 @@ void	ft_execute_cd(t_argument *argument, int is_parent)
 		ft_putstr_fd(argument->pa_argument[length - 1], STDOUT_FILENO);
 		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
 	}
-	if (is_parent)
-		return ;
-	else
-		ft_execute_exit(0);
-}
-
-void	ft_execute_exit(int error_num)
-{
-    exit(error_num);
+	if (is_parent == 0)
+		exit(1);
 }

@@ -14,6 +14,83 @@ void	ft_print_error()
 	write(1, "Error!", 6);
 }
 
+int	ft_parent(t_argument *arg)
+{
+	if(ft_strcmp(arg->pa_argument[COMMAND_POSITION], "exit") == 0)
+	{
+		ft_execute_exit(arg, TRUE);
+		return (1);
+	}
+	else if(ft_strcmp(arg->pa_argument[COMMAND_POSITION], "cd") == 0)
+	{
+		ft_try_cd_parent(arg);
+		return (1);
+	}
+		return (0);
+}
+
+void	ft_state_redirection(t_argument **arg, int fd_pipe1[2], int fd_pipe2[2], int fd_temp)
+{
+	int	fd;
+	char *asd;
+
+	*arg = (*arg)->next;
+	asd = ft_strjoin(getcwd(NULL, 0), ft_strjoin("/", (*arg)->pa_argument[0]));
+
+	printf("%s\n", asd);	
+	fd = open(asd, O_RDONLY);
+	if (fd == -1)
+	{
+		printf("그런파일없다\n");
+	}
+	else
+	{
+		printf("리다이렉션 구현할게\n");
+	}
+	close(fd);
+	exit(1);
+}
+
+void	ft_state_pipe(int fd_pipe1[2], int fd_pipe2[2], int fd_temp, int pipe_state)
+{
+	if (pipe_state == PIPE_START)
+	{
+		//FD1 : STDOUT -> PIPE OUT
+		// 파이프 실패 예외처리 해줄것
+		close(fd_pipe2[PIPE_WRITE]);
+		close(fd_pipe2[PIPE_READ]);
+
+		dup2(fd_pipe1[PIPE_WRITE], STDOUT_FILENO);
+		close(fd_pipe1[PIPE_WRITE]);
+		close(fd_pipe1[PIPE_READ]);
+	}
+	else if (pipe_state == PIPE_MIDDLE)
+	{
+		close(fd_pipe1[PIPE_WRITE]);
+
+		// 파이프 실패 예외처리 해줄것
+		dup2(fd_pipe2[PIPE_WRITE], STDOUT_FILENO);
+		close(fd_pipe2[PIPE_WRITE]);
+		close(fd_pipe2[PIPE_READ]);
+		// 파이프 실패 예외처리 해줄것
+		dup2(fd_pipe1[PIPE_READ], STDIN_FILENO);
+		close(fd_pipe1[PIPE_READ]);
+		close(fd_pipe1[PIPE_WRITE]);
+	}
+	else if (pipe_state == PIPE_END)
+	{
+		close(fd_pipe1[PIPE_WRITE]);
+		close(fd_pipe2[PIPE_WRITE]);
+
+		// 파이프 실패 예외처리 해줄것
+		dup2(fd_temp, STDIN_FILENO);
+		close(fd_temp);
+
+		close(fd_pipe2[PIPE_READ]);
+		close(fd_pipe1[PIPE_READ]);
+	}
+}
+
 void	ft_system(t_argument *argument)
 {
 	t_argument				*pa_orgin_argument;
@@ -29,104 +106,54 @@ void	ft_system(t_argument *argument)
 
 	// loop for execute command
 	
+	if (argument->next == NULL)
+		if (ft_parent(argument) == 1)
+			return ;
+
 	pipe_state = PIPE_NONE;
 	while (argument != NULL)
 	{
 		mult_command = argument->next_token_type;
 		
-		if (mult_command == PIPE && pipe_state == PIPE_NONE)
-		{
-			pipe_state = PIPE_START;
-			pipe(fd_pipe1);
-			pipe(fd_pipe2);
-			fd_temp = fd_pipe1[PIPE_READ];
-		}
-		else if (mult_command == PIPE && pipe_state == PIPE_START)
-		{
-			pipe_state = PIPE_MIDDLE;
-			//pipe(fd_pipe2);
-			fd_temp = fd_pipe2[PIPE_READ];
-
-		}
-		else if (mult_command != PIPE && (pipe_state == PIPE_START || pipe_state == PIPE_MIDDLE))
-		{
-			pipe_state = PIPE_END;
-		}
-
-		//DGT, 세미콜론이라면 명령을 그냥 다음으로 가면 되고 eof라면 그냥 나가면 된다
-
-		//파이프 없이 부모 쉘에서만 실행되는 경우
-		if (pipe_state == PIPE_NONE)
-		{
-			if (ft_try_exit_parent(argument) == TRUE)
-			{
-				argument = argument->next;
-				continue;
-			}
-			else if (ft_try_cd_parent(argument) == TRUE)
-			{
-				argument = argument->next;
-				continue;
-			}
-		}
-	
-		// 자식 쉘을 생성하는 경우
-		pid_t child_pid;
-		child_pid = fork();
-		
-		//자식 쉘을 생성한다
-		if (child_pid == -1)
-		{
-			ft_print_error();
-		}
-		if (child_pid == 0)
+		if (mult_command == EOL || mult_command == SEMICOLON)
+			pipe_state = PIPE_NONE;
+		else if (mult_command == PIPE)
 		{
 			if (pipe_state == PIPE_NONE)
 			{
-				ft_execuse(argument);
+				pipe_state = PIPE_START;
+				pipe(fd_pipe1);
+				pipe(fd_pipe2);
+				fd_temp = fd_pipe1[PIPE_READ];
 			}
 			else if (pipe_state == PIPE_START)
 			{
-				//FD1 : STDOUT -> PIPE OUT
-				// 파이프 실패 예외처리 해줄것
-				close(fd_pipe2[PIPE_WRITE]);
-				close(fd_pipe2[PIPE_READ]);
+				pipe_state = PIPE_MIDDLE;
+				//pipe(fd_pipe2);
+				fd_temp = fd_pipe2[PIPE_READ];
 
-				dup2(fd_pipe1[PIPE_WRITE], STDOUT_FILENO);
-				close(fd_pipe1[PIPE_WRITE]);
-				close(fd_pipe1[PIPE_READ]);
-
-				ft_execuse(argument);
 			}
-			else if (pipe_state == PIPE_MIDDLE)
+			else if (pipe_state == PIPE_START || pipe_state == PIPE_MIDDLE)
 			{
-				close(fd_pipe1[PIPE_WRITE]);
-				
-				// 파이프 실패 예외처리 해줄것
-				dup2(fd_pipe2[PIPE_WRITE], STDOUT_FILENO);
-				close(fd_pipe2[PIPE_WRITE]);
-				close(fd_pipe2[PIPE_READ]);
-				// 파이프 실패 예외처리 해줄것
-				dup2(fd_pipe1[PIPE_READ], STDIN_FILENO);
-				close(fd_pipe1[PIPE_READ]);
-				close(fd_pipe1[PIPE_WRITE]);
-					
-				ft_execuse(argument);
+				pipe_state = PIPE_END;
 			}
-			else if (pipe_state == PIPE_END)
+		}
+		else
+			pipe_state = REDIRECTION;
+
+		pid_t child_pid;
+		child_pid = fork();
+
+		if (child_pid == -1)
+			ft_print_error();
+		if (child_pid == 0)
+		{
+			if (pipe_state == REDIRECTION)
+				ft_state_redirection(&argument, fd_pipe1, fd_pipe2, fd_temp);
+			else
 			{
-				
-				close(fd_pipe1[PIPE_WRITE]);
-				close(fd_pipe2[PIPE_WRITE]);
-
-				// 파이프 실패 예외처리 해줄것
-				dup2(fd_temp, STDIN_FILENO);
-				close(fd_temp);
-
-				close(fd_pipe2[PIPE_READ]);
-				close(fd_pipe1[PIPE_READ]);
-			
-				ft_execuse(argument);
+				ft_state_pipe(fd_pipe1, fd_pipe2, fd_temp, pipe_state);
+				ft_execuse(argument, child_pid);
 			}
 		}
 		argument = argument->next;
@@ -147,7 +174,63 @@ void	ft_system(t_argument *argument)
 	ft_free_argument(pa_orgin_argument);
 }
 
-void	ft_execuse(t_argument *argument)
+int		ft_execuse_path(t_argument *arg)
+{
+	g_exit = execve(arg->pa_argument[COMMAND_POSITION], arg->pa_argument, NULL);
+	return 0;
+}
+
+int		ft_execuse_nopath(t_argument *arg, char *pa_path)
+{
+	char *pa_orgin_command = ft_strdup(arg->pa_argument[COMMAND_POSITION]);
+	free(arg->pa_argument[COMMAND_POSITION]);
+	arg->pa_argument[COMMAND_POSITION] = pa_path;
+
+	g_exit = execve(pa_path, arg->pa_argument, NULL);
+	return 0;
+}
+
+int		ft_execuse_except_case(t_argument *arg)
+{
+	const int	SIZE = 0;
+	int			is_command_exist = FALSE;
+	char 		*pa_current_path = getcwd(NULL, SIZE);
+	char		*pa_path;
+	
+	DIR *dir;
+	struct dirent *ent;
+	if ((dir = opendir(pa_current_path)) != NULL) {
+		while ((ent = readdir (dir)) != NULL) 
+		{
+			if (ft_strcmp(arg->pa_argument[COMMAND_POSITION], ent->d_name) == 0)
+			{
+				is_command_exist = TRUE;
+				break;
+			}
+		}
+	closedir (dir);
+	} 
+	else 
+	{
+	/* could not open directory */
+		perror ("");
+	}
+
+	//get PATH + COMMAND
+	pa_path = ft_join_path_command_malloc(pa_current_path, arg->pa_argument[COMMAND_POSITION]);
+	free(pa_current_path);
+	
+	char *pa_orgin_command = ft_strdup(arg->pa_argument[COMMAND_POSITION]);
+	free(arg->pa_argument[COMMAND_POSITION]);
+	
+	//swap arg->pa_argument
+	arg->pa_argument[COMMAND_POSITION] = pa_path;
+
+	g_exit = execve(pa_path, arg->pa_argument, NULL);
+	return 0;
+}
+
+void	ft_execuse(t_argument *argument, int is_parent)
 {
 	int						is_path;
 	char					*pa_path;
@@ -160,7 +243,7 @@ void	ft_execuse(t_argument *argument)
 
 	if (is_bulletin(command, &bull_type))
 	{
-		ft_bulletin(argument, bull_type);
+		ft_bulletin(argument, bull_type, is_parent);
 		return ;
 	}
 
@@ -171,72 +254,18 @@ void	ft_execuse(t_argument *argument)
 		is_path = FALSE;
 
 	if (is_path)
-	{
-		execve(argument->pa_argument[COMMAND_POSITION], argument->pa_argument, NULL);
-		printf("bash: %s: No such file or directory\n", argument->pa_argument[COMMAND_POSITION]);
-		return ;
-	}
-	
+		ft_execuse_path(argument);
+
 	//CASE2 : 경로 없이 COMMAND만 들어왔는데 환경변수를 훑었을 때 명령어가 있는 경우
 	pa_path = ft_search_command_path_malloc(argument->pa_argument[COMMAND_POSITION]);
 	if (pa_path != NULL)
-	{
-		//swap argument->pa_argument
-		char *pa_orgin_command = ft_strdup(argument->pa_argument[COMMAND_POSITION]);
-		free(argument->pa_argument[COMMAND_POSITION]);
-		argument->pa_argument[COMMAND_POSITION] = pa_path;
-
-		execve(pa_path, argument->pa_argument, NULL);
-		printf("bash: %s: No such file or directory\n", pa_orgin_command);
-		free(pa_path);
-		free(pa_orgin_command);
-		return ;
-	}
+		ft_execuse_nopath(argument, pa_path);
 
 	//CASE3 : 커맨드이고 현재 디렉토리가 커맨드가 있는 곳(일반적으로 환경변수에 등록되는 곳)인 경우
 	//	      커맨드와 현재 디렉토리 내에 있으면 그냥 실행함
 	if (ft_is_command_dir())
-	{
-		const int	SIZE = 0;
-		int	is_command_exist = FALSE;
-		char *pa_current_path = getcwd(NULL, SIZE);
-		
-		DIR *dir;
-		struct dirent *ent;
-		if ((dir = opendir(pa_current_path)) != NULL) {
-			while ((ent = readdir (dir)) != NULL) 
-			{
-				if (ft_strcmp_temp(argument->pa_argument[COMMAND_POSITION], ent->d_name) == 0)
-				{
-					is_command_exist = TRUE;
-					break;
-				}
-			}
-		closedir (dir);
-		} 
-		else 
-		{
-		/* could not open directory */
-			perror ("");
-		}
-
-		//get PATH + COMMAND
-		pa_path = ft_join_path_command_malloc(pa_current_path, argument->pa_argument[COMMAND_POSITION]);
-		free(pa_current_path);
-		
-		char *pa_orgin_command = ft_strdup(argument->pa_argument[COMMAND_POSITION]);
-		free(argument->pa_argument[COMMAND_POSITION]);
-		
-		//swap argument->pa_argument
-		argument->pa_argument[COMMAND_POSITION] = pa_path;
-
-		execve(pa_path, argument->pa_argument, NULL);
-		printf("bash: %s: No such file or directory\n", pa_orgin_command);
-		free(pa_path);
-		free(pa_orgin_command);
-	}
-	printf("bash: %s: command not found\n", argument->pa_argument[COMMAND_POSITION]);
-	ft_execute_exit(0);
+		ft_execuse_except_case(argument);
+	exit(127);
 }
 
 int	ft_is_command_dir()
@@ -245,27 +274,27 @@ int	ft_is_command_dir()
 	const int	SIZE = 0;
 
 	pa_path = getcwd(NULL, SIZE);
-	if (ft_strcmp_temp(pa_path, "/usr/local/bin") == 0)
+	if (ft_strcmp(pa_path, "/usr/local/bin") == 0)
 	{
 		return (TRUE);
 	}
-	if (ft_strcmp_temp(pa_path, "/usr/bin") == 0)
+	if (ft_strcmp(pa_path, "/usr/bin") == 0)
 	{
 		return (TRUE);
 	}
-	if (ft_strcmp_temp(pa_path, "/bin") == 0)
+	if (ft_strcmp(pa_path, "/bin") == 0)
 	{
 		return (TRUE);
 	}
-	if (ft_strcmp_temp(pa_path, "/usr/sbin") == 0)
+	if (ft_strcmp(pa_path, "/usr/sbin") == 0)
 	{
 		return (TRUE);
 	}
-	if (ft_strcmp_temp(pa_path, "/sbin") == 0)
+	if (ft_strcmp(pa_path, "/sbin") == 0)
 	{
 		return (TRUE);
 	}
-	if (ft_strcmp_temp(pa_path, "/usr/local/munki") == 0)
+	if (ft_strcmp(pa_path, "/usr/local/munki") == 0)
 	{
 		return (TRUE);
 	}
@@ -327,7 +356,7 @@ char	*ft_search_command_path_malloc(char *command)
 		if ((dir = opendir(pa_directories[i])) != NULL) {
 			while ((ent = readdir (dir)) != NULL) 
 			{
-				if (ft_strcmp_temp(command, ent->d_name) == 0)
+				if (ft_strcmp(command, ent->d_name) == 0)
 				{
 					position = i;
 					break;
@@ -369,42 +398,6 @@ char	*ft_join_path_command_malloc(char *path, char *command)
 	return (pa_path_with_command);
 }
 
-int	ft_strcmp_temp(const char *s1, const char *s2)
-{
-	size_t	i;
-
-	i = 0;
-	while (s1[i] != 0 && s2[i] != 0)
-	{
-		if (s1[i] != s2[i])
-			break ;
-		++i;
-	}
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
-}
-
-// void	ft_free_argument(t_argument *pa_argument)
-// {
-// 	t_argument 	*p;
-// 	t_argument 	*temp;
-// 	int			i;
-
-// 	p = pa_argument;
-// 	while (p->next != NULL)
-// 	{
-// 		i = 0;
-// 		while (p->pa_argument[i] != NULL)
-// 		{
-// 			free(p->pa_argument[i]);
-// 			i++;
-// 		}
-// 		free(p->pa_argument);
-// 		temp = p->next;
-// 		free(p);
-// 		p = temp;
-// 	}
-// }
-
 void	ft_free_command(char **pa_char)
 {
 	int i;
@@ -428,24 +421,4 @@ int	ft_get_length_2d_arr(char **array)
 		i++;
 	}
 	return (i);
-}
-
-void	ft_get_sh_command(char **src_2d, char **out_dst)
-{
-	int	i;
-	int j;
-	int	length;
-
-	i = 0;
-	out_dst[i++] = ft_strdup("/bin/sh");
-	out_dst[i++] = ft_strdup("-c");
-
-	j = 0;
-	while (src_2d[j] != NULL)
-	{
-		out_dst[i] = ft_strdup(src_2d[j]);
-		i++;
-		j++;
-	}
-	out_dst[i] = NULL;
 }

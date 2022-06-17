@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/17 09:17:01 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/17 16:09:20 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,12 +166,6 @@ char			*ft_merge_str(char *s1, char *s2);
  * #                                                       #
  * #########################################################
  */
-/* src/environment/env_execute.c */
-void			ft_execute_export(t_argument *arg);
-void			ft_execute_env(t_argument *arg);
-void			ft_execute_unset(t_argument *arg);
-void			ft_env_simple_command_test(t_argument *arg);
-
 /* src/environment/env_utils.c */
 int				ft_is_dictionary(char *str);
 char			*ft_extract_key_from_str(char *str);

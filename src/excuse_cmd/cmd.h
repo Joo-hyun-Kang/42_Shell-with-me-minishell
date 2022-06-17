@@ -5,6 +5,9 @@
 #include <sys/wait.h>
 #include <stdio.h>
 #include <dirent.h>
+#include <errno.h>
+#include <string.h>
+#include <fcntl.h>
 
 #include "../../library/libft/inc/libft.h"
 
@@ -33,6 +36,7 @@
 #define PIPE_START (0)
 #define PIPE_MIDDLE (1)
 #define PIPE_END (2)
+#define REDIRECTION (3)
 
 #define ENV_PATH_NAME_LENGTH (5)
 
@@ -49,13 +53,12 @@ enum e_bulltein_type {
 
 void	ft_system(t_argument *argument);
 
-void	ft_bulletin(t_argument *argument, enum e_bulltein_type bull_type);
-int     ft_try_exit_parent(t_argument *argumnet);
+void	ft_bulletin(t_argument *argument, enum e_bulltein_type bull_type, int is_parent);
+void    ft_execute_exit(t_argument *argumnet, int is_parent);
 int     ft_try_cd_parent(t_argument *argumnet);
-void	ft_execute_echo(t_argument *argument);
-void	ft_execute_pwd(t_argument *argument);
+void	ft_execute_echo(t_argument *argument, int is_parent);
+void	ft_execute_pwd(t_argument *argument, int is_parent);
 void	ft_execute_cd(t_argument *argument, int is_parent);
-void	ft_execute_exit(int error_num);
 
 int		is_bulletin(char *command, enum e_bulltein_type *out_type);
 
@@ -65,10 +68,16 @@ int     ft_get_length_2d_arr(char **array);
 void	ft_get_sh_command(char **src_2d, char **out_dst);
 void	ft_free_command(char **pa_char);
 
-void	ft_execuse(t_argument *argument);
+void	ft_execuse(t_argument *argument, int is_parent);
 char	*ft_search_command_path_malloc(char *command);
 int     ft_strcmp_temp(const char *s1, const char *s2);
 char	*ft_join_path_command_malloc(char *path, char *command);
 int     ft_is_command_dir();
+
+/* src/environment/env_execute.c */
+void			ft_execute_export(t_argument *arg);
+void			ft_execute_env(t_argument *arg);
+void			ft_execute_unset(t_argument *arg);
+void			ft_env_simple_command_test(t_argument *arg);
 
 #endif

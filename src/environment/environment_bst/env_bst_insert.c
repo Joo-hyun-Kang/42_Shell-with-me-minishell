@@ -1,4 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_bst_insert.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/17 09:14:02 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/17 09:14:03 by kanghyki         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../../include/minishell.h"
+
+static void	ft_env_replace_value(t_env *node, char *new_value);
 
 int	ft_env_insert_recursive(char *key, char *value, t_env *cur_node)
 {
@@ -38,7 +52,7 @@ void	ft_env_insert(t_env_root *root, char *key, char *value)
 	}
 }
 
-void	ft_env_replace_value(t_env *node, char *new_value)
+static void	ft_env_replace_value(t_env *node, char *new_value)
 {
 	free(node->pa_value);
 	node->pa_value = new_value;

@@ -6,18 +6,13 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 17:57:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 17:35:45 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/17 09:11:13 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*ft_extract_value_from_node(t_env *node)
-{
-	return (node->pa_value);
-}
-
-int		ft_is_dictionary(char *str)
+int	ft_is_dictionary(char *str)
 {
 	while (*str != '\0')
 	{

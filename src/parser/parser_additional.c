@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/18 03:11:37 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/18 04:52:16 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static void	ft_merge_env_heredoc(char **str, char **dst, t_env_root *env)
 		return ;
 	}
 	s_pos = *str;
-	while (ft_strchr(M_SEP, *(*str)) == 0 && *(*str) != '\n')
+	while (ft_strchr(M_SEP, *(*str)) == NULL && *(*str) != '\n')
 		++(*str);
 	key = ft_strndup(s_pos, *str - s_pos);
 	node = ft_env_search(env, key);

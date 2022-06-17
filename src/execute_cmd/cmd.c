@@ -1,10 +1,6 @@
 #include "../../include/minishell.h"
 #include "cmd.h"
 
-// 테스팅용 전역 환경변수
-
-extern char **environ;
-
 /*
  * 그냥 에러를 출력하고 나가버리는데
  * 후에 조금 더 구체화할 필요성이 있다
@@ -14,46 +10,21 @@ void	ft_print_error()
 	write(1, "Error!", 6);
 }
 
-int	ft_parent(t_argument *arg)
+int	ft_execute_single_cmd(t_argument *arg)
 {
-	if(ft_strcmp(arg->pa_argument[COMMAND_POSITION], "exit") == 0)
+	enum e_builtin_type		bull_type;
+
+	if (is_builtin(arg->pa_argument[COMMAND_POSITION], &bull_type) == true)
 	{
-		ft_execute_exit(arg, TRUE);
+		ft_builtin(arg, bull_type, true);
 		return (1);
 	}
-	else if(ft_strcmp(arg->pa_argument[COMMAND_POSITION], "cd") == 0)
-	{
-		ft_try_cd_parent(arg);
-		return (1);
-	}
-		return (0);
+	return (0);
 }
 
-void	ft_state_redirection(t_argument **arg, int fd_pipe1[2], int fd_pipe2[2], int fd_temp)
+void	ft_state_pipe(int fd_pipe1[2], int fd_pipe2[2], int fd_temp, int state)
 {
-	int	fd;
-	char *asd;
-
-	*arg = (*arg)->next;
-	asd = ft_strjoin(getcwd(NULL, 0), ft_strjoin("/", (*arg)->pa_argument[0]));
-
-	printf("%s\n", asd);	
-	fd = open(asd, O_RDONLY);
-	if (fd == -1)
-	{
-		printf("그런파일없다\n");
-	}
-	else
-	{
-		printf("리다이렉션 구현할게\n");
-	}
-	close(fd);
-	exit(1);
-}
-
-void	ft_state_pipe(int fd_pipe1[2], int fd_pipe2[2], int fd_temp, int pipe_state)
-{
-	if (pipe_state == PIPE_START)
+	if (state == PIPE_START)
 	{
 		//FD1 : STDOUT -> PIPE OUT
 		// 파이프 실패 예외처리 해줄것
@@ -64,7 +35,7 @@ void	ft_state_pipe(int fd_pipe1[2], int fd_pipe2[2], int fd_temp, int pipe_state
 		close(fd_pipe1[PIPE_WRITE]);
 		close(fd_pipe1[PIPE_READ]);
 	}
-	else if (pipe_state == PIPE_MIDDLE)
+	else if (state == PIPE_MIDDLE)
 	{
 		close(fd_pipe1[PIPE_WRITE]);
 
@@ -77,7 +48,7 @@ void	ft_state_pipe(int fd_pipe1[2], int fd_pipe2[2], int fd_temp, int pipe_state
 		close(fd_pipe1[PIPE_READ]);
 		close(fd_pipe1[PIPE_WRITE]);
 	}
-	else if (pipe_state == PIPE_END)
+	else if (state == PIPE_END)
 	{
 		close(fd_pipe1[PIPE_WRITE]);
 		close(fd_pipe2[PIPE_WRITE]);
@@ -93,73 +64,81 @@ void	ft_state_pipe(int fd_pipe1[2], int fd_pipe2[2], int fd_temp, int pipe_state
 
 void	ft_system(t_argument *argument)
 {
-	t_argument				*pa_orgin_argument;
-	enum e_token_type		mult_command;
+	enum e_token_type		t_type;
 	int						fd_pipe1[PIPE_COUNT];
 	int						fd_pipe2[PIPE_COUNT];
-	int						fd_current_pipe[PIPE_COUNT];
 	int						fd_temp;
-	int						pipe_state;
+	int						state;
+	pid_t					child_pid;
 
-	// Reserve before argument's address for Free
-	pa_orgin_argument = argument;
-
-	// loop for execute command
-	
-	if (argument->next == NULL)
-		if (ft_parent(argument) == 1)
-			return ;
-
-	pipe_state = PIPE_NONE;
+	state = INIT;
 	while (argument != NULL)
 	{
-		mult_command = argument->next_token_type;
-		
-		if (mult_command == EOL || mult_command == SEMICOLON)
-			pipe_state = PIPE_NONE;
-		else if (mult_command == PIPE)
+		t_type = argument->next_token_type;
+
+		// INIT 상태 일 때, 전이 조건
+		if (state == INIT)
 		{
-			if (pipe_state == PIPE_NONE)
-			{
-				pipe_state = PIPE_START;
-				pipe(fd_pipe1);
-				pipe(fd_pipe2);
-				fd_temp = fd_pipe1[PIPE_READ];
-			}
-			else if (pipe_state == PIPE_START)
-			{
-				pipe_state = PIPE_MIDDLE;
-				//pipe(fd_pipe2);
-				fd_temp = fd_pipe2[PIPE_READ];
-
-			}
-			else if (pipe_state == PIPE_START || pipe_state == PIPE_MIDDLE)
-			{
-				pipe_state = PIPE_END;
-			}
+			if (t_type == EOL || t_type == SEMICOLON)
+				state = SINGLE_CMD;
+			else if (t_type == PIPE)
+				state = PIPE_START;
+			else
+				state = SINGLE_REDIRECTION;
 		}
+		// INIT 상태가 아닐 때, 전이 조건
+		else if (t_type == EOL || t_type == SEMICOLON)
+			state = PIPE_END;
+		else if (t_type == PIPE)
+			state = PIPE_MIDDLE;
 		else
-			pipe_state = REDIRECTION;
+			state = MULTI_REDIRECTION;
 
-		pid_t child_pid;
+		// 임시 분리
+		if (state == PIPE_START)
+		{
+			pipe(fd_pipe1);
+			pipe(fd_pipe2);
+			fd_temp = fd_pipe1[PIPE_READ];
+		}
+		else if (state == PIPE_MIDDLE)
+			fd_temp = fd_pipe2[PIPE_READ];
+
+		// SINGLE STATE
+		if (state == SINGLE_REDIRECTION || state == MULTI_REDIRECTION)
+		{
+			// 파이프() 연결
+			printf("리다이렉션 추가 예정\n");
+			// 리다이렉션 인자
+			argument = argument->next;
+			// 다음 argument
+			argument = argument->next;
+			state = INIT;
+			continue ;
+		}
+		if (state == SINGLE_CMD)
+		{
+			if (ft_execute_single_cmd(argument) == true)
+			{
+				argument = argument->next;
+				state = INIT;
+				continue ;
+			}
+			// BUILTIN 함수가 아니라면 fork()
+		}
+
 		child_pid = fork();
-
 		if (child_pid == -1)
 			ft_print_error();
 		if (child_pid == 0)
 		{
-			if (pipe_state == REDIRECTION)
-				ft_state_redirection(&argument, fd_pipe1, fd_pipe2, fd_temp);
-			else
-			{
-				ft_state_pipe(fd_pipe1, fd_pipe2, fd_temp, pipe_state);
-				ft_execuse(argument, child_pid);
-			}
+			ft_state_pipe(fd_pipe1, fd_pipe2, fd_temp, state);
+			ft_execute(argument, false);
 		}
 		argument = argument->next;
 	}
 
-	if (pipe_state == PIPE_END)
+	if (state == PIPE_END)
 	{
 		close(fd_pipe1[PIPE_READ]);
 		close(fd_pipe1[PIPE_WRITE]);
@@ -167,20 +146,16 @@ void	ft_system(t_argument *argument)
 		close(fd_pipe2[PIPE_WRITE]);
 	}
 
-	while (wait(NULL) != -1)
-	{
-	}
-
-	ft_free_argument(pa_orgin_argument);
+	while (wait(NULL) != -1);
 }
 
-int		ft_execuse_path(t_argument *arg)
+int		ft_execute_path(t_argument *arg)
 {
 	g_exit = execve(arg->pa_argument[COMMAND_POSITION], arg->pa_argument, NULL);
 	return 0;
 }
 
-int		ft_execuse_nopath(t_argument *arg, char *pa_path)
+int		ft_execute_nopath(t_argument *arg, char *pa_path)
 {
 	char *pa_orgin_command = ft_strdup(arg->pa_argument[COMMAND_POSITION]);
 	free(arg->pa_argument[COMMAND_POSITION]);
@@ -190,10 +165,10 @@ int		ft_execuse_nopath(t_argument *arg, char *pa_path)
 	return 0;
 }
 
-int		ft_execuse_except_case(t_argument *arg)
+int		ft_execute_except_case(t_argument *arg)
 {
 	const int	SIZE = 0;
-	int			is_command_exist = FALSE;
+	int			is_command_exist = false;
 	char 		*pa_current_path = getcwd(NULL, SIZE);
 	char		*pa_path;
 	
@@ -204,7 +179,7 @@ int		ft_execuse_except_case(t_argument *arg)
 		{
 			if (ft_strcmp(arg->pa_argument[COMMAND_POSITION], ent->d_name) == 0)
 			{
-				is_command_exist = TRUE;
+				is_command_exist = true;
 				break;
 			}
 		}
@@ -230,41 +205,41 @@ int		ft_execuse_except_case(t_argument *arg)
 	return 0;
 }
 
-void	ft_execuse(t_argument *argument, int is_parent)
+void	ft_execute(t_argument *argument, int is_parent)
 {
 	int						is_path;
 	char					*pa_path;
 	char					*command;
-	enum e_bulltein_type	bull_type;
+	enum e_builtin_type		bull_type;
 
 	//CASE0 : Bulltein 명령어인 경경우	
 	command = argument->pa_argument[COMMAND_POSITION];
 	bull_type = INVAILD;
 
-	if (is_bulletin(command, &bull_type))
+	if (is_builtin(command, &bull_type))
 	{
-		ft_bulletin(argument, bull_type, is_parent);
+		ft_builtin(argument, bull_type, is_parent);
 		return ;
 	}
 
 	//CASE1 : 절대 경로나 상대경로로 들어오는 경우
-	if (ft_strchr(argument->pa_argument[COMMAND_POSITION], '/') != FALSE)
-		is_path = TRUE;
+	if (ft_strchr(argument->pa_argument[COMMAND_POSITION], '/') != false)
+		is_path = true;
 	else
-		is_path = FALSE;
+		is_path = false;
 
 	if (is_path)
-		ft_execuse_path(argument);
+		ft_execute_path(argument);
 
 	//CASE2 : 경로 없이 COMMAND만 들어왔는데 환경변수를 훑었을 때 명령어가 있는 경우
 	pa_path = ft_search_command_path_malloc(argument->pa_argument[COMMAND_POSITION]);
 	if (pa_path != NULL)
-		ft_execuse_nopath(argument, pa_path);
+		ft_execute_nopath(argument, pa_path);
 
 	//CASE3 : 커맨드이고 현재 디렉토리가 커맨드가 있는 곳(일반적으로 환경변수에 등록되는 곳)인 경우
 	//	      커맨드와 현재 디렉토리 내에 있으면 그냥 실행함
 	if (ft_is_command_dir())
-		ft_execuse_except_case(argument);
+		ft_execute_except_case(argument);
 	exit(127);
 }
 
@@ -276,29 +251,29 @@ int	ft_is_command_dir()
 	pa_path = getcwd(NULL, SIZE);
 	if (ft_strcmp(pa_path, "/usr/local/bin") == 0)
 	{
-		return (TRUE);
+		return (true);
 	}
 	if (ft_strcmp(pa_path, "/usr/bin") == 0)
 	{
-		return (TRUE);
+		return (true);
 	}
 	if (ft_strcmp(pa_path, "/bin") == 0)
 	{
-		return (TRUE);
+		return (true);
 	}
 	if (ft_strcmp(pa_path, "/usr/sbin") == 0)
 	{
-		return (TRUE);
+		return (true);
 	}
 	if (ft_strcmp(pa_path, "/sbin") == 0)
 	{
-		return (TRUE);
+		return (true);
 	}
 	if (ft_strcmp(pa_path, "/usr/local/munki") == 0)
 	{
-		return (TRUE);
+		return (true);
 	}
-	return (FALSE);
+	return (false);
 }
 
 char	*ft_search_command_path_malloc(char *command)

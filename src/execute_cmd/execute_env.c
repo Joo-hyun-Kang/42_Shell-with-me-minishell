@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_execute.c                                      :+:      :+:    :+:   */
+/*   execute_env.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:19:31 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/17 17:08:59 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/18 04:49:02 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_excute_env_print(t_env *root_node, char *str)
 	ft_excute_env_print(root_node->right, str);
 }
 
-void	ft_execute_export(t_argument *arg)
+void	ft_execute_export(t_argument *arg, int is_parent)
 {
 	const int	ARG = 1;
 	char		*key;
@@ -48,16 +48,18 @@ void	ft_execute_export(t_argument *arg)
 			ft_env_insert(arg->env, key, value);
 		}
 	}
-	exit(0);
+	if (is_parent == false)
+		exit(0);
 }
 
-void	ft_execute_env(t_argument *arg)
+void	ft_execute_env(t_argument *arg, int is_parent)
 {
 	ft_excute_env_print(arg->env->root, "");
-	exit(0);
+	if (is_parent == false)
+		exit(0);
 }
 
-void	ft_execute_unset(t_argument *arg)
+void	ft_execute_unset(t_argument *arg, int is_parent)
 {
 	const int	ARG = 1;
 	char		*key;
@@ -79,5 +81,6 @@ void	ft_execute_unset(t_argument *arg)
 		++i;
 	}
 	ft_env_delete(arg->env, key);
-	exit(0);
+	if (is_parent == false)
+		exit(0);
 }

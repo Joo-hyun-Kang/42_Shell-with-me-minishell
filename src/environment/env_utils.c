@@ -6,13 +6,13 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 17:57:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/17 09:11:13 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/18 04:52:41 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	ft_is_dictionary(char *str)
+bool	ft_is_dictionary(char *str)
 {
 	while (*str != '\0')
 	{

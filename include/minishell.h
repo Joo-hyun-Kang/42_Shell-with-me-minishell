@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/17 16:09:20 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/18 05:02:06 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <stdbool.h>
 
 # define M_META		"|;><"
 # define M_SPACE	" \r\v\f\t"
@@ -79,9 +80,7 @@ typedef struct s_argument {
 	struct s_argument		*next;
 } t_argument;
 
-# include "../src/excuse_cmd/cmd.h"
-
-void	print_memory_test(char *dst, int size);
+# include "../src/execute_cmd/cmd.h"
 
 /*
  * #########################################################
@@ -141,7 +140,7 @@ void			ft_replace_lexer_cmd_str(t_lexer *lexer, char *new_cmd_str);
 char			*ft_get_token_type_char(enum e_token_type token_type);
 t_token			*ft_read_token(t_token *cur_token, t_argument *arg, int idx);
 t_token			*ft_read_token_init(t_token *cur_token, t_argument *arg, int idx);
-t_argument		*ft_parser(char *cmd_str, t_env_root *root_env); /* API */
+t_argument		*ft_parser(char *cmd_str, t_env_root *root_env);
 
 /* src/parser/parser_free_utils.c */
 void			ft_free_token(t_token *token);
@@ -167,7 +166,7 @@ char			*ft_merge_str(char *s1, char *s2);
  * #########################################################
  */
 /* src/environment/env_utils.c */
-int				ft_is_dictionary(char *str);
+bool			ft_is_dictionary(char *str);
 char			*ft_extract_key_from_str(char *str);
 char			*ft_extract_value_from_str(char *str);
 void			ft_free_env_node(t_env *node);
@@ -178,11 +177,9 @@ t_env_root		*ft_init_env_root(void);
 t_env			*ft_init_env_node(char *key, char *value);
 
 /* src/environment/environment_bst/env_bst_insert.c */
-int				ft_env_insert_recursive(char *key, char *value, t_env *cur_node);
 void			ft_env_insert(t_env_root *root, char *key, char *value);
 
 /* src/environment/environment_bst/env_bst_search.c */
-t_env			*ft_env_search_recursive(t_env *cur_node, char *key);
 t_env			*ft_env_search(t_env_root *root, char *key);
 
 /* src/environment/environment_bst/env_bst_delete.c */

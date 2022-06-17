@@ -6,15 +6,28 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 09:14:02 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/17 09:14:03 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/18 04:54:08 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
+static int	ft_env_insert_recursive(char *key, char *value, t_env *cur_node);
 static void	ft_env_replace_value(t_env *node, char *new_value);
 
-int	ft_env_insert_recursive(char *key, char *value, t_env *cur_node)
+// Unused key will be automatically freed.
+void	ft_env_insert(t_env_root *root, char *key, char *value)
+{
+	if (root->root == NULL)
+		root->root = ft_init_env_node(key, value);
+	else
+	{
+		if (ft_env_insert_recursive(key, value, root->root) == 0)
+			free(key);
+	}
+}
+
+static int	ft_env_insert_recursive(char *key, char *value, t_env *cur_node)
 {
 	if (ft_strcmp(key, cur_node->pa_key) < 0)
 	{
@@ -38,18 +51,6 @@ int	ft_env_insert_recursive(char *key, char *value, t_env *cur_node)
 	}
 	ft_env_replace_value(cur_node, value);
 	return (0);
-}
-
-// Unused key will be automatically freed.
-void	ft_env_insert(t_env_root *root, char *key, char *value)
-{
-	if (root->root == NULL)
-		root->root = ft_init_env_node(key, value);
-	else
-	{
-		if (ft_env_insert_recursive(key, value, root->root) == 0)
-			free(key);
-	}
 }
 
 static void	ft_env_replace_value(t_env *node, char *new_value)

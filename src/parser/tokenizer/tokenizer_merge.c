@@ -6,13 +6,11 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 15:51:20 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 21:47:25 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/18 05:01:48 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
-
-extern int	g_code;
 
 void	ft_merge_env(t_lexer *lexer, char **dst, t_env_root *env)
 {
@@ -29,7 +27,7 @@ void	ft_merge_env(t_lexer *lexer, char **dst, t_env_root *env)
 		return ;
 	}
 	s_pos = ft_cur_ptr(lexer);
-	while (ft_strchr(M_SEP, ft_cur_char(lexer)) == 0
+	while (ft_strchr(M_SEP, ft_cur_char(lexer)) == NULL
 		&& ft_cur_char(lexer) != '\n')
 		ft_read_lexer(lexer);
 	key = ft_strndup(s_pos, ft_cur_ptr(lexer) - s_pos);

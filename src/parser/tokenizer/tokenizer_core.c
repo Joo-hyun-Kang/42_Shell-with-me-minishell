@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 17:15:28 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/17 13:11:11 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/18 04:50:43 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,13 @@ t_token	*ft_create_token_type_argument(t_lexer *lexer, t_env_root *env)
 	while (ft_cur_char(lexer) != '\0')
 	{
 		s_pos = ft_cur_ptr(lexer);
-		while (ft_strchr(M_SEP, ft_cur_char(lexer)) == 0)
+		while (ft_strchr(M_SEP, ft_cur_char(lexer)) == NULL)
 			ft_read_lexer(lexer);
 		rtn_str = ft_merge_str(rtn_str, \
 				ft_strndup(s_pos, ft_cur_ptr(lexer) - s_pos));
 		ft_reserved(lexer, env, &rtn_str);
-		if (ft_strchr_except_null(M_SPACE, ft_cur_char(lexer)) != 0
-			|| ft_strchr_except_null(M_META, ft_cur_char(lexer)) != 0)
+		if (ft_strchr_except_null(M_SPACE, ft_cur_char(lexer)) != NULL
+			|| ft_strchr_except_null(M_META, ft_cur_char(lexer)) != NULL)
 			break ;
 	}
 	return (ft_init_token(rtn_str, ARGUMENT));
@@ -65,7 +65,7 @@ t_token	*ft_create_token_type_argument(t_lexer *lexer, t_env_root *env)
 
 static void	ft_reserved(t_lexer *lexer, t_env_root *env, char **rtn_str)
 {
-	if (ft_strchr_except_null(M_QUOTE, ft_cur_char(lexer)) != 0)
+	if (ft_strchr_except_null(M_QUOTE, ft_cur_char(lexer)) != NULL)
 		ft_merge_quote(lexer, rtn_str, env, ft_read_lexer(lexer));
 	else if (ft_cur_char(lexer) == M_HOME)
 		ft_merge_home(lexer, rtn_str, env);

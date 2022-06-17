@@ -6,11 +6,13 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 17:15:28 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 16:09:49 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/17 13:11:11 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
+
+static void	ft_reserved(t_lexer *lexer, t_env_root *env, char **rtn_str);
 
 t_token	*ft_create_token_type_metachar(t_lexer *lexer)
 {
@@ -53,15 +55,20 @@ t_token	*ft_create_token_type_argument(t_lexer *lexer, t_env_root *env)
 			ft_read_lexer(lexer);
 		rtn_str = ft_merge_str(rtn_str, \
 				ft_strndup(s_pos, ft_cur_ptr(lexer) - s_pos));
-		if (ft_strchr_except_null(M_QUOTE, ft_cur_char(lexer)) != 0)
-			ft_merge_quote(lexer, &rtn_str, env, ft_read_lexer(lexer));
-		else if (ft_cur_char(lexer) == M_HOME)
-			ft_merge_home(lexer, &rtn_str, env);
-		else if (ft_cur_char(lexer) == M_ENV)
-			ft_merge_env(lexer, &rtn_str, env);
+		ft_reserved(lexer, env, &rtn_str);
 		if (ft_strchr_except_null(M_SPACE, ft_cur_char(lexer)) != 0
 			|| ft_strchr_except_null(M_META, ft_cur_char(lexer)) != 0)
 			break ;
 	}
 	return (ft_init_token(rtn_str, ARGUMENT));
+}
+
+static void	ft_reserved(t_lexer *lexer, t_env_root *env, char **rtn_str)
+{
+	if (ft_strchr_except_null(M_QUOTE, ft_cur_char(lexer)) != 0)
+		ft_merge_quote(lexer, rtn_str, env, ft_read_lexer(lexer));
+	else if (ft_cur_char(lexer) == M_HOME)
+		ft_merge_home(lexer, rtn_str, env);
+	else if (ft_cur_char(lexer) == M_ENV)
+		ft_merge_env(lexer, rtn_str, env);
 }

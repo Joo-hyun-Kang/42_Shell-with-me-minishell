@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 16:20:17 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/18 03:11:37 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,13 +80,12 @@ void	ft_read_additional_heredoc(t_token *cur_token, t_env_root *env)
 	char	*read_line;
 	char	*new_str;
 
-	new_str = ft_strdup("");
+	new_str = 0;
 	read_line = readline("> ");
 	while (ft_strcmp(cur_token->pa_str, read_line) != 0)
 	{
-		if (new_str != NULL)
-			new_str = ft_merge_str(new_str, ft_strdup("\n"));
 		new_str = ft_merge_str(new_str, read_line);
+		new_str = ft_merge_str(new_str, ft_strdup("\n"));
 		read_line = readline("> ");
 	}
 	free(read_line);

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:19:31 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 21:36:12 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/17 09:09:21 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	ft_execute_export(t_argument *arg)
 			key = ft_extract_key_from_str(arg->pa_argument[ARG]);
 			value = ft_extract_value_from_str(arg->pa_argument[ARG]);
 			printf("key=%s, value=%s\n", key, value);
-			ft_env_insert(arg->env, key, value); 
+			ft_env_insert(arg->env, key, value);
 		}
 	}
 }

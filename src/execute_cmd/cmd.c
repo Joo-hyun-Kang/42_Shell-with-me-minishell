@@ -131,6 +131,32 @@ int		ft_is_redir(enum e_token_type token)
 	return (false);
 }
 
+void ft_execute_redir(arg, state, pipes)
+{
+	if (state == INIT)
+	{
+		state = REDIRECTION;
+	}
+	else if (state == PIPE_START)
+	{
+		// ls | sort < a.txt
+		// ls하면 해서 파이프에 이미 쏴준 상태
+		// 여기서 가
+	}
+	else if (state == PIPE_MIDDLE)
+	{
+		// ls | sort < a.txt | sort
+	}
+	else if (state == END)
+	{
+		//?
+	}
+
+	// a.txt < sort -> 이건 안 되지만
+	// < a.txt sort -> 이건 된다
+
+}
+
 int	ft_construt_pipes(t_pipes *pipes)
 {
 	int ret1;
@@ -245,7 +271,7 @@ void	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 	}
 	else if (ft_is_redir(token))
 	{
-		//ft_execute_redir(arg, state, pipes);
+		ft_execute_redir(arg, state, pipes);
 	}
 }
 

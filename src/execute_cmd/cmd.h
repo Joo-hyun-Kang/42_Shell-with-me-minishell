@@ -102,5 +102,6 @@ void            	ft_set_pipe(t_pipes *pipes, int state);
 /* src/execute_cmd/redir.c */
 
 int         		ft_is_redir(enum e_token_type token);
+void				ft_relocate_redir_argumet(t_argument **arg);
 
 #endif

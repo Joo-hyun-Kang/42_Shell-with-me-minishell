@@ -22,6 +22,19 @@ void	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 			pipes->out_copy_state = PIPE1_READ;
 		}
 	}
+	else if (state == PIPE_MIDDLE)
+	{
+		if (pipes->out_copy_state == PIPE1_READ)
+		{
+			pipes->out_copy = pipes->pipe2[PIPE_READ];
+			pipes->out_copy_state = PIPE2_READ;
+		}
+		else
+		{
+			pipes->out_copy = pipes->pipe1[PIPE_READ];
+			pipes->out_copy_state = PIPE1_READ;
+		}
+	}
 	else if (state == END)
 		state = PIPE_END;
 
@@ -42,6 +55,8 @@ void	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 	if (*arg == NULL)
 		return ;
 
+	// 만약에 다음 토큰이 파이프라면 파이프 ㄱㄱ
+	// 재귀로 안 짜고 while문으로 빼려면 여기서 빼면 됌
 	enum e_token_type token = (*arg)->next_token_type;
 	if (token == PIPE)
 	{

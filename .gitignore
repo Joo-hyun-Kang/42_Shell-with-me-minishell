@@ -5,3 +5,6 @@
 *.out
 *.out.dSYM
 *.gch
+*.txt
+testshell
+minishell

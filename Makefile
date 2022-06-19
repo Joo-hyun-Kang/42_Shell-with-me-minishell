@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/18 04:48:45 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/20 01:39:27 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,7 +42,7 @@ PARSER_SRC		=	parser.c\
 ENV_DIR			=	src/environment
 ENV_SRC			=	env_utils.c\
 					execute_env.c
-#--------------[ ENV_bst ]----------------
+#--------------[ ENV_BST ]----------------
 ENVBST_DIR		=	src/environment/environment_bst
 ENVBST_SRC		=	env_bst_init.c\
 					env_bst_insert.c\
@@ -57,7 +57,13 @@ EXECUTE_SRC		=	cmd.c\
 NAME			=	minishell	
 OBJ_DIR			=	objects
 SRC_DIR			=	src
-SRC				=	main.c
+# SRC				=	main.c
+ifdef TEST
+	SRC = test.c
+	NAME = testshell
+else
+	SRC = main.c
+endif
 
 OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(PARSER_SRC:.c=.o))\
@@ -108,8 +114,11 @@ fclean:
 	@$(RM) $(OBJ_DIR) $(NAME)
 	@echo $(DEL_COLOR) "fclean" $(END)
 
+test:
+	@make TEST=1
+
 re:
 	@make fclean
 	@make all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re test

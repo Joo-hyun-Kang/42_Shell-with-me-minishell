@@ -1,13 +1,16 @@
 #include "cmd.h"
 
+
+	// ls > a.txt
+	// 	{ next tokenType: LT }
+	// { arg->pa_argument: ls }
+	// { next tokenType: EOL }
+	// { arg->pa_argument: a.txt }
+
+
 void	ft_redir_lt(t_argument **arg)
 {
-	enum e_token_type t_type = (*arg)->next_token_type;
-
 	
-
-
-	(*arg) = (*arg)->next;
 }
 
 void	ft_redir_gt(t_argument **arg)
@@ -35,16 +38,6 @@ void	ft_redir_gt(t_argument **arg)
 	ft_execute_single_cmd(&pre_arg);
 	close(fd);
 	dup2(fd_temp, STDIN_FILENO);
-}
-
-void	ft_redir(t_argument **arg)
-{
-	if ((*arg)->next_token_type == LT
-	|| (*arg)->next_token_type == DLT)
-		ft_redir_lt(arg);
-	else
-		ft_redir_gt(arg);
-	(*arg) = (*arg)->next;
 }
 
 int		ft_is_redir(enum e_token_type token)
@@ -82,14 +75,31 @@ void ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 	// { arg->pa_argument: a.txt }
 	// { arg->pa_argument: cat }
 
-	enum e_builtin_type token = (*arg)->next_token_type;
+	// ls > a.txt
+	// 	{ next tokenType: LT }
+	// { arg->pa_argument: ls }
+	// { next tokenType: EOL }
+	// { arg->pa_argument: a.txt }
+
+
 	
 	// 들어온 명령어와 매개변수를 깔끔하게 만들어준다
-	// 예외처리도 하고 
-	// ft_sort_redir_argument
+	if (arg->pa_argument == NULL)
+		ft_relocate_redir_argument(arg, command);
 
+	enum e_builtin_type token = (*arg)->next_token_type;
 
 	// 리다이렉션 세팅
+	if (token == LT)
+		ft_redir_lt(argument);
+	else if (token == DLT)
+		return 
+	else if (token == GT)
+		return (true);
+	else if (token == DGT)
+		return (true);
+	return (false);
+
 
 	*arg = (*arg)->next;
 	*arg = (*arg)->next;
@@ -109,4 +119,42 @@ void ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 		//실행
 	}
 
+}
+
+void ft_relocate_redir_argumet(t_argument **arg)
+{
+	t_argument	*arg1;
+	t_argument	*arg2;
+	t_argument	*temp;
+	char		**p;
+	int			len;
+	int			i;
+	
+	//"< a.txt cat"를 "cat < a.txt" 토큰 형태로 바꾼다
+	// { next tokenType: GT }      ->   { next tokenType: GT } 
+	// { next tokenType: EOL }     ->   { arg->pa_argument: cat } 
+	// { arg->pa_argument: a.txt } ->   { next tokenType: EOL }
+	// { arg->pa_argument: cat }   ->   { arg->pa_argument: a.txt }
+	arg1 = *arg;
+	arg2 = (*arg)->next;
+
+	arg1->pa_argument = (char **)malloc(sizeof(char *) * (1 + 1));
+	arg1->pa_argument[0] = ft_strdup(arg2->pa_argument[0]);
+	arg1->pa_argument[1] = NULL;
+
+	len = ft_get_length_2d_arr(arg2->pa_argument);
+	p = (char **)malloc(sizeof(char *) * (len));
+	
+	i = 0;
+	while (i < len)
+	{
+		p[i] = ft_strdup(arg2->pa_argument[i + 1]);
+		i++;
+	}
+	free(arg2->pa_argument);
+	arg2->pa_argumet = p;
+
+	temp = arg1;
+	arg1 = arg2;
+	arg2 = temp;
 }

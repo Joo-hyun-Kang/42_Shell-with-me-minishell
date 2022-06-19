@@ -64,7 +64,6 @@ enum e_builtin_type {
 /* src/execute_cmd/cmd.c */
 void				ft_print_error();
 void				ft_execute_single_cmd(t_argument **arg);
-void            	ft_set_pipe(t_pipes *pipes, int state);
 void				ft_system(t_argument *argument);
 int					ft_execute_path(t_argument *arg);
 int					ft_execute_nopath(t_argument *arg, char *pa_path);
@@ -76,9 +75,6 @@ char				*ft_join_path_command_malloc(char *path, char *command);
 void				ft_free_command(char **pa_char);
 int					ft_get_length_2d_arr(char **array);
 void            	ft_execute_mult_cmd(t_argument **arg);
-int         		ft_is_redir(enum e_token_type token);
-void            	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes);
-int	                ft_construt_pipes(t_pipes *pipes);
 
 /* src/execute_cmd/builtin.c */
 int					is_builtin(char *command, enum e_builtin_type *out_type);
@@ -96,5 +92,15 @@ unsigned long long	ft_atoull(const char *str, int *is_numeric);
 void				ft_execute_export(t_argument *arg, int is_parent);
 void				ft_execute_env(t_argument *arg, int is_parent);
 void				ft_execute_unset(t_argument *arg, int is_parent);
+
+/* src/execute_cmd/pipe.c */
+
+void            	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes);
+int	                ft_construt_pipes(t_pipes *pipes);
+void            	ft_set_pipe(t_pipes *pipes, int state);
+
+/* src/execute_cmd/redir.c */
+
+int         		ft_is_redir(enum e_token_type token);
 
 #endif

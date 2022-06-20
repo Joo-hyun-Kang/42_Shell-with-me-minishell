@@ -54,8 +54,18 @@ enum e_builtin_type {
 	INVAILD
 };
 
+enum redir_type {
+	RE_COM,
+	LT_OPEN,
+	DLT_OPEN,
+	LT_FILE,
+	GT_FILE,
+	NONE
+};
+
 typedef struct arraylist {
 	char	**pa_arr;
+    int     *type;
 	int		length;
 	int		capacity;
 }	t_arraylist;
@@ -108,12 +118,15 @@ void		ft_set_pipe(t_pipes *pipes, int state);
 /* src/execute_cmd/redir.c */
 
 int			ft_is_redir(enum e_token_type token);
+void		ft_execute_redir(t_argument **arg, int state, t_pipes *pipes);
+void		ft_sort_redir_command(t_argument **arg, t_arraylist *list_arg, t_arraylist *list_com);
+void		ft_set_redir(t_pipes *pipes, t_arraylist *list_arg, t_arraylist *list_com, t_arraylist *argument);
 void		ft_relocate_redir_argument(t_argument **arg);
 int			ft_find_next_pipe(t_argument **arg);
 
 /* src/execute_cmd/arraylist.c */
 
-int			add_arraylist(t_arraylist *arraylist, char* value);
+int			add_arraylist(t_arraylist *arraylist, char* value, int type);
 int			is_arraylist_full(t_arraylist *arraylist);
 int			allocate_arraylist(t_arraylist *arraylist);
 void		ft_free_list_value(char **pa_char, int lenght);

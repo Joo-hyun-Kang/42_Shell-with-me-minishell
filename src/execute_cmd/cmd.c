@@ -58,7 +58,11 @@ void	ft_execute_mult_cmd(t_argument **arg)
 		}
 		else if (ft_is_redir(token))
 		{
-			state = REDIRECTION;
+			ft_execute_redir(arg, state, pa_pipes);
+		}
+		else if (token == SEMICOLON)
+		{
+			break;
 		}
 	}
 

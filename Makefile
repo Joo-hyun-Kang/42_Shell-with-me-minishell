@@ -50,22 +50,17 @@ ENVBST_SRC		=	env_bst_init.c\
 					env_bst_delete.c
 #--------------[ EXECUTE ]----------------
 EXECUTE_DIR		=	src/execute_cmd
-EXECUTE_SRC		=	# cmd.c\
-# 					builtin.c\
-# 					ft_atoull.c
-# 					pipe.c\
-# 					redir.c
+EXECUTE_SRC		=	cmd.c\
+					builtin.c\
+					ft_atoull.c\
+					pipe.c\
+					redir.c\
+					arraylist.c
 #--------------[ MINISHELL ]----------------
 NAME			=	minishell	
 OBJ_DIR			=	objects
 SRC_DIR			=	src
-# SRC				=	main.c
-ifdef TEST
-	SRC = test.c
-	NAME = testshell
-else
-	SRC = main.c
-endif
+SRC				=	main.c
 
 OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(PARSER_SRC:.c=.o))\
@@ -76,14 +71,12 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(EXECUTE_SRC:.c=.o))
 #-----------------[ CMD ]-------------------
 CC				=	gcc
-CFLAGS			=	-g # -Wall -Wextra -Werror
+CFLAGS			=	-g #-Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(EXECUTE_DIR)\
-					-I /opt/homebrew/opt/readline/include
-					#-I /Users/kanghyki/.brew/opt/readline/include
+					-I /home/linuxbrew/.linuxbrew/Cellar/readline/8.1.2/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /opt/homebrew/opt/readline/lib
-					#-l readline -L /Users/kanghyki/.brew/opt/readline/lib
+					-l readline -L /home/linuxbrew/.linuxbrew/Cellar/readline/8.1.2/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 

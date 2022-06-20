@@ -54,6 +54,12 @@ enum e_builtin_type {
 	INVAILD
 };
 
+typedef struct arraylist {
+	char	**pa_arr;
+	int		length;
+	int		capacity;
+}	t_arraylist;
+
 /*
  * #########################################################
  * #                                                       #
@@ -95,13 +101,84 @@ void				ft_execute_unset(t_argument *arg, int is_parent);
 
 /* src/execute_cmd/pipe.c */
 
-void            	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes);
-int	                ft_construt_pipes(t_pipes *pipes);
-void            	ft_set_pipe(t_pipes *pipes, int state);
+void		ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes);
+int			ft_construt_pipes(t_pipes *pipes);
+void		ft_set_pipe(t_pipes *pipes, int state);
 
 /* src/execute_cmd/redir.c */
 
-int         		ft_is_redir(enum e_token_type token);
-void				ft_relocate_redir_argumet(t_argument **arg);
+int			ft_is_redir(enum e_token_type token);
+void		ft_relocate_redir_argument(t_argument **arg);
+int			ft_find_next_pipe(t_argument **arg);
+
+/* src/execute_cmd/arraylist.c */
+
+int			add_arraylist(t_arraylist *arraylist, char* value);
+int			is_arraylist_full(t_arraylist *arraylist);
+int			allocate_arraylist(t_arraylist *arraylist);
+void		ft_free_list_value(char **pa_char, int lenght);
+void	    ft_copy_char_arr_malloc(char **dst, char **src);
+void		exit_malloc_fail(void *p);
+void		free_arraylist(t_arraylist *arraylist);
 
 #endif
+
+// 1-1. < 여러 개 인 경우
+// <가 중복되면 가장 뒤에 있는 걸 처리
+// cat < 4 1 2 3 == cat 1 2 3 < 4 == cat 1 2 3
+
+// 1-2. < 뒤에 매개변수가 많아지는 경우
+// < 뒤에 매개변수가 많아지면 < 효력없음
+
+// 2-1. > 여러 개 인경우
+// 2-2처럼 가장 첫번째 나오는 파일을 만듬
+// 2-2처럼 매개변수가 많지 않는 한 마지막 걸 그냥 출력
+// 2-2처럼 >에 여러 개가 있는 경우 중복 처리
+
+// 2-2. > 뒤에 매개변수가 많아지는 경우
+// > 뒤에 매개변수가 많아지면 요거 파일을 만들지만(오픈은 함)
+// 뒤에 있는 매개변수를 커맨드가 처리함
+// c2r2s7:tmp jokang$ ls > a b c
+// ls: b: No such file or directory
+// ls: c: No such file or directory
+// c2r2s7:tmp jokang$ cat a --> 아무것도 출력이 안 된다
+
+// 3-1. >> 여러 개 인경우
+// 3-3처럼 가장 첫번째 나오는 파일을 만듬
+// 3-3처럼 매개변수가 많지 않는 한 마지막 걸 그냥 출력
+// 3-3처럼 >>에 여러 개가 있는 경우 중복 처리
+
+// 3-2. >> 뒤에 매개변수가 많아지는 경우
+// >> 뒤에 매개변수가 많아지면 요거 파일을 만들어서 뒤에 덮붙이거나 새로 만듬
+// 뒤에 있는 매개변수를 커맨드가 처리함
+
+// 혼합
+// c2r2s7:tmp jokang$ ls > a 1 2 < 3 4
+// c2r2s7:tmp jokang$ cat a
+// 1
+// 2
+// 4
+// c2r2s7:tmp jokang$
+
+
+// ls > a.txt
+// 	{ next tokenType: LT }
+// { arg->pa_argument: ls }
+// { next tokenType: EOL }
+// { arg->pa_argument: a.txt }
+
+//minishell-4.2$ < a.txt cat
+// { next tokenType: GT }
+// { next tokenType: EOL }
+// { arg->pa_argument: a.txt }
+// { arg->pa_argument: cat }
+
+// minishell-4.2$ cat < a.txt < b.txt < c.txt
+// { next tokenType: GT }
+// { arg->pa_argument: cat }
+// { next tokenType: GT }
+// { arg->pa_argument: a.txt }
+// { next tokenType: GT }
+// { arg->pa_argument: b.txt }
+// { next tokenType: EOL }
+// { arg->pa_argument: c.txt }

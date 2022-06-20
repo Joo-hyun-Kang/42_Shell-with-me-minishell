@@ -54,7 +54,6 @@ void	ft_execute_mult_cmd(t_argument **arg)
 		
 		if (token == PIPE)
 		{
-			int temp_pipe;
 			ft_execute_pipe(arg, state, pa_pipes);
 		}
 		else if (ft_is_redir(token))

@@ -122,6 +122,9 @@ void	ft_sort_redir_command(t_argument **arg, t_arraylist *list_arg, t_arraylist 
 		i++;
 	}
 
+	char *gt_file = NULL;
+	char *lt_file = NULL;
+	char *dlt_file = NULL;
 	while (p->next_token_type != PIPE || p->next_token_type != SEMICOLON || p->next_token_type != EOF)
 	{
 		if (p->next_token_type == GT)
@@ -131,7 +134,7 @@ void	ft_sort_redir_command(t_argument **arg, t_arraylist *list_arg, t_arraylist 
 			int i = 0;
 			if (len == 1)
 			{
-				
+				gt_file = p->pa_argument[i]; 
 				i++;
 			}
 			
@@ -141,14 +144,16 @@ void	ft_sort_redir_command(t_argument **arg, t_arraylist *list_arg, t_arraylist 
 				i++;
 			}
 		}
+		//LT, DLT 같이 처리
 		else if (p->next_token_type == LT)
 		{
 			p = p->next;
 			int len = ft_get_length_2d_arr(p->pa_argument);
 			int i = 0;
 
-			add_arraylist(list_com, ft_strdup("LT"));
+			add_arraylist(list_com, ft_strdup("LT_OPEN"));
 			add_arraylist(list_com, ft_strdup(p->pa_argument[i]));
+			lt_file = p->pa_argument[i];
 			i++;
 			while (i < len)
 			{
@@ -156,7 +161,26 @@ void	ft_sort_redir_command(t_argument **arg, t_arraylist *list_arg, t_arraylist 
 				i++;
 			}
 		}
-	
+		else if (p->next_token_type == DLT)
+		{
+			p = p->next;
+			int len = ft_get_length_2d_arr(p->pa_argument);
+			int i = 0;
+
+			add_arraylist(list_com, ft_strdup("DLT_OPEN"));
+			add_arraylist(list_com, ft_strdup(p->pa_argument[i]));
+			dlt_file = p->pa_argument[i];
+			i++;
+			while (i < len)
+			{
+				add_arraylist(list_arg, ft_strdup(p->pa_argument[i]));
+				i++;
+			}
+		}
+		else
+		{
+			p = p->next;
+		}
 	}
 	
 }

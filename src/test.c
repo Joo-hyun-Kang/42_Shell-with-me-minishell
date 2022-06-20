@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   test_main.c                                        :+:      :+:    :+:   */
+/*   test.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/19 15:43:42 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/20 01:34:54 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/20 16:04:41 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,8 @@ int	main(int argc, char **argv, char **ori_env)
 
 		pid = fork();
 		if (pid == 0)
-			ft_system_test(arg);
+			system_test(cmdStrDPtr[idx]);
+//			ft_system_test(arg);
 		else
 		{
 			if (check_work_done(waitTime) == false)

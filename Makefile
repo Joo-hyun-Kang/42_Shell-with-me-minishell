@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/20 01:39:27 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/20 16:04:07 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,9 +50,11 @@ ENVBST_SRC		=	env_bst_init.c\
 					env_bst_delete.c
 #--------------[ EXECUTE ]----------------
 EXECUTE_DIR		=	src/execute_cmd
-EXECUTE_SRC		=	cmd.c\
-					builtin.c\
-					ft_atoull.c
+EXECUTE_SRC		=	# cmd.c\
+# 					builtin.c\
+# 					ft_atoull.c
+# 					pipe.c\
+# 					redir.c
 #--------------[ MINISHELL ]----------------
 NAME			=	minishell	
 OBJ_DIR			=	objects

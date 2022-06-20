@@ -6,11 +6,11 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/20 15:35:49 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/20 16:00:08 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_Hs
+#ifndef MINISHELL_H
 # define MINISHELL_H
 
 # include "../library/libft/inc/libft.h"

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 21:40:51 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/22 01:35:53 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ t_token	*ft_heredoc(t_argument *arg, t_token *cur_token)
 	int		fd;
 
 	fd = open("doc.here", (O_CREAT | O_TRUNC | O_RDWR), 0666);
+	if (fd < 0)
+		return (NULL);
 	arg->next_token_type = GT;
 	pa_heredoc = ft_get_heredoc(cur_token->pa_str);
 	free(cur_token->pa_str);
@@ -100,10 +102,9 @@ static void	ft_replace_env_heredoc(char **str, char **dst, t_env_root *env)
 	t_env	*node;
 
 	++(*str);
-	if (*(*str) == '?' || ft_isdigit(*(*str)) != false)
+	if (*(*str) == '?')
 	{
-		if (*(*str) == '?')
-			*dst = ft_merge_str(*dst, ft_itoa(g_exit));
+		*dst = ft_merge_str(*dst, ft_itoa(g_exit));
 		++(*str);
 		return ;
 	}

@@ -65,6 +65,14 @@ void	ft_merge_quote(t_lexer *lexer, char quote)
 			ft_merge_bslash(lexer);
 			ft_set_spos(lexer);
 		}
+		else if (ft_cur_char(lexer) == M_BSLASH)
+		{
+			ft_read_lexer(lexer);
+			*dst = ft_merge_str(*dst, \
+					ft_strndup(ft_cur_ptr(lexer), 1));
+			ft_read_lexer(lexer);
+			s_pos = ft_cur_ptr(lexer);
+		}
 		else
 			ft_read_lexer(lexer);
 	}
@@ -89,4 +97,11 @@ static void	ft_no_quote(t_lexer *lexer, char quote)
 	free(read_line);
 	ft_replace_lexer_cmd_str(lexer, tmp);
 	ft_merge_quote(lexer, quote);
+}
+
+void	ft_save_str(t_lexer *lexer, char **dst, char *s_pos)
+{
+	if ((ft_cur_ptr(lexer) - s_pos) < 1)
+		return ;
+	*dst = ft_merge_str(*dst, ft_strndup(s_pos, ft_cur_ptr(lexer) - s_pos));
 }

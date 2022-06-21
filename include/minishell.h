@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 17:40:56 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/21 21:36:00 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@
 # define M_HOME		'~'
 # define M_BSLASH	'\\'
 # define M_SEP		"|;>< \r\v\f\t\"'$~\\"
+
+# define F_HEREDOC	"doc.here"
 
 # define BANNER "\
                                                     \n\
@@ -164,7 +166,7 @@ void			ft_add_argument_back(t_argument **head, t_argument *arg);
 
 /* src/parser/parser_additional.c */
 t_token			*ft_additional_pipe(t_token *cur_token, t_env_root *env);
-void			ft_heredoc(t_argument *arg, t_token *cur_token, t_env_root *env);
+t_token			*ft_heredoc(t_argument *arg, t_token *cur_token);
 
 /* src/parser/ft_merge_str.c */
 char			*ft_merge_str(char *s1, char *s2);
@@ -175,7 +177,8 @@ char			*ft_merge_str(char *s1, char *s2);
  * #                    src/environment/                   #
  * #                                                       #
  * #########################################################
- */ /* src/environment/env_utils.c */ bool			ft_is_dictionary(char *str);
+ */ /* src/environment/env_utils.c */
+bool			ft_is_dictionary(char *str);
 char			*ft_extract_key_from_str(char *str);
 char			*ft_extract_value_from_str(char *str);
 void			ft_free_env_node(t_env *node);

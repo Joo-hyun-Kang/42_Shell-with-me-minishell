@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 23:03:18 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 17:13:39 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/21 17:52:12 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	*ft_get_spos(t_lexer *lexer)
 	return (lexer->spos);
 }
 
-t_env_root		*ft_get_env(t_lexer *lexer)
+t_env_root	*ft_get_env(t_lexer *lexer)
 {
 	return (lexer->env);
 }

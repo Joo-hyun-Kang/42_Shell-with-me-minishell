@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/19 15:43:42 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/20 16:56:28 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/21 17:54:08 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static bool		check_work_done(int waitTime);
 
 int	main(int argc, char **argv, char **ori_env)
 {
-	const int	waitTime = 2;
+	const int	waitTime = 3;
 	int			idx = 0;
 	char		c;
 	int			pid;
@@ -146,8 +146,7 @@ int	main(int argc, char **argv, char **ori_env)
 
 		pid = fork();
 		if (pid == 0)
-			system_test(cmdStrDPtr[idx]);
-//			ft_system_test(arg);
+			ft_system_test(arg);
 		else
 		{
 			if (check_work_done(waitTime) == false)

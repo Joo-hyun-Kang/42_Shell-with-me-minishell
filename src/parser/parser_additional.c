@@ -6,14 +6,15 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 11:23:44 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/21 21:40:51 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-static void	ft_merge_env_heredoc(char **str, char **dst, t_env_root *env);
+static char	*ft_get_heredoc(char *heredoc);
 static char	*ft_env_heredoc(char *str, t_env_root *env);
+static void	ft_replace_env_heredoc(char **str, char **dst, t_env_root *env);
 
 t_token	*ft_additional_pipe(t_token *cur_token, t_env_root *env)
 {
@@ -32,29 +33,41 @@ t_token	*ft_additional_pipe(t_token *cur_token, t_env_root *env)
 	return (cur_token->next);
 }
 
-static void	ft_merge_env_heredoc(char **str, char **dst, t_env_root *env)
+t_token	*ft_heredoc(t_argument *arg, t_token *cur_token)
 {
-	char	*s_pos;
-	char	*key;
-	char	*value;
-	t_env	*node;
+	char	*pa_heredoc;
+	char	*pa_env_heredoc;
+	int		fd;
 
-	++(*str);
-	if (*(*str) == '?')
+	fd = open("doc.here", (O_CREAT | O_TRUNC | O_RDWR), 0666);
+	arg->next_token_type = GT;
+	pa_heredoc = ft_get_heredoc(cur_token->pa_str);
+	free(cur_token->pa_str);
+	pa_env_heredoc = ft_env_heredoc(pa_heredoc, arg->env);
+	ft_putstr_fd(pa_env_heredoc, fd);
+	close(fd);
+	free(pa_heredoc);
+	free(pa_env_heredoc);
+	cur_token->pa_str = ft_strdup(F_HEREDOC);
+	return (cur_token);
+}
+
+static char	*ft_get_heredoc(char *heredoc)
+{
+	char	*read_line;
+	char	*pa_str;
+
+	pa_str = NULL;
+	read_line = readline("> ");
+	while (read_line != NULL && ft_strcmp(heredoc, read_line) != 0)
 	{
-		*dst = ft_merge_str(*dst, ft_strdup("127"));
-		++(*str);
-		return ;
+		pa_str = ft_merge_str(pa_str, read_line);
+		pa_str = ft_merge_str(pa_str, ft_strdup("\n"));
+		read_line = readline("> ");
 	}
-	s_pos = *str;
-	while (ft_strchr(M_SEP, *(*str)) == NULL && *(*str) != '\n')
-		++(*str);
-	key = ft_strndup(s_pos, *str - s_pos);
-	node = ft_env_search(env, key);
-	if (node == NULL)
-		*dst = ft_merge_str(*dst, ft_strdup(""));
-	else
-		*dst = ft_merge_str(*dst, ft_strdup(node->pa_value));
+	if (read_line != NULL)
+		free(read_line);
+	return (pa_str);
 }
 
 static char	*ft_env_heredoc(char *str, t_env_root *env)
@@ -63,14 +76,14 @@ static char	*ft_env_heredoc(char *str, t_env_root *env)
 	char	*s_pos;
 	t_env	*node;
 
-	rtn_str = 0;
+	rtn_str = NULL;
 	s_pos = str;
 	while (*str != '\0')
 	{
 		if (*str == '$')
 		{
 			rtn_str = ft_merge_str(rtn_str, ft_strndup(s_pos, str - s_pos));
-			ft_merge_env_heredoc(&str, &rtn_str, env);
+			ft_replace_env_heredoc(&str, &rtn_str, env);
 			s_pos = str;
 		}
 		else
@@ -80,34 +93,30 @@ static char	*ft_env_heredoc(char *str, t_env_root *env)
 	return (rtn_str);
 }
 
-void	ft_heredoc(t_argument *arg, t_token *cur_token, t_env_root *env)
+static void	ft_replace_env_heredoc(char **str, char **dst, t_env_root *env)
 {
-	char	*read_line;
-	char	*new_str;
-	char	*tmp;
-	int		fd;
+	char	*s_pos;
+	char	*value;
+	t_env	*node;
 
-	fd = open("doc.here", (O_CREAT | O_TRUNC | O_RDWR), 0666);
-	arg->next_token_type = GT;
-	new_str = 0;
-	read_line = readline("> ");
-	while (read_line != NULL && ft_strcmp(cur_token->pa_str, read_line) != 0)
+	++(*str);
+	if (*(*str) == '?' || ft_isdigit(*(*str)) != false)
 	{
-		new_str = ft_merge_str(new_str, read_line);
-		new_str = ft_merge_str(new_str, ft_strdup("\n"));
-		read_line = readline("> ");
-		if (read_line == NULL)
-			break ;
+		if (*(*str) == '?')
+			*dst = ft_merge_str(*dst, ft_itoa(g_exit));
+		++(*str);
+		return ;
 	}
-	if (read_line != NULL)
-		free(read_line);
-	if (new_str != NULL)
+	s_pos = *str;
+	while (ft_strchr(M_SEP, *(*str)) == NULL
+		&& *(*str) != '\n' && *(*str) != '=')
+		++(*str);
+	if ((*str - s_pos) > 0)
 	{
-		read_line = new_str;
-		tmp = ft_env_heredoc(new_str, env);
-		write(fd, tmp, ft_strlen(tmp));
-		free(read_line);
+		node = ft_env_search(env, ft_strndup(s_pos, *str - s_pos));
+		if (node != NULL)
+			*dst = ft_merge_str(*dst, ft_strdup(node->pa_value));
 	}
-	free(cur_token->pa_str);
-	cur_token->pa_str = ft_strdup("doc.here");
+	else
+		*dst = ft_merge_str(*dst, ft_strdup("$"));
 }

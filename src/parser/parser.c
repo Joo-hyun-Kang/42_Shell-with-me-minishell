@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 11:15:41 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/21 21:18:53 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	ft_syntax_error(enum e_token_type token_type)
 		err = "|";
 	else
 		err = "newline";
-	// #define EX_USAGE 258 syntax error in usage
 	g_exit = 258;
 	printf("minishell: syntax error near unexpected token `%s'\n", err);
 }
@@ -40,7 +39,6 @@ t_token	*ft_read_token_end(t_token *cur_token, t_argument *arg)
 	arg->next_token_type = cur_token->token_type;
 	if (cur_token->token_type == EOL)
 		return (cur_token);
-	/* Pipe */
 	if (cur_token->token_type == PIPE)
 	{
 		if (cur_token->next->token_type == EOL)
@@ -48,14 +46,12 @@ t_token	*ft_read_token_end(t_token *cur_token, t_argument *arg)
 		else
 			return (cur_token->next);
 	}
-	/* Redir */
 	if (cur_token->next->token_type == ARGUMENT)
 	{
 		if (cur_token->token_type == DGT)
-			ft_heredoc(arg, cur_token->next, arg->env);
+			return (ft_heredoc(arg, cur_token->next));
 		return (cur_token->next);
 	}
-	/* Error */
 	ft_syntax_error(cur_token->next->token_type);
 	return (NULL);
 }

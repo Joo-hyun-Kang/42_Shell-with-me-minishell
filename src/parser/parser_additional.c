@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/18 04:52:16 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/21 11:23:44 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,19 @@
 static void	ft_merge_env_heredoc(char **str, char **dst, t_env_root *env);
 static char	*ft_env_heredoc(char *str, t_env_root *env);
 
-t_token	*ft_read_additional_pipe(t_token *cur_token, t_env_root *env)
+t_token	*ft_additional_pipe(t_token *cur_token, t_env_root *env)
 {
 	char	*read_line;
 	t_token	*add;
 
 	read_line = readline("> ");
+	if (read_line == NULL)
+	{
+		printf("minishell: syntax error: unexpected end of file\n");
+		g_exit = 258;
+		return (NULL);
+	}
 	add = ft_tokenizer(read_line, env);
-	free(read_line);
 	cur_token->next = add;
 	return (cur_token->next);
 }
@@ -75,22 +80,34 @@ static char	*ft_env_heredoc(char *str, t_env_root *env)
 	return (rtn_str);
 }
 
-void	ft_read_additional_heredoc(t_token *cur_token, t_env_root *env)
+void	ft_heredoc(t_argument *arg, t_token *cur_token, t_env_root *env)
 {
 	char	*read_line;
 	char	*new_str;
+	char	*tmp;
+	int		fd;
 
+	fd = open("doc.here", (O_CREAT | O_TRUNC | O_RDWR), 0666);
+	arg->next_token_type = GT;
 	new_str = 0;
 	read_line = readline("> ");
-	while (ft_strcmp(cur_token->pa_str, read_line) != 0)
+	while (read_line != NULL && ft_strcmp(cur_token->pa_str, read_line) != 0)
 	{
 		new_str = ft_merge_str(new_str, read_line);
 		new_str = ft_merge_str(new_str, ft_strdup("\n"));
 		read_line = readline("> ");
+		if (read_line == NULL)
+			break ;
 	}
-	free(read_line);
+	if (read_line != NULL)
+		free(read_line);
+	if (new_str != NULL)
+	{
+		read_line = new_str;
+		tmp = ft_env_heredoc(new_str, env);
+		write(fd, tmp, ft_strlen(tmp));
+		free(read_line);
+	}
 	free(cur_token->pa_str);
-	read_line = new_str;
-	cur_token->pa_str = ft_env_heredoc(new_str, env);
-	free(read_line);
+	cur_token->pa_str = ft_strdup("doc.here");
 }

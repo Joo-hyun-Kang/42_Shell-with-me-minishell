@@ -6,52 +6,68 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 06:13:12 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/21 11:15:41 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*ft_get_token_type_char(enum e_token_type token_type)
+void	ft_syntax_error(enum e_token_type token_type)
 {
+	char	*err;
+
 	if (token_type == SEMICOLON)
-		return (";");
+		err = ";";
 	else if (token_type == LT)
-		return (">");
+		err = ">";
 	else if (token_type == DLT)
-		return (">>");
+		err = ">>";
 	else if (token_type == GT)
-		return ("<");
+		err = "<";
 	else if (token_type == DGT)
-		return ("<<");
+		err = "<<";
+	else if (token_type == PIPE)
+		err = "|";
 	else
-		return ("\\n");
+		err = "newline";
+	// #define EX_USAGE 258 syntax error in usage
+	g_exit = 258;
+	printf("minishell: syntax error near unexpected token `%s'\n", err);
 }
 
-t_token	*ft_no_eol(t_token *cur_token, t_argument *arg)
+t_token	*ft_read_token_end(t_token *cur_token, t_argument *arg)
 {
+	arg->next_token_type = cur_token->token_type;
+	if (cur_token->token_type == EOL)
+		return (cur_token);
+	/* Pipe */
 	if (cur_token->token_type == PIPE)
-		return (ft_read_additional_pipe(cur_token, arg->env));
-	printf("minishell: parse error near `%s'\n", \
-			ft_get_token_type_char(cur_token->next->token_type));
+	{
+		if (cur_token->next->token_type == EOL)
+			return (ft_additional_pipe(cur_token, arg->env));
+		else
+			return (cur_token->next);
+	}
+	/* Redir */
+	if (cur_token->next->token_type == ARGUMENT)
+	{
+		if (cur_token->token_type == DGT)
+			ft_heredoc(arg, cur_token->next, arg->env);
+		return (cur_token->next);
+	}
+	/* Error */
+	ft_syntax_error(cur_token->next->token_type);
 	return (NULL);
 }
 
-t_token	*ft_read_token(t_token *cur_token, t_argument *arg, int idx)
+t_token	*ft_read_token_mid(t_token *cur_token, t_argument *arg, int idx)
 {
 	if (cur_token->token_type == ARGUMENT)
 	{
 		arg->pa_argument[idx] = cur_token->pa_str;
-		return (ft_read_token(cur_token->next, arg, idx + 1));
+		return (ft_read_token_mid(cur_token->next, arg, idx + 1));
 	}
-	arg->next_token_type = cur_token->token_type;
-	if (cur_token->token_type == EOL)
-		return (cur_token);
-	else if (cur_token->next->token_type != ARGUMENT)
-		return (ft_no_eol(cur_token, arg));
-	else if (cur_token->token_type == DGT)
-		ft_read_additional_heredoc(cur_token->next, arg->env);
-	return (cur_token->next);
+	return (ft_read_token_end(cur_token, arg));
 }
 
 t_token	*ft_read_token_init(t_token *cur_token, t_argument *arg, int idx)
@@ -59,14 +75,14 @@ t_token	*ft_read_token_init(t_token *cur_token, t_argument *arg, int idx)
 	if (cur_token->token_type == ARGUMENT)
 	{
 		arg->pa_argument[idx] = cur_token->pa_str;
-		return (ft_read_token(cur_token->next, arg, idx + 1));
+		return (ft_read_token_mid(cur_token->next, arg, idx + 1));
 	}
 	else if (cur_token->token_type == PIPE)
 	{
-		printf("minishell: parse error near `|'\n");
+		ft_syntax_error(cur_token->token_type);
 		return (NULL);
 	}
-	return (ft_read_token(cur_token, arg, -1));
+	return (ft_read_token_mid(cur_token, arg, idx));
 }
 
 t_argument	*ft_parser(char *cmd_str, t_env_root *root_env)
@@ -78,7 +94,6 @@ t_argument	*ft_parser(char *cmd_str, t_env_root *root_env)
 
 	head_arg = NULL;
 	head_token = ft_tokenizer(cmd_str, root_env);
-	ft_add_token_back(&head_token, ft_init_token(NULL, EOL));
 	cur_token = head_token;
 	while (cur_token->token_type != EOL)
 	{

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/19 15:43:42 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/20 16:04:41 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/20 16:56:28 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,7 +222,6 @@ static char	**getTestScript(void)
 	{
 		if (*line != '\0')
 			cmdStrDPtr = ft_add_cmd(cmdStrDPtr, line);
-		printf("NO\n");
 		line = get_next_line(fd);
 	}
 	return (cmdStrDPtr);

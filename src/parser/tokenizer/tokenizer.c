@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 11:32:19 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/21 16:04:37 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,8 @@ t_token	*ft_tokenizer(char *cmd_str, t_env_root *env)
 				new_token = ft_create_token_type_metachar(lexer);
 			else
 				new_token = ft_create_token_type_argument(lexer, env);
-			if (new_token == NULL)
-			{
-				ft_free_token(head);
-				return (NULL);
-			}
-			ft_add_token_back(&head, new_token);
+			if (new_token != NULL)
+				ft_add_token_back(&head, new_token);
 		}
 	}
 	ft_add_token_back(&head, ft_init_token(NULL, EOL));

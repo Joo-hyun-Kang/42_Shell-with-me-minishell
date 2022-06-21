@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 11:15:26 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/21 16:39:57 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@
 # define M_QUOTE	"\"'"
 # define M_ENV		'$'
 # define M_HOME		'~'
-# define M_SEP		"|;>< \r\v\f\t\"'$~"
+# define M_BSLASH	'\\'
+# define M_SEP		"|;>< \r\v\f\t\"'$~\\"
 
 # define BANNER "\
                                                     \n\
@@ -112,6 +113,7 @@ void			ft_merge_env(t_lexer *lexer, char **dst, t_env_root *env);
 void			ft_merge_home(t_lexer *lexer, char **dst, t_env_root *env);
 void			ft_merge_quote(t_lexer *lexer, char **dst, t_env_root *env, char quote);
 void			ft_no_quote(t_lexer *lexer, char **dst, t_env_root *env, char quote);
+void			ft_save_str(t_lexer *lexer, char **dst, char *s_pos);
 
 /* src/parser/tokenizer/tokenizer_utils.c */
 char			*ft_strchr_except_null(const char *str, int c);

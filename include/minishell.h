@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/20 16:00:08 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/21 11:15:26 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,8 +137,9 @@ void			ft_replace_lexer_cmd_str(t_lexer *lexer, char *new_cmd_str);
  * #########################################################
  */
 /* src/parser/parser.c */
-char			*ft_get_token_type_char(enum e_token_type token_type);
-t_token			*ft_read_token(t_token *cur_token, t_argument *arg, int idx);
+void			ft_syntax_error(enum e_token_type token_type);
+t_token			*ft_read_token_end(t_token *cur_token, t_argument *arg);
+t_token			*ft_read_token_mid(t_token *cur_token, t_argument *arg, int idx);
 t_token			*ft_read_token_init(t_token *cur_token, t_argument *arg, int idx);
 t_argument		*ft_parser(char *cmd_str, t_env_root *root_env);
 
@@ -152,8 +153,8 @@ char			**ft_init_pa_argument(t_token *cur_token);
 void			ft_add_argument_back(t_argument **head, t_argument *arg);
 
 /* src/parser/parser_additional.c */
-t_token			*ft_read_additional_pipe(t_token *cur_token, t_env_root *env);
-void			ft_read_additional_heredoc(t_token *cur_token, t_env_root *env);
+t_token			*ft_additional_pipe(t_token *cur_token, t_env_root *env);
+void			ft_heredoc(t_argument *arg, t_token *cur_token, t_env_root *env);
 
 /* src/parser/ft_merge_str.c */
 char			*ft_merge_str(char *s1, char *s2);
@@ -164,9 +165,7 @@ char			*ft_merge_str(char *s1, char *s2);
  * #                    src/environment/                   #
  * #                                                       #
  * #########################################################
- */
-/* src/environment/env_utils.c */
-bool			ft_is_dictionary(char *str);
+ */ /* src/environment/env_utils.c */ bool			ft_is_dictionary(char *str);
 char			*ft_extract_key_from_str(char *str);
 char			*ft_extract_value_from_str(char *str);
 void			ft_free_env_node(t_env *node);

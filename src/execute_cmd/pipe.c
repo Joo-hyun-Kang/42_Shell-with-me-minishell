@@ -11,16 +11,8 @@ void	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 	else if (state == PIPE_START)
 	{
 		state = PIPE_MIDDLE;
-		if (pipes->out_copy_state == PIPE1_READ)
-		{
-			pipes->out_copy = pipes->pipe2[PIPE_READ];
-			pipes->out_copy_state = PIPE2_READ;
-		}
-		else
-		{
-			pipes->out_copy = pipes->pipe1[PIPE_READ];
-			pipes->out_copy_state = PIPE1_READ;
-		}
+		pipes->out_copy = pipes->pipe2[PIPE_READ];
+		pipes->out_copy_state = PIPE2_READ;
 	}
 	else if (state == PIPE_MIDDLE)
 	{
@@ -106,7 +98,12 @@ void	ft_set_pipe(t_pipes *pipes, int state)
 	}
 	else if (state == PIPE_MIDDLE)
 	{
-		close(pipes->pipe1[PIPE_WRITE]);
+		char *str;
+		if (pipes->out_copy_state == PIPE2_READ)
+			str = "PIPE2";
+		else
+			str = "PIPE1";
+		printf("%s\n", str);
 
 		// 파이프 실패 예외처리 해줄것
 		dup2(pipes->pipe2[PIPE_WRITE], STDOUT_FILENO);

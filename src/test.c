@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/19 15:43:42 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 17:54:08 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/22 02:00:26 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static void		move_idx(char **cmdStrDPtr, int *idx);
 static int		ft_strdplen(char **str);
 static char		**ft_add_cmd(char **dp, char *str);
 static void		ft_show_argument_test(t_argument *arg);
-static void		*ft_system_test(t_argument *arg);
+static void		*ft_system_test(char *cmd);
 static void		*system_test(char *cmd);
 static bool		check_work_done(int waitTime);
 /* ---------------------------------------------------------------- */
@@ -132,10 +132,10 @@ int	main(int argc, char **argv, char **ori_env)
 		printf("|                                            # %s%-3d%s |\n", GREEN, idx, DEFAULT);
 		printf("#--------------------------------------------------#\n");
 
-		env = ft_dpenv_to_bstenv(ori_env);
-		arg = ft_parser(ft_strdup(cmdStrDPtr[idx]), env);
-		printf("\n##--------%s Argument %s--------##\n", CYAN, DEFAULT);
-		ft_show_argument_test(arg);
+//		env = ft_dpenv_to_bstenv(ori_env);
+//		arg = ft_parser(ft_strdup(cmdStrDPtr[idx]), env);
+//		printf("\n##--------%s Argument %s--------##\n", CYAN, DEFAULT);
+//		ft_show_argument_test(arg);
 
 		/*
 		 *
@@ -146,7 +146,7 @@ int	main(int argc, char **argv, char **ori_env)
 
 		pid = fork();
 		if (pid == 0)
-			ft_system_test(arg);
+			ft_system_test(cmdStrDPtr[idx]);
 		else
 		{
 			if (check_work_done(waitTime) == false)
@@ -180,7 +180,7 @@ int	main(int argc, char **argv, char **ori_env)
 		}
 		printf("%s##-----------------------------##%s\n", BLUE, DEFAULT);
 
-		ft_free_argument(arg);
+//		ft_free_argument(arg);
 		++idx;
 	}
 	system("clear");
@@ -330,12 +330,16 @@ static void	ft_show_argument_test(t_argument *arg)
 	ft_show_argument_test(arg->next);
 }
 
-static void	*ft_system_test(t_argument *arg)
+static void	*ft_system_test(char *cmd)
 {
-	char	c;
+	char	*tmp;
 
+	tmp = ft_strjoin("echo '", cmd);
+	free(cmd);
+	cmd = ft_strjoin(tmp, "' | ./minishell");
+	free(tmp);
 	printf("\n%s##--------  ft_system  --------##%s\n", BLUE, DEFAULT);
-	ft_system(arg);
+	system(cmd);
 
 	kill(getppid(), SIGUSR1);
 	exit(1);
@@ -343,7 +347,14 @@ static void	*ft_system_test(t_argument *arg)
 
 static void	*system_test(char *cmd)
 {
+	char	*tmp;
+
 	printf("%s##--------   System    --------##%s\n", BLUE, DEFAULT);
+	tmp = ft_strjoin("echo '", cmd);
+	free(cmd);
+	cmd = ft_strjoin(tmp, "' | bash");
+	free(tmp);
+
 	system(cmd);
 
 	kill(getppid(), SIGUSR1);

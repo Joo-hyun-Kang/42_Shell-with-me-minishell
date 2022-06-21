@@ -66,11 +66,12 @@ void	ft_execute_mult_cmd(t_argument **arg)
 		}
 	}
 
+	
 	close(pa_pipes->pipe1[PIPE_WRITE]);
 	close(pa_pipes->pipe1[PIPE_READ]);
 	close(pa_pipes->pipe2[PIPE_WRITE]);
 	close(pa_pipes->pipe2[PIPE_READ]);
-
+	
 	while (wait(NULL) != -1)
 	{
 	}
@@ -102,7 +103,6 @@ int		ft_execute_nopath(t_argument *arg, char *pa_path)
 	char *pa_orgin_command = ft_strdup(arg->pa_argument[COMMAND_POSITION]);
 	free(arg->pa_argument[COMMAND_POSITION]);
 	arg->pa_argument[COMMAND_POSITION] = pa_path;
-
 	g_exit = execve(pa_path, arg->pa_argument, NULL);
 	return 0;
 }

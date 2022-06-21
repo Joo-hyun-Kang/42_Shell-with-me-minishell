@@ -58,7 +58,6 @@ enum redir_type {
 	RE_COM,
 	LT_OPEN,
 	DLT_OPEN,
-	LT_FILE,
 	GT_FILE,
 	NONE
 };
@@ -120,7 +119,7 @@ void		ft_set_pipe(t_pipes *pipes, int state);
 int			ft_is_redir(enum e_token_type token);
 void		ft_execute_redir(t_argument **arg, int state, t_pipes *pipes);
 void		ft_sort_redir_command(t_argument **arg, t_arraylist *list_arg, t_arraylist *list_com);
-void		ft_set_redir(t_pipes *pipes, t_arraylist *list_arg, t_arraylist *list_com, t_arraylist *argument);
+int			ft_set_redir(t_pipes *pipes, t_arraylist *list_arg, t_arraylist *list_com, t_arraylist *argument);
 void		ft_relocate_redir_argument(t_argument **arg);
 int			ft_find_next_pipe(t_argument **arg);
 

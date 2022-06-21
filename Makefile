@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/21 17:18:11 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/21 22:49:20 by jokang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,11 +81,9 @@ CC				=	gcc
 CFLAGS			=	-g # -Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(EXECUTE_DIR)\
-					-I /opt/homebrew/opt/readline/include
-					#-I /Users/kanghyki/.brew/opt/readline/include
+					-I /Users/jokang/.brew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /opt/homebrew/opt/readline/lib
-					#-l readline -L /Users/kanghyki/.brew/opt/readline/lib
+					-l readline -L /Users/jokang/.brew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 

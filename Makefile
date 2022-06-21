@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/20 16:04:07 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/21 17:18:11 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,7 @@ TOKEN_SRC		=	tokenizer.c\
 					tokenizer_core.c\
 					tokenizer_utils.c\
 					tokenizer_merge.c\
+					tokenizer_merge_utils.c\
 					lexer.c\
 					lexer_utils.c
 #--------------[ PARSER ]----------------
@@ -60,7 +61,13 @@ EXECUTE_SRC		=	cmd.c\
 NAME			=	minishell	
 OBJ_DIR			=	objects
 SRC_DIR			=	src
-SRC				=	main.c
+# SRC				=	main.c
+ifdef TEST
+	SRC = test.c
+	NAME = testshell
+else
+	SRC = main.c
+endif
 
 OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(PARSER_SRC:.c=.o))\
@@ -71,12 +78,14 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(EXECUTE_SRC:.c=.o))
 #-----------------[ CMD ]-------------------
 CC				=	gcc
-CFLAGS			=	-g #-Wall -Wextra -Werror
+CFLAGS			=	-g # -Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(EXECUTE_DIR)\
-					-I /home/linuxbrew/.linuxbrew/Cellar/readline/8.1.2/include
+					-I /opt/homebrew/opt/readline/include
+					#-I /Users/kanghyki/.brew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /home/linuxbrew/.linuxbrew/Cellar/readline/8.1.2/lib
+					-l readline -L /opt/homebrew/opt/readline/lib
+					#-l readline -L /Users/kanghyki/.brew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 
@@ -110,7 +119,8 @@ fclean:
 	@echo $(DEL_COLOR) "fclean" $(END)
 
 test:
-	@make TEST=1
+	@make fclean
+	@make TEST=1 -j 8
 
 re:
 	@make fclean

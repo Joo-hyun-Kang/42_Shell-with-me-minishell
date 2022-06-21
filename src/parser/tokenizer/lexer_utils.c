@@ -6,20 +6,16 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 16:05:45 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 16:09:13 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/21 17:06:15 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-char	ft_read_lexer(t_lexer *lexer)
+void	ft_read_lexer(t_lexer *lexer)
 {
-	char	c;
-
-	c = ft_cur_char(lexer);
 	if (lexer->read_idx < lexer->cmd_str_size)
 		++lexer->read_idx;
-	return (c);
 }
 
 char	ft_cur_char(t_lexer *lexer)

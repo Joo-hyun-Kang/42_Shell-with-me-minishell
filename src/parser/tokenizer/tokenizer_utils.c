@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:03:15 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/16 15:57:45 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/21 17:41:00 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*ft_strchr_except_null(const char *str, int c)
 	return (NULL);
 }
 
-t_token	*ft_init_token(char *str, enum e_token_type token_type)
+t_token	*ft_init_token(char *str, enum e_token_type t_type)
 {
 	t_token	*new_token;
 
@@ -32,7 +32,7 @@ t_token	*ft_init_token(char *str, enum e_token_type token_type)
 		return (NULL);
 	ft_memset(new_token, 0, sizeof(t_token));
 	new_token->pa_str = str;
-	new_token->token_type = token_type;
+	new_token->token_type = t_type;
 	return (new_token);
 }
 

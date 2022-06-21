@@ -6,13 +6,13 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 17:15:28 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 16:44:05 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/21 17:37:02 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-static void	ft_get_meta_str(t_lexer *lexer, t_env_root *env, char **rtn_str);
+static void	ft_merge_arg(t_lexer *lexer);
 
 t_token	*ft_create_token_type_metachar(t_lexer *lexer)
 {
@@ -41,42 +41,38 @@ t_token	*ft_create_token_type_metachar(t_lexer *lexer)
 	return (ft_init_token(NULL, token_type));
 }
 
-t_token	*ft_create_token_type_argument(t_lexer *lexer, t_env_root *env)
+t_token	*ft_create_token_type_argument(t_lexer *lexer)
 {
-	char	*s_pos;
-	char	*pa_str;
-	char	quote;
-
-	pa_str = 0;
 	while (ft_cur_char(lexer) != '\0')
 	{
-		s_pos = ft_cur_ptr(lexer);
+		ft_set_spos(lexer);
 		while (ft_strchr(M_SEP, ft_cur_char(lexer)) == NULL)
 			ft_read_lexer(lexer);
-		ft_save_str(lexer, &pa_str, s_pos);
-		ft_get_meta_str(lexer, env, &pa_str);
+		ft_save_str(lexer);
+		ft_merge_arg(lexer);
 		if (ft_strchr_except_null(M_SPACE, ft_cur_char(lexer)) != NULL
 			|| ft_strchr_except_null(M_META, ft_cur_char(lexer)) != NULL)
 			break ;
 	}
-	if (pa_str == NULL)
+	if (lexer->pa_str == NULL)
 		return (NULL);
-	return (ft_init_token(pa_str, ARGUMENT));
+	return (ft_init_token(lexer->pa_str, ARGUMENT));
 }
 
-static void	ft_get_meta_str(t_lexer *lexer, t_env_root *env, char **pa_str)
+static void	ft_merge_arg(t_lexer *lexer)
 {
+	char	quote;
+
 	if (ft_strchr_except_null(M_QUOTE, ft_cur_char(lexer)) != NULL)
-		ft_merge_quote(lexer, pa_str, env, ft_read_lexer(lexer));
-	else if (ft_cur_char(lexer) == M_HOME)
-		ft_merge_home(lexer, pa_str, env);
-	else if (ft_cur_char(lexer) == M_ENV)
-		ft_merge_env(lexer, pa_str, env);
-	else if (ft_cur_char(lexer) == M_BSLASH)
 	{
+		quote = ft_cur_char(lexer);
 		ft_read_lexer(lexer);
-		*pa_str = ft_merge_str(*pa_str, \
-				ft_strndup(ft_cur_ptr(lexer), 1));
-		ft_read_lexer(lexer);
+		ft_merge_quote(lexer, quote);
 	}
+	else if (ft_cur_char(lexer) == M_HOME)
+		ft_merge_home(lexer);
+	else if (ft_cur_char(lexer) == M_ENV)
+		ft_merge_env(lexer);
+	else if (ft_cur_char(lexer) == M_BSLASH)
+		ft_merge_bslash(lexer);
 }

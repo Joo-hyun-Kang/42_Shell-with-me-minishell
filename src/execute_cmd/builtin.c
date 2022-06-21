@@ -103,6 +103,7 @@ void	ft_execute_echo(t_argument *argument, int is_parent)
 	while (argument->pa_argument[i] != NULL)
 	{
 		ft_putstr_fd(argument->pa_argument[i], STDOUT_FILENO);
+		// 마지막 매개변수가 아닌 한 ' ' 출력
 		if (i != len - 1)
 			ft_putchar_fd(' ', STDOUT_FILENO);
 		i++;

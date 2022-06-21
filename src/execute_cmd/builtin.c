@@ -89,8 +89,10 @@ void	ft_execute_echo(t_argument *argument, int is_parent)
 	char	*p;
 	int		i;
 	int		is_newline;
+	int		len;
 
 	is_newline = true;
+	len = ft_get_length_2d_arr(argument->pa_argument);
 	i = COMMAND_ARG_POSITION;
 	if (argument->pa_argument[i] != NULL && \
 	ft_strcmp(argument->pa_argument[COMMAND_ARG_POSITION], "-n") == 0)
@@ -101,7 +103,8 @@ void	ft_execute_echo(t_argument *argument, int is_parent)
 	while (argument->pa_argument[i] != NULL)
 	{
 		ft_putstr_fd(argument->pa_argument[i], STDOUT_FILENO);
-		ft_putchar_fd(' ', STDOUT_FILENO);
+		if (i != len - 1)
+			ft_putchar_fd(' ', STDOUT_FILENO);
 		i++;
 	}
 	if (is_newline)

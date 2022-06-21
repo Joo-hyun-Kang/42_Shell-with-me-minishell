@@ -72,9 +72,7 @@ void	ft_execute_mult_cmd(t_argument **arg)
 	close(pa_pipes->pipe2[PIPE_WRITE]);
 	close(pa_pipes->pipe2[PIPE_READ]);
 	
-	while (wait(NULL) != -1)
-	{
-	}
+
 	
 	//free(pipes)
 }

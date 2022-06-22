@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 20:59:14 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 00:44:14 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,12 @@
 # include <stdbool.h>
 # include <termios.h>
 
-# define M_META		"|;><"
+# define M_META		"|><"
 # define M_SPACE	" \r\v\f\t"
 # define M_QUOTE	"\"'"
 # define M_ENV		'$'
 # define M_HOME		'~'
-# define M_BSLASH	'\\'
-# define M_SEP		"|;>< \r\v\f\t\"'$~\\"
+# define M_SEP		"|>< \r\v\f\t\"'$~"
 
 # define F_HEREDOC	"doc.here"
 # define ADD_TMP	"add.tmp"
@@ -132,7 +131,6 @@ void		ft_merge_quote(t_lexer *lexer, char quote);
 
 /* src/parser/tokenizer/tokenizer_merge_utils.c */
 void		ft_merge_home(t_lexer *lexer);
-void		ft_merge_bslash(t_lexer *lexer);
 void		ft_save_str(t_lexer *lexer);
 
 /* src/parser/tokenizer/tokenizer_common_utils.c */

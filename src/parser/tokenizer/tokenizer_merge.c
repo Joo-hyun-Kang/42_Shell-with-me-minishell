@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 15:51:20 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 17:45:35 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 00:40:48 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,34 +58,8 @@ void	ft_merge_quote(t_lexer *lexer, char quote)
 			ft_merge_env(lexer);
 			ft_set_spos(lexer);
 		}
-		else if (ft_cur_char(lexer) == M_BSLASH)
-		{
-			ft_merge_bslash(lexer);
-			ft_set_spos(lexer);
-		}
 		else
 			ft_read_lexer(lexer);
 	}
-	ft_save_str(lexer);
-	lexer->pa_str = ft_merge_str(lexer->pa_str, ft_strdup("\n"));
-	ft_no_quote(lexer, quote);
-}
-
-static void	ft_no_quote(t_lexer *lexer, char quote)
-{
-	char	*read_line;
-	char	*tmp;
-
-	read_line = readline("> ");
-	if (read_line == NULL)
-	{
-		printf("minishell: unexpected EOF while looking for matching\
-`%c'\nminishell: syntax error: unexpected end of file\n", quote);
-		g_exit = 258;
-		return ;
-	}
-	tmp = ft_strjoin(lexer->cmd_str, read_line);
-	free(read_line);
-	ft_replace_lexer_cmd_str(lexer, tmp);
-	ft_merge_quote(lexer, quote);
+	printf("Unclosed Quote\n");
 }

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 17:15:28 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 17:37:02 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 00:39:47 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ t_token	*ft_create_token_type_metachar(t_lexer *lexer)
 	enum e_token_type	token_type;
 
 	token_type = 0;
-	if (ft_cur_char(lexer) == ';')
-		token_type = SEMICOLON;
-	else if (ft_cur_char(lexer) == '|')
+	if (ft_cur_char(lexer) == '|')
 		token_type = PIPE;
 	else if (ft_cur_char(lexer) == '<')
 	{
@@ -73,6 +71,4 @@ static void	ft_merge_arg(t_lexer *lexer)
 		ft_merge_home(lexer);
 	else if (ft_cur_char(lexer) == M_ENV)
 		ft_merge_env(lexer);
-	else if (ft_cur_char(lexer) == M_BSLASH)
-		ft_merge_bslash(lexer);
 }

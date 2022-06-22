@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 02:01:16 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 05:21:59 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../library/libft/inc/libft.h"
+# include "../library/get_next_line/inc/get_next_line.h"
 # include <stdio.h>
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -27,8 +28,8 @@
 # define M_HOME		'~'
 # define M_SEP		"|>< \r\v\f\t\"'$~"
 
-# define F_HEREDOC	"doc.here"
-# define ADD_TMP	"add.tmp"
+# define F_HEREDOC	"heredoc.tmp"
+# define F_EXTRA	"extra.tmp"
 
 # define BANNER "\
                                                     \n\
@@ -56,7 +57,6 @@ int	g_exit;
 enum e_token_type {
 	ARGUMENT,
 	PIPE,					// |
-	SEMICOLON,				// ;
 	/* Redirections */
 	LT,						// >
 	DLT,					// >>
@@ -84,6 +84,7 @@ typedef struct s_lexer {
 	char		*pos;
 	t_env_root	*env;
 	char		*pa_str;
+	bool		err;
 }	t_lexer;
 
 typedef struct s_token {
@@ -109,14 +110,49 @@ typedef struct s_argument {
  * #########################################################
  */
 /* src/signal/signal.c */
-void		ft_set_signal(void);
+void		ft_sigint(int sig);
+void		ft_sigquit(int sig);
+void		ft_sig_get_extra_line(int sig);
 
 /*
  * #########################################################
  * #                                                       #
- * #                src/parser/tokenizer/                  #
+ * #                      src/parser/                      #
  * #                                                       #
  * #########################################################
+ */
+/* src/parser/parser.c */
+t_argument	*ft_parser(char *cmd_str, t_env_root *root_env);
+
+/* src/parser/parser_utils.c */
+t_argument	*ft_init_argument(t_token *cur_token, t_env_root *env);
+char		**ft_init_pa_argument(t_token *cur_token);
+void		ft_add_argument_back(t_argument **head, t_argument *arg);
+void		ft_free_argument(t_argument *arg);
+t_argument	*p_all_free(t_argument *head_arg, t_token *head_tok);
+
+/* src/parser/ft_merge_str.c */
+char		*ft_merge_str(char *s1, char *s2);
+
+/* src/parser/extra_pipe.c */
+t_token		*p_extra_pipe(t_token *cur_token, t_env_root *env);
+
+/* src/parser/heredoc.c */
+t_token		*p_heredoc(t_argument *arg, t_token *cur_token);
+
+/* src/parser/heredoc_utils.c */
+t_token		*p_heredoc_err(int status);
+void		p_heredoc_child(t_argument *arg, t_token *cur_token);
+char		*p_read_heredoc(char *heredoc);
+char		*p_env_heredoc(char *str, t_env_root *env);
+void		p_replace_env_heredoc(char **str, char **dst, t_env_root *env);
+
+/*
+ *         #########################################################
+ *         #                                                       #
+ *         #                src/parser/tokenizer/                  #
+ *         #                                                       #
+ *         #########################################################
  */
 /* src/parser/tokenizer/tokenizer.c */
 t_token		*ft_tokenizer(char *cmd_str, t_env_root *env);
@@ -127,7 +163,7 @@ void		tk_replace_home(t_lexer *lexer);
 void		tk_quote(t_lexer *lexer);
 
 /* src/parser/tokenizer/tokenizer_utils.c */
-t_token		*tk_init(char *str, enum e_token_type t_type);
+t_token		*tk_init(t_lexer *lexer, enum e_token_type t_type);
 void		tk_free(t_token *token);
 void		tk_add_back(t_token **head, t_token *new_token);
 
@@ -146,37 +182,6 @@ void		lx_set_pos(t_lexer *lexer);
 char		*lx_get_pos(t_lexer *lexer);
 t_env_root	*lx_env(t_lexer *lexer);
 void		lx_store_str(t_lexer *lexer);
-
-/*
- * #########################################################
- * #                                                       #
- * #                      src/parser/                      #
- * #                                                       #
- * #########################################################
- */
-/* src/parser/parser.c */
-void		ft_syntax_error(enum e_token_type token_type);
-t_token		*ft_read_token_end(t_token *cur_token, t_argument *arg);
-t_token		*ft_read_token_mid(t_token *cur_token, t_argument *arg, int idx);
-t_token		*ft_read_token_init(t_token *cur_token, t_argument *arg, int idx);
-t_argument	*ft_parser(char *cmd_str, t_env_root *root_env);
-
-/* src/parser/parser_free_utils.c */
-void		ft_free_argument(t_argument *arg);
-
-/* src/parser/parser_common_utils.c */
-t_argument	*ft_init_argument(t_token *cur_token, t_env_root *env);
-char		**ft_init_pa_argument(t_token *cur_token);
-void		ft_add_argument_back(t_argument **head, t_argument *arg);
-
-/* src/parser/parser_add_pipe.c */
-t_token		*ft_add_pipe(t_token *cur_token, t_env_root *env);
-
-/* src/parser/parser_heredoc.c */
-t_token		*ft_heredoc(t_argument *arg, t_token *cur_token);
-
-/* src/parser/ft_merge_str.c */
-char		*ft_merge_str(char *s1, char *s2);
 
 /*
  * #########################################################
@@ -203,5 +208,17 @@ t_env		*ft_env_search(t_env_root *root, char *key);
 
 /* src/environment/environment_bst/env_bst_delete.c */
 void		ft_env_delete(t_env_root *root, char *key);
+
+/*
+ * #########################################################
+ * #                                                       #
+ * #                      src/prompt/                      #
+ * #                                                       #
+ * #########################################################
+ */
+/* src/prompt/echo.c */
+void		ft_set_echo(void);
+void		ft_set_noecho(void);
+void		ft_exit(void);
 
 #endif

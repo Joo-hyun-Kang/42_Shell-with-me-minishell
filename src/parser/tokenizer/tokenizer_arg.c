@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 15:51:20 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 01:59:11 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 05:23:17 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	tk_replace_env(t_lexer *lexer)
 {
-	char	*value;
 	t_env	*node;
 
 	lx_read(lexer);
@@ -25,7 +24,8 @@ void	tk_replace_env(t_lexer *lexer)
 		return ;
 	}
 	lx_set_pos(lexer);
-	while (lx_chr(lexer) != '\0' && lx_chr(lexer) != '='
+	while (lx_chr(lexer) != '\0'
+		&& lx_chr(lexer) != '=' && lx_chr(lexer) != '\n'
 		&& ft_strchr(M_SEP, lx_chr(lexer)) == NULL)
 		lx_read(lexer);
 	if ((lx_ptr(lexer) - lx_get_pos(lexer)) > 0)
@@ -68,7 +68,8 @@ void	tk_quote(t_lexer *lexer)
 		if (lx_chr(lexer) == quote)
 		{
 			lx_store_str(lexer);
-			return (lx_read(lexer));
+			lx_read(lexer);
+			return ;
 		}
 		else if (quote == '"' && lx_chr(lexer) == M_ENV)
 		{
@@ -79,4 +80,6 @@ void	tk_quote(t_lexer *lexer)
 		else
 			lx_read(lexer);
 	}
+	lexer->err = true;
+	printf("minishell: syntax error: unclosed quote\n");
 }

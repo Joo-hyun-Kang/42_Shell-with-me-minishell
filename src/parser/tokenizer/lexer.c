@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 23:03:18 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 01:45:10 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 04:28:32 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ t_lexer	*lx_init(char *cmd_str, t_env_root *env)
 
 void	lx_free(t_lexer *lexer)
 {
+	if (lexer->pa_str != NULL)
+		free(lexer->pa_str);
 	free(lexer->cmd_str);
 	free(lexer);
 }

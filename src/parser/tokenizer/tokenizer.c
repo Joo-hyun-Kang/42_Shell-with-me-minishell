@@ -6,12 +6,14 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/02 20:30:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 01:59:21 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 04:54:32 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
+static t_token	*tk_err(t_lexer *lexer, t_token *head);
+static void		tk_create_tok(t_lexer *lexer, t_token **head);
 static t_token	*tk_create_arg(t_lexer *lexer);
 static t_token	*tk_create_meta(t_lexer *lexer);
 
@@ -19,7 +21,6 @@ t_token	*ft_tokenizer(char *cmd_str, t_env_root *env)
 {
 	t_lexer	*lexer;
 	t_token	*head;
-	t_token	*new_token;
 
 	head = 0;
 	lexer = lx_init(cmd_str, env);
@@ -31,17 +32,33 @@ t_token	*ft_tokenizer(char *cmd_str, t_env_root *env)
 			lx_read(lexer);
 		if (lx_chr(lexer) != '\0')
 		{
-			if (ft_strchr(M_META, lx_chr(lexer)) != NULL)
-				new_token = tk_create_meta(lexer);
-			else
-				new_token = tk_create_arg(lexer);
-			if (new_token != NULL)
-				tk_add_back(&head, new_token);
+			tk_create_tok(lexer, &head);
+			if (lexer->err == true)
+				return (tk_err(lexer, head));
 		}
 	}
 	tk_add_back(&head, tk_init(NULL, EOL));
 	lx_free(lexer);
 	return (head);
+}
+
+static t_token	*tk_err(t_lexer *lexer, t_token *head)
+{
+	lx_free(lexer);
+	tk_free(head);
+	return (NULL);
+}
+
+static void	tk_create_tok(t_lexer *lexer, t_token **head)
+{
+	t_token	*new_tok;
+
+	if (ft_strchr(M_META, lx_chr(lexer)) != NULL)
+		new_tok = tk_create_meta(lexer);
+	else
+		new_tok = tk_create_arg(lexer);
+	if (new_tok != NULL)
+		tk_add_back(head, new_tok);
 }
 
 static t_token	*tk_create_meta(t_lexer *lexer)
@@ -83,12 +100,12 @@ static t_token	*tk_create_arg(t_lexer *lexer)
 			tk_replace_home(lexer);
 		else if (lx_chr(lexer) == M_ENV)
 			tk_replace_env(lexer);
-		if (lx_chr(lexer) != '\0'
-				&& ft_strchr(M_SPACE, lx_chr(lexer)) != NULL
+		if (lexer->err == true
+			|| ft_strchr(M_SPACE, lx_chr(lexer)) != NULL
 			|| ft_strchr(M_META, lx_chr(lexer)) != NULL)
 			break ;
 	}
-	if (lexer->pa_str == NULL)
+	if (lexer->pa_str == NULL || lexer->err == true)
 		return (NULL);
-	return (tk_init(lexer->pa_str, ARGUMENT));
+	return (tk_init(lexer, ARGUMENT));
 }

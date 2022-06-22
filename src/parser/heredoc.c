@@ -1,34 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_free_utils.c                                :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/12 04:34:39 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 17:50:08 by kanghyki         ###   ########.fr       */
+/*   Created: 2022/06/22 17:27:21 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/23 04:46:41 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_free_argument(t_argument *arg)
+t_token	*p_heredoc(t_argument *arg, t_token *cur_tok)
 {
-	t_argument	*prev;
-	int			i;
+	int		pid;
+	int		status;
 
-	prev = arg;
-	while (arg != NULL)
-	{
-		i = 0;
-		while (arg->pa_argument[i] != NULL)
-		{
-			free(arg->pa_argument[i]);
-			++i;
-		}
-		free(arg->pa_argument);
-		arg = arg->next;
-		free(prev);
-		prev = arg;
-	}
+	pid = fork();
+	signal(SIGQUIT, SIG_IGN);
+	if (pid == 0)
+		p_heredoc_child(arg, cur_tok);
+	wait(&status);
+	if (status != 0)
+		p_heredoc_err(status);
+	arg->next_token_type = GT;
+	free(cur_tok->pa_str);
+	cur_tok->pa_str = ft_strdup(F_HEREDOC);
+	signal(SIGINT, ft_sigint);
+	signal(SIGQUIT, ft_sigquit);
+	return (cur_tok);
 }

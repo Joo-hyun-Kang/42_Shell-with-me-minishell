@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 17:27:21 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 21:00:30 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 00:18:53 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,15 @@ t_token	*ft_heredoc(t_argument *arg, t_token *cur_token)
 	if (pid == 0)
 		ft_heredoc_child(arg, cur_token);
 	wait(&status);
-	if (status == 256)
+	if ((status / 256) == 3)
 	{
+		printf("Can't open file!\n");
+		return (NULL);
+	}
+	if (status != 0)
+	{
+		if ((status / 256) == 1)
+			g_exit = 1;
 		unlink("doc.here");
 		return (NULL);
 	}
@@ -54,10 +61,10 @@ static void	ft_heredoc_child(t_argument *arg, t_token *cur_token)
 	fd = open(F_HEREDOC, (O_CREAT | O_TRUNC | O_RDWR), 0666);
 	// TODO:예외처리 추가
 	if (fd < 0)
-		exit(2);
+		exit(3);
 	pa_heredoc = ft_get_heredoc(cur_token->pa_str);
 	if (pa_heredoc == NULL)
-		exit(1);
+		exit(2);
 	free(cur_token->pa_str);
 	pa_env_heredoc = ft_env_heredoc(pa_heredoc, arg->env);
 	ft_putstr_fd(pa_env_heredoc, fd);

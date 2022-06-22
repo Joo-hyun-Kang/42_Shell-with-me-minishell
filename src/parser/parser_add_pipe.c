@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 00:12:07 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 00:15:18 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_token	*ft_add_pipe(t_token *cur_token, t_env_root *env)
 	wait(&status);
 	if ((status / 256) == 1)
 	{
-		g_exit = status % 256;
+		g_exit = 1;
 		unlink(ADD_TMP);
 		return (NULL);
 	}

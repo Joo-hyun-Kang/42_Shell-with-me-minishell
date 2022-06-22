@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 21:18:53 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/22 17:29:06 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_token	*ft_read_token_end(t_token *cur_token, t_argument *arg)
 	if (cur_token->token_type == PIPE)
 	{
 		if (cur_token->next->token_type == EOL)
-			return (ft_additional_pipe(cur_token, arg->env));
+			return (ft_add_pipe(cur_token, arg->env));
 		else
 			return (cur_token->next);
 	}

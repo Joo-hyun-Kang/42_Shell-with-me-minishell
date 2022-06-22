@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 17:03:37 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/22 20:02:12 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,16 @@ void	ft_exit(void)
 	exit(g_exit);
 }
 
-void	ft_init_minishell(void)
-{
-	g_exit = 0;
-	ft_set_signal();
-	ft_set_noecho();
-	printf("%s", BANNER);
-}
-
 int main(int argc, char **argv, char **env)
 {
 	char       		*str;
 	t_argument		*arg;
 	t_env_root		*root_env;
 
-	ft_init_minishell();
+	g_exit = 0;
+	ft_set_signal();
+	ft_set_noecho();
+	printf("%s", BANNER);
 	root_env = ft_dpenv_to_bstenv(env);
 	str = readline(READLINE);
 	while (str != NULL)
@@ -85,6 +80,7 @@ int main(int argc, char **argv, char **env)
 //		system("leaks minishell");
 		}
 		ft_set_noecho();
+		ft_set_signal();
 		str = readline(READLINE);
 	}
 	ft_exit();

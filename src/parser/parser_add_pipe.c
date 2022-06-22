@@ -1,34 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_free_utils.c                                :+:      :+:    :+:   */
+/*   parser_add_pipe.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/12 04:34:39 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 17:50:08 by kanghyki         ###   ########.fr       */
+/*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/22 20:58:15 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_free_argument(t_argument *arg)
+t_token	*ft_add_pipe(t_token *cur_token, t_env_root *env)
 {
-	t_argument	*prev;
-	int			i;
+	char	*read_line;
+	t_token	*add;
 
-	prev = arg;
-	while (arg != NULL)
+	read_line = readline("> ");
+	if (read_line == NULL)
 	{
-		i = 0;
-		while (arg->pa_argument[i] != NULL)
-		{
-			free(arg->pa_argument[i]);
-			++i;
-		}
-		free(arg->pa_argument);
-		arg = arg->next;
-		free(prev);
-		prev = arg;
+		printf("minishell: syntax error: unexpected end of file\n");
+		g_exit = 258;
+		return (NULL);
 	}
+	add = ft_tokenizer(read_line, env);
+	cur_token->next = add;
+	return (cur_token->next);
 }

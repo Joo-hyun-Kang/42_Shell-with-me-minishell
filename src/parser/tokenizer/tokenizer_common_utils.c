@@ -1,27 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
+/*   tokenizer_common_utils.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:03:15 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 17:41:00 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/22 17:50:14 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
-
-char	*ft_strchr_except_null(const char *str, int c)
-{
-	while (*str != '\0')
-	{
-		if (*str == (char)c)
-			return ((char *)str);
-		++str;
-	}
-	return (NULL);
-}
 
 t_token	*ft_init_token(char *str, enum e_token_type t_type)
 {
@@ -34,6 +23,19 @@ t_token	*ft_init_token(char *str, enum e_token_type t_type)
 	new_token->pa_str = str;
 	new_token->token_type = t_type;
 	return (new_token);
+}
+
+void	ft_free_token(t_token *token)
+{
+	t_token	*prev;
+
+	prev = token;
+	while (token != NULL)
+	{
+		token = token->next;
+		free(prev);
+		prev = token;
+	}
 }
 
 void	ft_add_token_back(t_token **head, t_token *new_token)

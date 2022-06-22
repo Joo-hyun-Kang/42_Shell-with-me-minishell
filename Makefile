@@ -6,7 +6,7 @@
 #    By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/21 17:18:11 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/22 17:35:21 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,18 +26,20 @@ SIG_SRC			=	signal.c
 #--------------[ TOKENIZER ]-----------------
 TOKEN_DIR		=	src/parser/tokenizer
 TOKEN_SRC		=	tokenizer.c\
+					tokenizer_common_utils.c\
 					tokenizer_core.c\
-					tokenizer_utils.c\
 					tokenizer_merge.c\
 					tokenizer_merge_utils.c\
 					lexer.c\
-					lexer_utils.c
+					lexer_utils.c\
+					ft_strchr_except_null.c
 #--------------[ PARSER ]----------------
 PARSER_DIR		=	src/parser
 PARSER_SRC		=	parser.c\
-					parser_utils.c\
+					parser_common_utils.c\
 					parser_free_utils.c\
-					parser_additional.c\
+					parser_add_pipe.c\
+					parser_heredoc.c\
 					ft_merge_str.c
 #--------------[ ENV ]----------------
 ENV_DIR			=	src/environment

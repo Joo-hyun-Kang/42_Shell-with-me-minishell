@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 15:51:20 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 01:36:15 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/22 17:45:35 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static void	ft_no_quote(t_lexer *lexer, char quote)
 	if (read_line == NULL)
 	{
 		printf("minishell: unexpected EOF while looking for matching\
-				`\"'\nminishell: syntax error: unexpected end of file\n");
+`%c'\nminishell: syntax error: unexpected end of file\n", quote);
 		g_exit = 258;
 		return ;
 	}

@@ -1,57 +1,70 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_additional.c                                :+:      :+:    :+:   */
+/*   parser_heredoc.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 01:35:53 by kanghyki         ###   ########.fr       */
+/*   Created: 2022/06/22 17:27:21 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/22 20:56:36 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+static void	ft_heredoc_child(t_argument *arg, t_token *cur_token);
 static char	*ft_get_heredoc(char *heredoc);
 static char	*ft_env_heredoc(char *str, t_env_root *env);
 static void	ft_replace_env_heredoc(char **str, char **dst, t_env_root *env);
 
-t_token	*ft_additional_pipe(t_token *cur_token, t_env_root *env)
+void	signal_heredoc(int sig)
 {
-	char	*read_line;
-	t_token	*add;
-
-	read_line = readline("> ");
-	if (read_line == NULL)
-	{
-		printf("minishell: syntax error: unexpected end of file\n");
-		g_exit = 258;
-		return (NULL);
-	}
-	add = ft_tokenizer(read_line, env);
-	cur_token->next = add;
-	return (cur_token->next);
+	(void)sig;
+	exit(1);
 }
 
 t_token	*ft_heredoc(t_argument *arg, t_token *cur_token)
+{
+	int		pid;
+	int		status;
+
+	pid = fork();
+	signal(SIGQUIT, SIG_IGN);
+	if (pid == 0)
+		ft_heredoc_child(arg, cur_token);
+	wait(&status);
+	if (status == 256)
+	{
+		unlink("doc.here");
+		return (NULL);
+	}
+	else if (status == 512)
+		printf("Can't open!\n");
+	arg->next_token_type = GT;
+	cur_token->pa_str = ft_strdup(F_HEREDOC);
+	return (cur_token);
+}
+
+static void	ft_heredoc_child(t_argument *arg, t_token *cur_token)
 {
 	char	*pa_heredoc;
 	char	*pa_env_heredoc;
 	int		fd;
 
+	signal(SIGINT, signal_heredoc);
 	fd = open("doc.here", (O_CREAT | O_TRUNC | O_RDWR), 0666);
 	if (fd < 0)
-		return (NULL);
-	arg->next_token_type = GT;
+		exit(2);
 	pa_heredoc = ft_get_heredoc(cur_token->pa_str);
+	if (pa_heredoc == NULL)
+		exit(1);
 	free(cur_token->pa_str);
 	pa_env_heredoc = ft_env_heredoc(pa_heredoc, arg->env);
 	ft_putstr_fd(pa_env_heredoc, fd);
 	close(fd);
 	free(pa_heredoc);
 	free(pa_env_heredoc);
-	cur_token->pa_str = ft_strdup(F_HEREDOC);
-	return (cur_token);
+	exit(0);
 }
 
 static char	*ft_get_heredoc(char *heredoc)
@@ -66,9 +79,16 @@ static char	*ft_get_heredoc(char *heredoc)
 		pa_str = ft_merge_str(pa_str, read_line);
 		pa_str = ft_merge_str(pa_str, ft_strdup("\n"));
 		read_line = readline("> ");
+		if (g_exit == 1)
+			return NULL;
 	}
 	if (read_line != NULL)
 		free(read_line);
+	else
+	{
+		free(pa_str);
+		pa_str = 0;
+	}
 	return (pa_str);
 }
 

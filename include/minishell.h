@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 17:04:23 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/22 17:50:45 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,9 +134,9 @@ void		ft_merge_home(t_lexer *lexer);
 void		ft_merge_bslash(t_lexer *lexer);
 void		ft_save_str(t_lexer *lexer);
 
-/* src/parser/tokenizer/tokenizer_utils.c */
-char		*ft_strchr_except_null(const char *str, int c);
+/* src/parser/tokenizer/tokenizer_common_utils.c */
 t_token		*ft_init_token(char *str, enum e_token_type t_type);
+void		ft_free_token(t_token *token);
 void		ft_add_token_back(t_token **head, t_token *new_token);
 
 /* src/parser/tokenizer/lexer.c */
@@ -153,6 +153,9 @@ char		*ft_cur_ptr(t_lexer *lexer);
 char		ft_next_char(t_lexer *lexer);
 void		ft_replace_lexer_cmd_str(t_lexer *lexer, char *new_cmd_str);
 
+/* src/parser/tokenizer/ft_strchr_except_null.c */
+char		*ft_strchr_except_null(const char *str, int c);
+
 /*
  * #########################################################
  * #                                                       #
@@ -168,16 +171,17 @@ t_token		*ft_read_token_init(t_token *cur_token, t_argument *arg, int idx);
 t_argument	*ft_parser(char *cmd_str, t_env_root *root_env);
 
 /* src/parser/parser_free_utils.c */
-void		ft_free_token(t_token *token);
 void		ft_free_argument(t_argument *arg);
 
-/* src/parser/parser_utils.c */
+/* src/parser/parser_common_utils.c */
 t_argument	*ft_init_argument(t_token *cur_token, t_env_root *env);
 char		**ft_init_pa_argument(t_token *cur_token);
 void		ft_add_argument_back(t_argument **head, t_argument *arg);
 
-/* src/parser/parser_additional.c */
-t_token		*ft_additional_pipe(t_token *cur_token, t_env_root *env);
+/* src/parser/parser_add_pipe.c */
+t_token		*ft_add_pipe(t_token *cur_token, t_env_root *env);
+
+/* src/parser/parser_heredoc.c */
 t_token		*ft_heredoc(t_argument *arg, t_token *cur_token);
 
 /* src/parser/ft_merge_str.c */

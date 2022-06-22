@@ -1,34 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_free_utils.c                                :+:      :+:    :+:   */
+/*   ft_strchr_except_null.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/12 04:34:39 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 17:50:08 by kanghyki         ###   ########.fr       */
+/*   Created: 2022/06/22 17:34:32 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/22 17:34:41 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/minishell.h"
+#include "../../../include/minishell.h"
 
-void	ft_free_argument(t_argument *arg)
+char	*ft_strchr_except_null(const char *str, int c)
 {
-	t_argument	*prev;
-	int			i;
-
-	prev = arg;
-	while (arg != NULL)
+	while (*str != '\0')
 	{
-		i = 0;
-		while (arg->pa_argument[i] != NULL)
-		{
-			free(arg->pa_argument[i]);
-			++i;
-		}
-		free(arg->pa_argument);
-		arg = arg->next;
-		free(prev);
-		prev = arg;
+		if (*str == (char)c)
+			return ((char *)str);
+		++str;
 	}
+	return (NULL);
 }
+

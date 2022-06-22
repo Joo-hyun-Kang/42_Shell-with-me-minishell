@@ -18,6 +18,7 @@ void	ft_fork_execute(t_argument *argument)
 		ft_print_error();
 	if (pid == 0)
 		ft_execute(argument, false);
+	wait(NULL);
 }
 
 void	ft_execute_single_cmd(t_argument **arg)
@@ -32,17 +33,16 @@ void	ft_execute_single_cmd(t_argument **arg)
 }
 
 
-
 void	ft_execute_mult_cmd(t_argument **arg)
 {
 	t_pipes				*pa_pipes;
 	enum e_token_type	token;
 	int	state;
 	int	ret;
+	int			status;
 
-	
 	pa_pipes = (t_pipes *)malloc(sizeof(t_pipes));
-	ret = ft_construt_pipes(pa_pipes);
+	ret = ft_construt_pipes(*arg, pa_pipes);
 	// 요거 실패했을 떄 처리 따로 할 것
 	if (ret == false)
 		return ;
@@ -66,15 +66,22 @@ void	ft_execute_mult_cmd(t_argument **arg)
 		}
 	}
 
-	
-	close(pa_pipes->pipe1[PIPE_WRITE]);
-	close(pa_pipes->pipe1[PIPE_READ]);
-	close(pa_pipes->pipe2[PIPE_WRITE]);
-	close(pa_pipes->pipe2[PIPE_READ]);
-	
 
-	
-	//free(pipes)
+	int i = 0;
+	while (i < pa_pipes->pipe_count)
+	{
+		close(pa_pipes->array[i][PIPE_READ]);
+		close(pa_pipes->array[i][PIPE_WRITE]);
+		i++;
+	}
+
+	while (wait(NULL) != -1)
+	{
+	}
+
+	printf("IH\n");
+
+	// //free(pa_pipes)--> 2차원
 }
 
 void	ft_system(t_argument *argument)
@@ -87,7 +94,6 @@ void	ft_system(t_argument *argument)
 		else
 			ft_execute_mult_cmd(&argument);
 	}
-	while (wait(NULL) != -1);
 }
 
 int		ft_execute_path(t_argument *arg)
@@ -101,7 +107,10 @@ int		ft_execute_nopath(t_argument *arg, char *pa_path)
 	char *pa_orgin_command = ft_strdup(arg->pa_argument[COMMAND_POSITION]);
 	free(arg->pa_argument[COMMAND_POSITION]);
 	arg->pa_argument[COMMAND_POSITION] = pa_path;
+
 	g_exit = execve(pa_path, arg->pa_argument, NULL);
+	//exit(1);
+	printf("failed my pid %d\n", getpid());
 	return 0;
 }
 

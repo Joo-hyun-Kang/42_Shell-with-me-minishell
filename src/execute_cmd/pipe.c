@@ -3,34 +3,18 @@
 void	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 {
 	if (state == INIT)
-	{
 		state = PIPE_START;
-		pipes->out_copy = pipes->pipe1[PIPE_READ];
-		pipes->out_copy_state = PIPE1_READ;
-	}
 	else if (state == PIPE_START)
-	{
 		state = PIPE_MIDDLE;
-		pipes->out_copy = pipes->pipe2[PIPE_READ];
-		pipes->out_copy_state = PIPE2_READ;
-	}
-	else if (state == PIPE_MIDDLE)
-	{
-		if (pipes->out_copy_state == PIPE1_READ)
-		{
-			pipes->out_copy = pipes->pipe2[PIPE_READ];
-			pipes->out_copy_state = PIPE2_READ;
-		}
-		else
-		{
-			pipes->out_copy = pipes->pipe1[PIPE_READ];
-			pipes->out_copy_state = PIPE1_READ;
-		}
-	}
 	else if (state == END)
 		state = PIPE_END;
 
-	pid_t pid;
+	pid_t	pid;
+	int		status;
+
+	// if (pipes->current_idx % 2 == 0)
+	// 	pipe(pipes->array[pipes->current_idx]);
+
 	pid = fork();
 	if (pid == -1)
 	{
@@ -39,10 +23,19 @@ void	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 	}
 	else if (pid == 0)
 	{
+		sleep(1);
 		ft_set_pipe(pipes, state);
 		ft_execute(*arg, false);
 	}
+	// ls | sort | sort | sort
+	//    0
 
+	// if (pipes->current_idx > 1 && pipes->current_idx % 2 == 1)
+	// {
+		
+	// }
+
+	pipes->current_idx++;
 	*arg = (*arg)->next;
 	if (*arg == NULL)
 		return ;
@@ -62,68 +55,87 @@ void	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 	{
 		ft_execute_redir(arg, state, pipes);
 	}
+
+
+	//free(pipes)
 }
 
-int	ft_construt_pipes(t_pipes *pipes)
+int	ft_construt_pipes(t_argument *arg, t_pipes *pipes)
 {
-	int ret1;
-	int ret2;
+	t_argument	*p;
+	t_pipes		*temp;
+	int			pipe_count;
+	int			i;
+	int			ret;
 
-	ret1 = pipe(pipes->pipe1);
-	ret2 = pipe(pipes->pipe2);
-	pipes->out_copy = pipes->pipe1[PIPE_READ];
-	pipes->out_copy_state = PIPE1_READ;
-
-	if (ret1 < -1 || ret2 < -1)
+	p = arg;
+	pipe_count = 0;
+	while (p != NULL)
 	{
-		printf("minishell: %s\n", strerror(errno));
-		return (false);
+		if (p->next_token_type == PIPE)
+		{
+			pipe_count++;
+		}
+		p = p->next;
 	}
-	
+
+	pipes->array = (int **)malloc(sizeof(int) * pipe_count);
+	pipes->pipe_count = pipe_count;
+	pipes->current_idx = 0;
+	i = 0;
+	while (i < pipe_count)
+	{
+		pipes->array[i] = (int *)malloc(sizeof(int) * PIPE_COUNT);
+		ret = pipe(pipes->array[i]);
+		if (ret < -1)
+			return (false);
+		i++;
+	}
 	return (true);
 }
 
 void	ft_set_pipe(t_pipes *pipes, int state)
 {
+	int	*cur_pipe;
+	int *pre_pipe;
+	int	i;
+
+	cur_pipe = pipes->array[pipes->current_idx];
 	if (state == PIPE_START)
 	{
 		//FD1 : STDOUT -> PIPE OUT
 		// 파이프 실패 예외처리 해줄것
-		close(pipes->pipe2[PIPE_WRITE]);
-		close(pipes->pipe2[PIPE_READ]);
-
-		dup2(pipes->pipe1[PIPE_WRITE], STDOUT_FILENO);
-		close(pipes->pipe1[PIPE_WRITE]);
-		close(pipes->pipe1[PIPE_READ]);
+		dup2(cur_pipe[PIPE_WRITE], STDOUT_FILENO);
+		//close(cur_pipe[PIPE_WRITE]);
+		//close(cur_pipe[PIPE_READ]);
 	}
 	else if (state == PIPE_MIDDLE)
 	{
-		char *str;
-		if (pipes->out_copy_state == PIPE2_READ)
-			str = "PIPE2";
-		else
-			str = "PIPE1";
-		printf("%s\n", str);
-
+		pre_pipe = pipes->array[pipes->current_idx - 1];
 		// 파이프 실패 예외처리 해줄것
-		dup2(pipes->pipe2[PIPE_WRITE], STDOUT_FILENO);
-		close(pipes->pipe2[PIPE_WRITE]);
-		close(pipes->pipe2[PIPE_READ]);
+		dup2(pre_pipe[PIPE_READ], STDIN_FILENO);
+		//close(pre_pipe[PIPE_READ]);
+		//close(pre_pipe[PIPE_WRITE]);
+		
 		// 파이프 실패 예외처리 해줄것
-		dup2(pipes->pipe1[PIPE_READ], STDIN_FILENO);
-		close(pipes->pipe1[PIPE_READ]);
-		close(pipes->pipe1[PIPE_WRITE]);
+		dup2(cur_pipe[PIPE_WRITE], STDOUT_FILENO);
+		//close(cur_pipe[PIPE_WRITE]);
+		//close(cur_pipe[PIPE_READ]);
 	}
 	else if (state == PIPE_END)
 	{
-		close(pipes->pipe1[PIPE_WRITE]);
-		close(pipes->pipe2[PIPE_WRITE]);
-
+		pre_pipe = pipes->array[pipes->current_idx - 1];
 		// 파이프 실패 예외처리 해줄것
-		dup2(pipes->out_copy, STDIN_FILENO);
-		close(pipes->out_copy);
+		dup2(pre_pipe[PIPE_READ], STDIN_FILENO);
+		//close(pre_pipe[PIPE_READ]);
+		//close(pre_pipe[PIPE_WRITE]);
+	}
 
-		close(pipes->pipe2[PIPE_READ]);
-		close(pipes->pipe1[PIPE_READ]);
+	i = 0;
+	while (i < pipes->pipe_count)
+	{
+		close(pipes->array[i][PIPE_READ]);
+		close(pipes->array[i][PIPE_WRITE]);
+		i++;
 	}
 }

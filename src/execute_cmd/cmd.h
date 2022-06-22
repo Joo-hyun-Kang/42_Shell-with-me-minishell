@@ -37,10 +37,9 @@
 // out_copy는 마지막 파이프의 READ fd값을 가짐
 // 짝수일 때는 pipe1의 READ를 홀수일 때는 pipe2의 READ를 가짐
 typedef struct pipes {
-	int	pipe1[PIPE_COUNT];
-	int	pipe2[PIPE_COUNT];
-    int out_copy;
-    int out_copy_state;
+	int			**array;
+	size_t		pipe_count;
+	size_t		current_idx;
 } t_pipes;
 
 enum e_builtin_type {
@@ -111,7 +110,7 @@ void				ft_execute_unset(t_argument *arg, int is_parent);
 /* src/execute_cmd/pipe.c */
 
 void		ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes);
-int			ft_construt_pipes(t_pipes *pipes);
+int			ft_construt_pipes(t_argument *arg, t_pipes *pipes);
 void		ft_set_pipe(t_pipes *pipes, int state);
 
 /* src/execute_cmd/redir.c */

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 15:51:20 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 21:41:44 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/22 01:36:15 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,9 @@ void	ft_merge_env(t_lexer *lexer)
 	t_env	*node;
 
 	ft_read_lexer(lexer);
-	if (ft_cur_char(lexer) == '?' || ft_isdigit(ft_cur_char(lexer)) != false)
+	if (ft_cur_char(lexer) == '?')
 	{
-		if (ft_cur_char(lexer) == '?')
-			lexer->pa_str = ft_merge_str(lexer->pa_str, ft_itoa(g_exit));
+		lexer->pa_str = ft_merge_str(lexer->pa_str, ft_itoa(g_exit));
 		ft_read_lexer(lexer);
 		return ;
 	}

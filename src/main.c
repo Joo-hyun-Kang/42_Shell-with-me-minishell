@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/18 04:30:48 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/22 17:03:37 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,33 +23,70 @@ void	ft_show_argument_test(t_argument *arg)
 	str = arg->pa_argument;
 	while (*str != 0)
 		printf("{ arg->pa_argument: %s }\n", *str++);
-	ft_show_argument_test(arg->next);
+	if (arg->next != NULL)
+	{
+		printf(" |\n");
+		printf(" v\n");
+		ft_show_argument_test(arg->next);
+	}
+}
+
+void	ft_set_noecho(void)
+{
+	struct termios	term;
+
+    tcgetattr(STDIN_FILENO, &term);
+    term.c_lflag &= ~(ECHOCTL);
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
+void	ft_set_echo(void)
+{
+	struct termios	term;
+
+    tcgetattr(STDIN_FILENO, &term);
+    term.c_lflag |= ECHOCTL;
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
+void	ft_exit(void)
+{
+	printf("\033[1A\033[15Cexit\n");
+	exit(g_exit);
+}
+
+void	ft_init_minishell(void)
+{
+	g_exit = 0;
+	ft_set_signal();
+	ft_set_noecho();
+	printf("%s", BANNER);
 }
 
 int main(int argc, char **argv, char **env)
 {
-	char        *str;
-	t_argument	*arg;
-	t_env_root	*root_env;
+	char       		*str;
+	t_argument		*arg;
+	t_env_root		*root_env;
 
-	g_exit = 0;
-	printf("%s", BANNER);
+	ft_init_minishell();
 	root_env = ft_dpenv_to_bstenv(env);
-	while (1)
+	str = readline(READLINE);
+	while (str != NULL)
 	{
-		signal(SIGINT, sigint_handler);
-		str = readline("minishell-4.2$ ");
-		if (str == NULL)
-			str = ft_strdup("exit");
 		add_history(str);
 		arg = ft_parser(str, root_env);
-		if (arg == 0)
-			continue ;
-		ft_show_argument_test(arg);
-		signal(SIGINT, sigint_handler_after_parsing);
-		ft_system(arg);
-		ft_free_argument(arg);
+		if (arg != NULL)
+		{
+//			ft_show_argument_test(arg);
+			ft_set_echo();
+			ft_system(arg);
+			ft_free_argument(arg);
 //		system("leaks minishell");
+		}
+		ft_set_noecho();
+		str = readline(READLINE);
 	}
+	ft_exit();
 	return (0);
 }

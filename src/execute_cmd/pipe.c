@@ -13,7 +13,7 @@ void	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 	int		status;
 
 	// if (pipes->current_idx % 2 == 0)
-	// 	pipe(pipes->array[pipes->current_idx]);
+	// 	pipe(pipes->array[pipes->current_idx]);		
 
 	pid = fork();
 	if (pid == -1)
@@ -23,7 +23,13 @@ void	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 	}
 	else if (pid == 0)
 	{
-		sleep(1);
+		t_argument	*p = *arg;
+		while (p != NULL)
+		{
+			printf("%ld : %s\n", pipes->current_idx, p->pa_argument[0]);
+			p = p->next;
+		}
+		
 		ft_set_pipe(pipes, state);
 		ft_execute(*arg, false);
 	}
@@ -70,16 +76,19 @@ int	ft_construt_pipes(t_argument *arg, t_pipes *pipes)
 
 	p = arg;
 	pipe_count = 0;
+	ret = 0;
+	
 	while (p != NULL)
 	{
 		if (p->next_token_type == PIPE)
 		{
 			pipe_count++;
 		}
+		printf("%s : %s\n", "init", p->pa_argument[0]);
 		p = p->next;
 	}
 
-	pipes->array = (int **)malloc(sizeof(int) * pipe_count);
+	pipes->array = (int **)malloc(sizeof(int *) * pipe_count);
 	pipes->pipe_count = pipe_count;
 	pipes->current_idx = 0;
 	i = 0;
@@ -136,6 +145,8 @@ void	ft_set_pipe(t_pipes *pipes, int state)
 	{
 		close(pipes->array[i][PIPE_READ]);
 		close(pipes->array[i][PIPE_WRITE]);
+		ft_putnbr_fd(pipes->current_idx, 2);
+
 		i++;
 	}
 }

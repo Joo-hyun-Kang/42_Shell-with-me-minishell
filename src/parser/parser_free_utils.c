@@ -28,20 +28,21 @@ void	ft_free_token(t_token *token)
 void	ft_free_argument(t_argument *arg)
 {
 	t_argument	*prev;
+	t_argument	*tmp;
 	int			i;
 
 	prev = arg;
-	while (arg != NULL)
+	while (prev != NULL)
 	{
 		i = 0;
-		while (arg->pa_argument[i] != NULL)
+		while (prev->pa_argument[i] != NULL)
 		{
-			free(arg->pa_argument[i]);
+			free(prev->pa_argument[i]);
 			++i;
 		}
-		free(arg->pa_argument);
-		arg = arg->next;
+		free(prev->pa_argument);
+		tmp = prev->next;
 		free(prev);
-		prev = arg;
+		prev = tmp;
 	}
 }

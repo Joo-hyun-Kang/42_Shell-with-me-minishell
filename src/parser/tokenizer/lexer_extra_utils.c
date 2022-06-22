@@ -1,33 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer_merge_utils.c                            :+:      :+:    :+:   */
+/*   lexer_extra_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/21 17:00:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 00:40:09 by kanghyki         ###   ########.fr       */
+/*   Created: 2022/06/23 01:45:02 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/23 01:54:28 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-void	ft_merge_home(t_lexer *lexer)
+void	lx_set_pos(t_lexer *lexer)
 {
-	t_env	*node;
-
-	ft_read_lexer(lexer);
-	node = ft_env_search(ft_get_env(lexer), ft_strdup("HOME"));
-	lexer->pa_str = ft_merge_str(lexer->pa_str, ft_strdup(node->pa_value));
+	lexer->pos = lx_ptr(lexer);
 }
 
-void	ft_save_str(t_lexer *lexer)
+char	*lx_get_pos(t_lexer *lexer)
+{
+	return (lexer->pos);
+}
+
+t_env_root	*lx_env(t_lexer *lexer)
+{
+	return (lexer->env);
+}
+
+void	lx_store_str(t_lexer *lexer)
 {
 	char	*spos;
 
-	spos = ft_get_spos(lexer);
-	if ((ft_cur_ptr(lexer) - spos) < 1)
+	spos = lx_get_pos(lexer);
+	if ((lx_ptr(lexer) - spos) < 1)
 		return ;
 	lexer->pa_str = ft_merge_str(lexer->pa_str, \
-			ft_strndup(spos, ft_cur_ptr(lexer) - spos));
+			ft_strndup(spos, lx_ptr(lexer) - spos));
 }

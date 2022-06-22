@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 00:44:14 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 02:01:16 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef struct s_lexer {
 	char		*cmd_str;
 	int			cmd_str_size;
 	int			read_idx;
-	char		*spos;
+	char		*pos;
 	t_env_root	*env;
 	char		*pa_str;
 }	t_lexer;
@@ -121,39 +121,31 @@ void		ft_set_signal(void);
 /* src/parser/tokenizer/tokenizer.c */
 t_token		*ft_tokenizer(char *cmd_str, t_env_root *env);
 
-/* src/parser/tokenizer/tokenizer_core.c */
-t_token		*ft_create_token_type_metachar(t_lexer *lexer);
-t_token		*ft_create_token_type_argument(t_lexer *lexer);
+/* src/parser/tokenizer/tokenizer_arg.c */
+void		tk_replace_env(t_lexer *lexer);
+void		tk_replace_home(t_lexer *lexer);
+void		tk_quote(t_lexer *lexer);
 
-/* src/parser/tokenizer/tokenizer_merge.c */
-void		ft_merge_env(t_lexer *lexer);
-void		ft_merge_quote(t_lexer *lexer, char quote);
-
-/* src/parser/tokenizer/tokenizer_merge_utils.c */
-void		ft_merge_home(t_lexer *lexer);
-void		ft_save_str(t_lexer *lexer);
-
-/* src/parser/tokenizer/tokenizer_common_utils.c */
-t_token		*ft_init_token(char *str, enum e_token_type t_type);
-void		ft_free_token(t_token *token);
-void		ft_add_token_back(t_token **head, t_token *new_token);
+/* src/parser/tokenizer/tokenizer_utils.c */
+t_token		*tk_init(char *str, enum e_token_type t_type);
+void		tk_free(t_token *token);
+void		tk_add_back(t_token **head, t_token *new_token);
 
 /* src/parser/tokenizer/lexer.c */
-t_lexer		*ft_init_lexer(char *cmd_str, t_env_root *env);
-void		ft_free_lexer(t_lexer *lexer);
-void		ft_set_spos(t_lexer *lexer);
-char		*ft_get_spos(t_lexer *lexer);
-t_env_root	*ft_get_env(t_lexer *lexer);
+t_lexer		*lx_init(char *cmd_str, t_env_root *env);
+void		lx_free(t_lexer *lexer);
 
 /* src/parser/tokenizer/lexer_utils.c */
-void		ft_read_lexer(t_lexer *lexer);
-char		ft_cur_char(t_lexer *lexer);
-char		*ft_cur_ptr(t_lexer *lexer);
-char		ft_next_char(t_lexer *lexer);
-void		ft_replace_lexer_cmd_str(t_lexer *lexer, char *new_cmd_str);
+void		lx_read(t_lexer *lexer);
+char		lx_chr(t_lexer *lexer);
+char		*lx_ptr(t_lexer *lexer);
+char		lx_next_chr(t_lexer *lexer);
 
-/* src/parser/tokenizer/ft_strchr_except_null.c */
-char		*ft_strchr_except_null(const char *str, int c);
+/* src/parser/tokenizer/lexer_extra_utils.c */
+void		lx_set_pos(t_lexer *lexer);
+char		*lx_get_pos(t_lexer *lexer);
+t_env_root	*lx_env(t_lexer *lexer);
+void		lx_store_str(t_lexer *lexer);
 
 /*
  * #########################################################

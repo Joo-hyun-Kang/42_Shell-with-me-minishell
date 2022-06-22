@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 17:29:06 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 01:48:43 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,11 +99,11 @@ t_argument	*ft_parser(char *cmd_str, t_env_root *root_env)
 		{
 			ft_add_argument_back(&head_arg, cur_arg);
 			ft_free_argument(head_arg);
-			ft_free_token(head_token);
+			tk_free(head_token);
 			return (NULL);
 		}
 		ft_add_argument_back(&head_arg, cur_arg);
 	}
-	ft_free_token(head_token);
+	tk_free(head_token);
 	return (head_arg);
 }

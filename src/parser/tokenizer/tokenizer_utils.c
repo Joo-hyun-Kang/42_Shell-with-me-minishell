@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer_common_utils.c                           :+:      :+:    :+:   */
+/*   tokenizer_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:03:15 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 17:50:14 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 01:41:44 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-t_token	*ft_init_token(char *str, enum e_token_type t_type)
+t_token	*tk_init(char *str, enum e_token_type t_type)
 {
 	t_token	*new_token;
 
@@ -25,7 +25,7 @@ t_token	*ft_init_token(char *str, enum e_token_type t_type)
 	return (new_token);
 }
 
-void	ft_free_token(t_token *token)
+void	tk_free(t_token *token)
 {
 	t_token	*prev;
 
@@ -38,7 +38,7 @@ void	ft_free_token(t_token *token)
 	}
 }
 
-void	ft_add_token_back(t_token **head, t_token *new_token)
+void	tk_add_back(t_token **head, t_token *new_token)
 {
 	t_token	*iter;
 

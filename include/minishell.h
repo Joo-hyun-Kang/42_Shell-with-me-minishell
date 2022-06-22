@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 17:50:45 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/22 20:59:14 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define M_SEP		"|;>< \r\v\f\t\"'$~\\"
 
 # define F_HEREDOC	"doc.here"
+# define ADD_TMP	"add.tmp"
 
 # define BANNER "\
                                                     \n\

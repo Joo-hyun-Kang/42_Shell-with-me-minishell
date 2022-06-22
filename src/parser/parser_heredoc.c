@@ -6,18 +6,19 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 17:27:21 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/22 20:56:36 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/22 21:00:30 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+static void	signal_heredoc(int sig);
 static void	ft_heredoc_child(t_argument *arg, t_token *cur_token);
 static char	*ft_get_heredoc(char *heredoc);
 static char	*ft_env_heredoc(char *str, t_env_root *env);
 static void	ft_replace_env_heredoc(char **str, char **dst, t_env_root *env);
 
-void	signal_heredoc(int sig)
+static void	signal_heredoc(int sig)
 {
 	(void)sig;
 	exit(1);
@@ -38,8 +39,6 @@ t_token	*ft_heredoc(t_argument *arg, t_token *cur_token)
 		unlink("doc.here");
 		return (NULL);
 	}
-	else if (status == 512)
-		printf("Can't open!\n");
 	arg->next_token_type = GT;
 	cur_token->pa_str = ft_strdup(F_HEREDOC);
 	return (cur_token);
@@ -52,7 +51,8 @@ static void	ft_heredoc_child(t_argument *arg, t_token *cur_token)
 	int		fd;
 
 	signal(SIGINT, signal_heredoc);
-	fd = open("doc.here", (O_CREAT | O_TRUNC | O_RDWR), 0666);
+	fd = open(F_HEREDOC, (O_CREAT | O_TRUNC | O_RDWR), 0666);
+	// TODO:예외처리 추가
 	if (fd < 0)
 		exit(2);
 	pa_heredoc = ft_get_heredoc(cur_token->pa_str);

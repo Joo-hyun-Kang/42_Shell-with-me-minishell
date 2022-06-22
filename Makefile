@@ -81,9 +81,9 @@ CC				=	gcc
 CFLAGS			=	-g # -Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(EXECUTE_DIR)\
-					-I /Users/jokang/.brew/opt/readline/include
+					-I /home/linuxbrew/.linuxbrew/Cellar/readline/8.1.2/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /Users/jokang/.brew/opt/readline/lib
+					-l readline -L /home/linuxbrew/.linuxbrew/Cellar/readline/8.1.2/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 

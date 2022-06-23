@@ -95,8 +95,8 @@ void ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 	ft_sort_redir_command(arg, list_arg, list_com);
 
 	pid_t pid;
-	pid = fork();
-	//pid = 0;
+	//pid = fork();
+	pid = 0;
 	if (pid == -1)
 	{
 		printf("minishell : %s\n", strerror(errno));
@@ -224,6 +224,7 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 {
 	t_arraylist *open_files;
 	char		*pa_gt_files;
+	char		*lt_dlt_files;
 	int			is_same_file;
 
 	printf("Hi\n");
@@ -231,7 +232,7 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 	init_arraylist(open_files);
 	
 	pa_gt_files = NULL;
-
+	lt_dlt_files = NULL;
 
 	printf("0\n");
 	// 사용할 변수들을 다시 가져옴
@@ -272,7 +273,7 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 		{
 			if (open_files->type[j] == LT_OPEN)
 			{
-				fd = open(open_files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 00644);
+				fd = open(open_files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0744);
 				if (fd < 0)
 				{
 					printf("minishell : %s\n", strerror(errno));
@@ -282,7 +283,7 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 			}
 			else
 			{
-				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 00644);
+				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0744);
 				if (fd < 0)
 				{
 					printf("minishell : %s\n", strerror(errno));
@@ -298,20 +299,16 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 			if (open_files->type[j] == LT_OPEN)
 			{
 				redir->will_stdout_pipe = false;
-				fd = open(open_files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0666);
+				fd = open(open_files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0744);
 				dup2(fd, STDOUT_FILENO);
 				close(fd);
 			}
 			else
 			{
 				redir->will_stdout_pipe = false;
-				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0666);
+				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0744);
 				dup2(fd, STDOUT_FILENO);
 				close(fd);
-			}
-			if (ft_strcmp(open_files->pa_arr[j], pa_gt_files) == 0)
-			{
-				is_same_file = true;
 			}
 		}
 	}
@@ -355,10 +352,12 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 
 	free_arraylist(open_files);
 	free(pa_gt_files);
-
+	/*
 	if (is_same_file == true)
+	{
 		exit(1);
-
+	}
+	*/
 	return (true);
 }
 

@@ -6,11 +6,13 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 17:27:21 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 15:07:05 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 08:02:38 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+static t_token	*p_heredoc_err(int status);
 
 t_token	*p_heredoc(t_argument *arg, t_token *cur_tok)
 {
@@ -22,11 +24,23 @@ t_token	*p_heredoc(t_argument *arg, t_token *cur_tok)
 	if (pid == 0)
 		p_heredoc_child(arg, cur_tok);
 	wait(&status);
+	signal(SIGQUIT, ft_sigquit);
 	if (status != 0)
-		p_heredoc_err(status);
+		return (p_heredoc_err(status));
 	arg->next_token_type = GT;
 	free(cur_tok->pa_str);
 	cur_tok->pa_str = ft_strdup(F_HEREDOC);
-	signal(SIGQUIT, ft_sigquit);
 	return (cur_tok);
+}
+
+static t_token	*p_heredoc_err(int status)
+{
+	if ((status / 256) == 1)
+	{
+		g_exit = 1;
+		unlink(F_HEREDOC);
+	}
+	else if ((status / 256) == 3)
+		printf("Can't open file!\n");
+	return (NULL);
 }

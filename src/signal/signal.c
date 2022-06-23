@@ -6,13 +6,13 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/14 21:48:20 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 03:56:28 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 07:38:03 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_sig_get_extra_line(int sig)
+void	ft_sig_for_child(int sig)
 {
 	(void)sig;
 	exit(1);

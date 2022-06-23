@@ -6,63 +6,48 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/23 03:25:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 05:16:53 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 08:10:16 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
+static void	p_read_heredoc(char *heredoc, t_argument *arg);
+
 void	p_heredoc_child(t_argument *arg, t_token *cur_tok)
 {
-	char	*tmp;
 	char	*new_pa_str;
 	int		fd;
 
-	signal(SIGINT, ft_sig_get_extra_line);
-	tmp = p_read_heredoc(cur_tok->pa_str);
-	if (tmp == NULL)
-		exit(2);
-	fd = open(F_HEREDOC, (O_CREAT | O_TRUNC | O_RDWR), 0666);
-	if (fd < 0)
-		exit(3);
-	new_pa_str = p_env_heredoc(tmp, arg->env);
-	ft_putstr_fd(new_pa_str, fd);
-	free(new_pa_str);
-	free(tmp);
-	close(fd);
+	signal(SIGINT, ft_sig_for_child);
+	p_read_heredoc(cur_tok->pa_str, arg);
 	exit(0);
 }
 
-t_token	*p_heredoc_err(int status)
-{
-	if ((status / 256) == 3)
-		printf("Can't open file!\n");
-	if (status != 0)
-	{
-		if ((status / 256) == 1)
-			g_exit = 1;
-		unlink(F_HEREDOC);
-	}
-	return (NULL);
-}
-
-char	*p_read_heredoc(char *heredoc)
+static void	p_read_heredoc(char *heredoc, t_argument *arg)
 {
 	char	*read_line;
 	char	*pa_str;
+	char	*write_line;
+	int		fd;
 
+	fd = open(F_HEREDOC, (O_CREAT | O_TRUNC | O_RDWR), 0666);
+	if (fd < 0)
+		exit(3);
 	pa_str = NULL;
 	read_line = readline("> ");
 	while (read_line != NULL && ft_strcmp(heredoc, read_line) != 0)
 	{
 		pa_str = ft_merge_str(pa_str, read_line);
 		pa_str = ft_merge_str(pa_str, ft_strdup("\n"));
+		write_line = p_env_heredoc(pa_str, arg->env);
+		free(pa_str);
+		pa_str = 0;
+		ft_putstr_fd(write_line, fd);
 		read_line = readline("> ");
 	}
-	if (read_line == NULL)
-		exit(2);
-	free(read_line);
-	return (pa_str);
+	if (read_line != NULL)
+		free(read_line);
 }
 
 char	*p_env_heredoc(char *str, t_env_root *env)

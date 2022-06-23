@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 07:25:54 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 08:00:14 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ typedef struct s_argument {
 /* src/signal/signal.c */
 void		ft_sigint(int sig);
 void		ft_sigquit(int sig);
-void		ft_sig_get_extra_line(int sig);
+void		ft_sig_for_child(int sig);
 
 /*
  * #########################################################
@@ -130,9 +130,7 @@ t_token		*p_extra_pipe(t_token *cur_token, t_env_root *env);
 t_token		*p_heredoc(t_argument *arg, t_token *cur_token);
 
 /* src/parser/heredoc_utils.c */
-t_token		*p_heredoc_err(int status);
 void		p_heredoc_child(t_argument *arg, t_token *cur_token);
-char		*p_read_heredoc(char *heredoc);
 char		*p_env_heredoc(char *str, t_env_root *env);
 void		p_replace_env_heredoc(char **str, char **dst, t_env_root *env);
 

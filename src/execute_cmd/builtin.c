@@ -139,6 +139,7 @@ void	ft_execute_pwd(t_argument *argument, int is_parent)
 
 	ft_putstr_fd(pa_path, STDOUT_FILENO);
 	ft_putchar_fd('\n', STDOUT_FILENO);
+	free(pa_path);
 	if (is_parent == 0)
 		exit(0);
 }

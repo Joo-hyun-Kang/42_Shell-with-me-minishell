@@ -233,7 +233,7 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 	char		*pa_gt_files;
 	char		*lt_dlt_files;
 	int			is_same_file;
-	
+
 	open_files = (t_arraylist *)malloc(sizeof(t_arraylist));
 	init_arraylist(open_files);
 	

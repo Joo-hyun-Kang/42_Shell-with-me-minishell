@@ -43,9 +43,6 @@ void	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 	{
 		ft_execute_redir(arg, state, pipes);
 	}
-
-
-	//free(pipes)
 }
 
 int	ft_construt_pipes(t_argument *arg, t_pipes *pipes)
@@ -114,4 +111,21 @@ void	ft_set_pipe(t_pipes *pipes, int state)
 		close(pipes->array[i][PIPE_WRITE]);
 		i++;
 	}
+}
+
+void	ft_free_pipe(t_pipes **pipes)
+{
+	t_pipes	*p;
+	int		i;
+	
+	p = *pipes;
+	i = 0;
+	while (i < p->pipe_count)
+	{
+		free(p->array[i]);
+		i++;
+	}
+	free(p->array);
+	free(*pipes);
+	pipes = NULL;
 }

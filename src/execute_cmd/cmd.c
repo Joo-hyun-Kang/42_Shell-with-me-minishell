@@ -74,7 +74,7 @@ void	ft_execute_mult_cmd(t_argument **arg)
 	{
 	}
 
-	// //free(pa_pipes)--> 2차원
+	ft_free_pipe(&pa_pipes);
 }
 
 void	ft_system(t_argument *argument)

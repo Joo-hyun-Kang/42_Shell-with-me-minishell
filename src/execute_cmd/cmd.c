@@ -188,16 +188,11 @@ void	ft_execute(t_argument *argument, int is_parent)
 	}
 
 	//error code 수정
-	char *command_cpy = ft_strdup(command);
-	int	error_code = EXE_COM_NOT;
-	int exit_code = 127;
+	int	error_code;
+	error_code = EXE_COM_NOT;
 	if (errno == 13)
-	{
-		error_code = EXE_DIR_NOT;
-		exit_code = 126;
-	}
-	ft_error(error_code, command_cpy, false);
-	exit(exit_code);
+		error_code = EXE_IS_DIR;
+	ft_error(error_code, command, is_parent);
 }
 
 int	ft_is_command_dir()

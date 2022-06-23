@@ -189,8 +189,9 @@ void	ft_execute_cd(t_argument *argument, int is_parent);
 
 #define	EXE_MIN (8)
 #define EXE_COM_NOT (8)
-#define EXE_DIR_NOT (9)
-#define	EXE_MAX (9)
+#define EXE_IS_DIR (9)
+#define EXE_NO_DIR (10)
+#define	EXE_MAX (10)
 
 void	ft_error(int error_code, void *info, int is_parent);
 

@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 00:57:21 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 03:41:02 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/24 04:02:53 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,23 @@ int	ft_export_error(int error_code, void *info)
 
 int	ft_exeve_error(int error_code, void *info)
 {
-	printf("%s:", (char *)info);
+	printf("%s: ", (char *)info);
 	if (error_code == EXE_COM_NOT)
-		printf(" command not found\n");
-	else if (error_code == EXE_DIR_NOT)
-		printf(" is a directory\n");
-	return (1);
+	{
+		printf("command not found\n");
+		return (127);
+	}
+	else if (error_code == EXE_IS_DIR)
+	{
+		printf("is a directory\n");
+		return (126);
+	}
+	else if (error_code == EXE_NO_DIR)
+	{
+		printf("No such file or directory\n");
+		return (1);
+	}
+	return (0);
 }
 
 void	ft_error(int error_code, void *info, int is_parent)

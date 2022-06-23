@@ -79,10 +79,11 @@ void ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 			redir.will_stdout_pipe = false;
 	}
 	
+	/*
 	// 리다이렉션이 이상하게 들어온 경우 재정렬해준다
 	if ((*arg)->pa_argument[0] == NULL)
 		ft_relocate_redir_argument(arg);
-	
+	*/
 	t_arraylist *list_arg = (t_arraylist *)malloc(sizeof(t_arraylist));
 	t_arraylist *list_com = (t_arraylist *)malloc(sizeof(t_arraylist));
 	t_arraylist *argument = (t_arraylist *)malloc(sizeof(t_arraylist));
@@ -292,20 +293,14 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 			{
 				fd = open(open_files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0744);
 				if (fd < 0)
-				{
-					printf("minishell : %s\n", strerror(errno));
-					return (false);
-				}
+					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
 				close(fd);
 			}
 			else
 			{
 				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0744);
 				if (fd < 0)
-				{
-					printf("minishell : %s\n", strerror(errno));
-					return (false);
-				}
+					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
 				close(fd);
 			}
 			j++;
@@ -316,6 +311,8 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 			{
 				redir->will_stdout_pipe = false;
 				fd = open(open_files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0744);
+				if (fd < 0)
+					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
 				dup2(fd, STDOUT_FILENO);
 				close(fd);
 			}
@@ -323,6 +320,8 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 			{
 				redir->will_stdout_pipe = false;
 				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0744);
+				if (fd < 0)
+					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
 				dup2(fd, STDOUT_FILENO);
 				close(fd);
 			}
@@ -335,10 +334,7 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 		int fd;
 		fd = open(pa_gt_files, O_RDONLY);
 		if (fd < 0)
-		{
-			printf("minishell : %s\n", strerror(errno));
-			return false;
-		}
+			ft_error(EXE_NO_DIR, pa_gt_files, false);
 		dup2(fd, STDIN_FILENO);
 		close(fd);
 		redir->will_stdin_pipe = false;

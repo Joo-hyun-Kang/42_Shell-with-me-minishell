@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 00:57:21 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 02:23:29 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 03:41:02 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,16 @@ int	ft_export_error(int error_code, void *info)
 	return (1);
 }
 
+int	ft_exeve_error(int error_code, void *info)
+{
+	printf("%s:", (char *)info);
+	if (error_code == EXE_COM_NOT)
+		printf(" command not found\n");
+	else if (error_code == EXE_DIR_NOT)
+		printf(" is a directory\n");
+	return (1);
+}
+
 void	ft_error(int error_code, void *info, int is_parent)
 {
 	int	exit_status;
@@ -79,6 +89,9 @@ void	ft_error(int error_code, void *info, int is_parent)
 		exit_status = ft_unset_error(error_code, info);
 	else if (error_code >= EXPORT_MIN && error_code <= EXPORT_MAX)
 		exit_status = ft_export_error(error_code, info);
+	else if (error_code >= EXE_MIN && error_code <= EXE_MAX)
+		exit_status = ft_exeve_error(error_code, info);
+
 
 	if (is_parent == 0)
 		exit (exit_status);

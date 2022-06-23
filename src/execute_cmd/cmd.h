@@ -186,6 +186,12 @@ void	ft_execute_cd(t_argument *argument, int is_parent);
 #define EXPORT_MIN (7)
 #define EXPORT_INVALID (7)
 #define EXPORT_MAX (7)
+
+#define	EXE_MIN (8)
+#define EXE_COM_NOT (8)
+#define EXE_DIR_NOT (9)
+#define	EXE_MAX (9)
+
 void	ft_error(int error_code, void *info, int is_parent);
 
 #endif

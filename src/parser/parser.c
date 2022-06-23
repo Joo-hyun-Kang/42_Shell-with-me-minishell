@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/03 15:55:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 19:51:25 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 03:32:31 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ t_argument	*ft_parser(char *cmd_str, t_env_root *root_env)
 	if (cur_tok == NULL)
 		return (p_all_free(head_arg, head_tok));
 	tk_free(head_tok);
-	return (head_arg);
+	return (p_replace_arg(head_arg));
 }
 
 static t_token	*p_init(t_token *cur_tok, t_argument *arg, int idx)

@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 00:17:16 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 03:32:13 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,9 @@ void		p_heredoc_child(t_argument *arg, t_token *cur_token);
 char		*p_read_heredoc(char *heredoc);
 char		*p_env_heredoc(char *str, t_env_root *env);
 void		p_replace_env_heredoc(char **str, char **dst, t_env_root *env);
+
+/* src/parser/replace_arg.c */
+t_argument	*p_replace_arg(t_argument *arg);
 
 /*
  * #########################################################

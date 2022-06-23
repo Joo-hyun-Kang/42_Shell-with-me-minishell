@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/24 02:54:15 by jokang           ###   ########.fr        #
+#    Updated: 2022/06/24 03:33:11 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,6 +47,7 @@ PARSER_SRC		=	parser.c\
 					extra_pipe.c\
 					heredoc.c\
 					heredoc_utils.c\
+					replace_arg.c\
 					ft_merge_str.c
 #--------------[ ENV ]----------------
 ENV_DIR			=	src/environment
@@ -102,11 +103,11 @@ CPPFLAGS		=	-I include\
 					-I $(LIBFT_DIR)\
 					-I $(GNL_DIR)\
 					-I $(EXECUTE_DIR)\
-					-I/Users/jokang/.brew/opt/readline/include
-					#-I/opt/homebrew/opt/readline/include
+					-I/opt/homebrew/opt/readline/include
+					#-I/Users/jokang/.brew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L/Users/jokang/.brew/opt/readline/lib
-					#-l readline -L /opt/homebrew/opt/readline/lib
+					-l readline -L /opt/homebrew/opt/readline/lib
+					#-l readline -L/Users/jokang/.brew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 

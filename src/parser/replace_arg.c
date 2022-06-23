@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 03:09:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 03:42:21 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 07:06:15 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,6 @@ char	**ft_append_str(char **str, char *src)
 		str_size = 0;
 	new_str = (char **)malloc(sizeof(char *) * (str_size + 2));
 	new_str[str_size + 1] = 0;
-	if (str_size == 0)
-	{
-		new_str[0] = src;
-		return (new_str);
-	}
 	idx = 0;
 	while (idx < str_size)
 	{
@@ -79,6 +74,8 @@ t_argument	*p_replace_arg(t_argument *arg)
 {
 	t_argument	*head;
 
+	if (arg == NULL)
+		return (NULL);
 	head = arg;
 	while (arg->next_token_type != EOL)
 	{

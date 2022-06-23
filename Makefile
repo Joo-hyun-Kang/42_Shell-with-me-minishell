@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/24 02:44:45 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/24 02:54:15 by jokang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ EXECUTE_SRC		=	cmd.c\
 					builtin.c\
 					ft_atoull.c\
 					pipe.c\
+					pipe_utils.c\
 					redir.c\
 					arraylist.c\
 					ft_error.c\
@@ -96,16 +97,16 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(PRPT_SRC:.c=.o))
 #-----------------[ CMD ]-------------------
 CC				=	gcc
-CFLAGS			=	# -Wall -Wextra -Werror
+CFLAGS			=	-fsanitize=address# -Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(LIBFT_DIR)\
 					-I $(GNL_DIR)\
 					-I $(EXECUTE_DIR)\
-					-I/opt/homebrew/opt/readline/include
-					#-I/Users/jokang/.brew/opt/readline/include
+					-I/Users/jokang/.brew/opt/readline/include
+					#-I/opt/homebrew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /opt/homebrew/opt/readline/lib
-					#-l readline -L/Users/jokang/.brew/opt/readline/lib
+					-l readline -L/Users/jokang/.brew/opt/readline/lib
+					#-l readline -L /opt/homebrew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 
@@ -115,7 +116,7 @@ all: $(NAME)
 
 $(OBJ_DIR)/%.o: %.c
 	@echo $(COMPILE_COLOR) "Compiling...\t$<" $(END)
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@ -g3
 
 $(NAME): $(LIBFT) $(OBJ_DIR) $(OBJS)
 	@echo $(COMPILE_COLOR) "Building...\t$@" $(END)

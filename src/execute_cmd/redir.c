@@ -55,27 +55,31 @@ int		ft_is_redir(enum e_token_type token)
 
 void ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 {
-	int will_stdin_pipe;
-	int	will_stdout_pipe;
+	t_redir_var	redir;
+
+	redir.will_stdin_pipe = false;
+	redir.will_stdout_pipe = false;
 	
 	// INIT 일 때도 파이프 인지 찾아야 함
 	// ls > a.txt | sort -> init인데 파이프 있는 경우
 	if (state == INIT)
 	{
-		will_stdin_pipe = false;
-		will_stdout_pipe = false;
+		redir.will_stdin_pipe = false;
+		if (ft_find_next_pipe(arg) == true)		
+			redir.will_stdout_pipe = true;
+		else
+			 redir.will_stdin_pipe = false;
 	}
 	else if (state == PIPE_START || state == PIPE_MIDDLE)
 	{
-		will_stdin_pipe = true;
+		redir.will_stdin_pipe = true;
 		if (ft_find_next_pipe(arg) == true)
-			will_stdout_pipe = true;
+			redir.will_stdout_pipe = true;
 		else
-			will_stdout_pipe = false;
+			redir.will_stdout_pipe = false;
 	}
 	
 	// 리다이렉션이 이상하게 들어온 경우 재정렬해준다
-	
 	if ((*arg)->pa_argument[0] == NULL)
 		ft_relocate_redir_argument(arg);
 	
@@ -84,14 +88,9 @@ void ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 	t_arraylist *argument = (t_arraylist *)malloc(sizeof(t_arraylist));
 
 	// init 만들기
-	list_arg->pa_arr = NULL;
-	list_com->pa_arr = NULL;
-	argument->pa_arr = NULL;
-
-	
-	allocate_arraylist(list_arg);
-	allocate_arraylist(list_com);
-	allocate_arraylist(argument);
+	init_arraylist(list_arg);
+	init_arraylist(list_com);
+	init_arraylist(argument);
 
 	ft_sort_redir_command(arg, list_arg, list_com);
 
@@ -105,7 +104,10 @@ void ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 	}
 	else if (pid == 0)
 	{
-		if (ft_set_redir(pipes, list_arg, list_com, argument) == true)
+		redir.list_arg = list_arg;
+		redir.list_com = list_com;
+		redir.pipes = pipes;
+		if (ft_set_redir(&redir, argument) == true)
 		{
 			t_argument temp;
 			temp.next_token_type = EOL;
@@ -121,10 +123,11 @@ void ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 			exit(error_num);
 		}
 	}
+	pipes->current_idx++;
 
-	//free list_arg
-	//free list_redir
-	//free(argument)
+	free_arraylist(list_arg);
+	free_arraylist(list_com);
+	free_arraylist(argument);
 	while (*arg != NULL && ft_is_redir((*arg)->next_token_type) == true)
 	{
 		*arg = (*arg)->next;
@@ -138,6 +141,8 @@ void ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 			state = PIPE_START;
 		if (state == PIPE_START)
 			state = PIPE_MIDDLE;
+		if ((*arg)->next_token_type == EOL)
+			state = PIPE_END;
 		ft_execute_pipe(arg, state, pipes);
 	}
 	else if (token == EOL)
@@ -215,20 +220,25 @@ void	ft_sort_redir_command(t_argument **arg, t_arraylist *list_arg, t_arraylist 
 	}
 }
 
-int	ft_set_redir(t_pipes *pipes, t_arraylist *list_arg, t_arraylist *list_com, t_arraylist *argument)
+int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 {
 	t_arraylist *open_files;
 	char		*pa_gt_files;
+	int			is_same_file;
 
+	printf("Hi\n");
 	open_files = (t_arraylist *)malloc(sizeof(t_arraylist));
-
+	init_arraylist(open_files);
+	
 	pa_gt_files = NULL;
 
+
+	printf("0\n");
 	// 사용할 변수들을 다시 가져옴
-	char **strs = list_com->pa_arr;
-	int	*type = list_com->type;
+	char **strs = redir->list_com->pa_arr;
+	int	*type = redir->list_com->type;
 	int i = 0;
-	while (i < list_com->length)
+	while (i < redir->list_com->length)
 	{
 		if (type[i] == RE_COM)
 			add_arraylist(argument, ft_strdup(strs[i]), NONE);
@@ -243,17 +253,19 @@ int	ft_set_redir(t_pipes *pipes, t_arraylist *list_arg, t_arraylist *list_com, t
 
 	// 커맨드를 따서 pa_arguemt를 만듬
 	i = 0;
-	while (i < list_arg->length)
+	while (i < redir->list_arg->length)
 	{
-		add_arraylist(argument, ft_strdup(list_arg->pa_arr[i]), NONE);
+		add_arraylist(argument, ft_strdup(redir->list_arg->pa_arr[i]), NONE);
 		i++;
 	}
 	add_arraylist(argument, NULL, NONE);
 
 	// 그리고 동시에 파일들을 오픈 시킬 건 오픈 시키고
 	// 가장 마지막 파일들은 빼고
+	is_same_file = false;
 	if (open_files->pa_arr != NULL)
 	{
+		printf("1\n");
 		int j = 0;
 		int fd;
 		while (j < open_files->length - 1)
@@ -270,7 +282,7 @@ int	ft_set_redir(t_pipes *pipes, t_arraylist *list_arg, t_arraylist *list_com, t
 			}
 			else
 			{
-				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0666);
+				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 00644);
 				if (fd < 0)
 				{
 					printf("minishell : %s\n", strerror(errno));
@@ -282,24 +294,31 @@ int	ft_set_redir(t_pipes *pipes, t_arraylist *list_arg, t_arraylist *list_com, t
 		}
 		if (j == open_files->length - 1)
 		{
+			printf("2\n");
 			if (open_files->type[j] == LT_OPEN)
 			{
+				redir->will_stdout_pipe = false;
 				fd = open(open_files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0666);
 				dup2(fd, STDOUT_FILENO);
 				close(fd);
 			}
 			else
 			{
+				redir->will_stdout_pipe = false;
 				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0666);
 				dup2(fd, STDOUT_FILENO);
 				close(fd);
 			}
+			if (ft_strcmp(open_files->pa_arr[j], pa_gt_files) == 0)
+			{
+				is_same_file = true;
+			}
 		}
 	}
 
-	
 	if (pa_gt_files != NULL)
 	{
+		printf("3\n");
 		int fd;
 		fd = open(pa_gt_files, O_RDONLY);
 		if (fd < 0)
@@ -309,13 +328,37 @@ int	ft_set_redir(t_pipes *pipes, t_arraylist *list_arg, t_arraylist *list_com, t
 		}
 		dup2(fd, STDIN_FILENO);
 		close(fd);
+		redir->will_stdin_pipe = false;
 	}
 
+	if (redir->will_stdin_pipe == true || redir->will_stdout_pipe == true)
+	{
+		if (redir->will_stdin_pipe == true)
+		{
+			printf("4\n");
+			dup2(redir->pipes->array[redir->pipes->current_idx - 1][PIPE_READ], STDIN_FILENO);
+		}
+		if (redir->will_stdout_pipe == true)
+		{
+			printf("5\n");
+			dup2(redir->pipes->array[redir->pipes->current_idx][PIPE_WRITE], STDOUT_FILENO);
+		}
+	}
 
-	//free(lt_files)
-	//free(dlt_files)
-	//free(pa_lt_files)
-	//free(pa_gt_files)
+	i = 0;
+	while (i < redir->pipes->pipe_count)
+	{
+		close(redir->pipes->array[i][PIPE_READ]);
+		close(redir->pipes->array[i][PIPE_WRITE]);
+		i++;
+	}
+
+	free_arraylist(open_files);
+	free(pa_gt_files);
+
+	if (is_same_file == true)
+		exit(1);
+
 	return (true);
 }
 

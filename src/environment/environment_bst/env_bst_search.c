@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 09:15:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/20 15:37:00 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/23 14:53:31 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static t_env	*ft_env_search_recursive(t_env *cur_node, char *key);
 
-// Key will be Automatically freed.
 t_env	*ft_env_search(t_env_root *root, char *key)
 {
 	t_env	*find_node;

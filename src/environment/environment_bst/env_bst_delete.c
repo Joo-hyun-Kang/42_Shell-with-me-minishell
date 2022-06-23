@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 09:14:46 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/17 09:15:26 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 14:52:59 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ static void	ft_env_delete_if_left_null(t_env_root *root, t_env *cur_node);
 static void	ft_env_delete_if_right_null(t_env_root *root, t_env *cur_node);
 static void	ft_env_delete_if_both_not_null(t_env_root *root, t_env *cur_node);
 
-// Key will be Automatically freed.
 void	ft_env_delete(t_env_root *root, char *key)
 {
 	t_env	*cur_node;

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 17:27:21 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 04:46:41 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 15:07:05 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ t_token	*p_heredoc(t_argument *arg, t_token *cur_tok)
 	arg->next_token_type = GT;
 	free(cur_tok->pa_str);
 	cur_tok->pa_str = ft_strdup(F_HEREDOC);
-	signal(SIGINT, ft_sigint);
 	signal(SIGQUIT, ft_sigquit);
 	return (cur_tok);
 }

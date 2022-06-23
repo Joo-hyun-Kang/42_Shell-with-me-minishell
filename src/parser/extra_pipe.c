@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 15:04:08 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 15:07:26 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ t_token	*p_extra_pipe(t_token *cur_tok, t_env_root *env)
 	if (status != 0)
 		return (p_extra_pipe_err(status));
 	p_read_extra_pipe_file(cur_tok, env);
-	signal(SIGINT, ft_sigint);
 	signal(SIGQUIT, ft_sigquit);
 	return (cur_tok->next);
 }

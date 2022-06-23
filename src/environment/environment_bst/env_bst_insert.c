@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 09:14:02 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 23:01:15 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 02:57:41 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,14 @@ void	ft_env_insert(t_env_root *root, char *key, char *value)
 	if (root->root == NULL)
 	{
 		root->root = ft_init_env_node(key, value);
-		++root->size;
+		++(root->size);
 	}
 	else
 	{
 		if (ft_env_insert_recursive(key, value, root->root) == 0)
 			free(key);
 		else
-			++root->size;
+			++(root->size);
 	}
 }
 

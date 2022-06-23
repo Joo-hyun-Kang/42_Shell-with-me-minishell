@@ -6,14 +6,14 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 04:59:51 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 15:04:08 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
 static void		p_extra_pipe_child(void);
-static void		p_read_file(char *file_name, t_token *cur_tok, t_env_root *env);
+static void		p_read_extra_pipe_file(t_token *cur_tok, t_env_root *env);
 static t_token	*p_extra_pipe_err(int status);
 
 t_token	*p_extra_pipe(t_token *cur_tok, t_env_root *env)
@@ -28,7 +28,7 @@ t_token	*p_extra_pipe(t_token *cur_tok, t_env_root *env)
 	wait(&status);
 	if (status != 0)
 		return (p_extra_pipe_err(status));
-	p_read_file(F_EXTRA, cur_tok, env);
+	p_read_extra_pipe_file(cur_tok, env);
 	signal(SIGINT, ft_sigint);
 	signal(SIGQUIT, ft_sigquit);
 	return (cur_tok->next);
@@ -59,13 +59,13 @@ static void	p_extra_pipe_child(void)
 	exit(0);
 }
 
-static void	p_read_file(char *file_name, t_token *cur_tok, t_env_root *env)
+static void	p_read_extra_pipe_file(t_token *cur_tok, t_env_root *env)
 {
 	char	*buf;
 	int		fd;
 	t_token	*extra_tok;
 
-	fd = open(file_name, O_RDONLY);
+	fd = open(F_EXTRA, O_RDONLY);
 	buf = get_next_line(fd);
 	close(fd);
 	unlink(F_EXTRA);
@@ -83,6 +83,7 @@ static t_token	*p_extra_pipe_err(int status)
 	}
 	else if ((status / 256) == 2)
 	{
+		printf("\033[1A\033[2C");
 		printf("minishell: syntax error: unexpected end of file\n");
 		g_exit = 258;
 	}

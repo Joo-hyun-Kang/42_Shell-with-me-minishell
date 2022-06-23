@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 05:21:59 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 00:17:16 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,24 +34,12 @@
 # define BANNER "\
                                                     \n\
                                                     \n\
-     \033[1;35mS  H  E  L  L\
-          \033[1;33mW  I  T  H\
-          \033[1;32mM  E\033[0;0m\n\
+     \033[1;35mS  H  E  L  L          \033[1;33mW  I  T  H          \033[1;32mM  E\033[0;0m\n\
      \033[1;37m-  -  -  -  -          -  -  -  -          -  -\033[0;0m\n\
                                                     \n\
                                                     \n"
 
-#define READLINE "\
-\033[1;35m\
-minishell\
-\033[0;0m\
--\
-\033[1;33m\
-0.0\
-\033[1;32m\
-$\
-\033[0;0m\
- "
+# define READLINE "\033[1;35mminishell\033[0;0m-\033[1;33m0.0\033[1;32m$\033[0;0m "
 int	g_exit;
 
 enum e_token_type {
@@ -74,6 +62,7 @@ typedef struct s_env {
 }	t_env;
 
 typedef struct s_env_root {
+	int						size;
 	struct s_env			*root;
 }	t_env_root;
 
@@ -148,11 +137,11 @@ char		*p_env_heredoc(char *str, t_env_root *env);
 void		p_replace_env_heredoc(char **str, char **dst, t_env_root *env);
 
 /*
- *         #########################################################
- *         #                                                       #
- *         #                src/parser/tokenizer/                  #
- *         #                                                       #
- *         #########################################################
+ * #########################################################
+ * #                                                       #
+ * #                src/parser/tokenizer/                  #
+ * #                                                       #
+ * #########################################################
  */
 /* src/parser/tokenizer/tokenizer.c */
 t_token		*ft_tokenizer(char *cmd_str, t_env_root *env);
@@ -195,6 +184,10 @@ char		*ft_extract_key_from_str(char *str);
 char		*ft_extract_value_from_str(char *str);
 void		ft_free_env_node(t_env *node);
 t_env_root	*ft_dpenv_to_bstenv(char **env);
+void	ft_copy_bstenv_recursive(t_env *node, char **env, int *idx);
+char	**ft_copy_bstenv(t_env_root *root);
+void	ft_remove_copy_env(char **env);
+void	ft_print_copy_env(char **env);
 
 /* src/environment/environment_bst/env_bst_init.c */
 t_env_root	*ft_init_env_root(void);

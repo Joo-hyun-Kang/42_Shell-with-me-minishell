@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/19 15:43:42 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 04:40:48 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 19:57:09 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@
 
 int	testSize = 0;
 int	is_done = 0;
-
 
 /*
  * GNL
@@ -70,6 +69,7 @@ int	main(int argc, char **argv, char **ori_env)
 	t_env_root	*env;
 
 
+	env = ft_dpenv_to_bstenv(ori_env);
 	/* Set signal */
 	/* Set signal */
 	/* Set signal */
@@ -115,15 +115,16 @@ int	main(int argc, char **argv, char **ori_env)
 		system("clear");
 
 		printf("#--------------------------------------------------#\n");
-		printf("|%sCOMMAND%s:                                          |\n", YELLOW, DEFAULT);
-		printf("|     %s%-45s%s|\n", GREEN, cmdStrDPtr[idx], DEFAULT);
-		printf("|                                            # %s%-3d%s |\n", GREEN, idx, DEFAULT);
+		printf(" %sCOMMAND%s:                                           \n", YELLOW, DEFAULT);
+		printf("      %s%-45s%s \n", GREEN, cmdStrDPtr[idx], DEFAULT);
+		printf("                                             # %s%-3d%s  \n", GREEN, idx, DEFAULT);
 		printf("#--------------------------------------------------#\n");
 
-//		env = ft_dpenv_to_bstenv(ori_env);
+
 //		arg = ft_parser(ft_strdup(cmdStrDPtr[idx]), env);
 //		printf("\n##--------%s Argument %s--------##\n", CYAN, DEFAULT);
 //		ft_show_argument_test(arg);
+//		ft_free_argument(arg);
 
 		/*
 		 *
@@ -166,9 +167,8 @@ int	main(int argc, char **argv, char **ori_env)
 			wait(&pid);
 			fflush(stdin);
 		}
-		printf("%s##-----------------------------##%s\n", BLUE, DEFAULT);
+		printf("\n%s##-----------------------------##%s\n", BLUE, DEFAULT);
 
-//		ft_free_argument(arg);
 		++idx;
 	}
 	system("clear");
@@ -337,7 +337,7 @@ static void	*system_test(char *cmd)
 {
 	char	*tmp;
 
-	printf("%s##--------   System    --------##%s\n", BLUE, DEFAULT);
+	printf("\n%s##--------   System    --------##%s\n", BLUE, DEFAULT);
 	tmp = ft_strjoin("echo '", cmd);
 	free(cmd);
 	cmd = ft_strjoin(tmp, "' | bash");

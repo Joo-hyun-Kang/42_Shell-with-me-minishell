@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 16:40:14 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 00:46:57 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int main(int argc, char **argv, char **env)
 			ft_set_echo();
 			ft_system(arg);
 			ft_free_argument(arg);
-			system("leaks minishell"); // for test
+//			system("leaks minishell"); // for test
 		}
 		ft_set_noecho();
 		read_line = readline(READLINE);

@@ -148,6 +148,46 @@ void	    ft_copy_char_arr_malloc(char **dst, char **src);
 void		exit_malloc_fail(void *p);
 void		free_arraylist(t_arraylist *arraylist);
 
+
+/* src/execute_cmd/export.c */
+void	ft_execute_export(t_argument *arg, int is_parent);
+/* src/execute_cmd/env.c */
+void	ft_execute_env(t_argument *arg, int is_parent);
+/* src/execute_cmd/unset.c */
+void	ft_execute_unset(t_argument *arg, int is_parent);
+/* src/execute_cmd/exit.c */
+void	ft_execute_exit(t_argument *argument, int is_parent);
+/* src/execute_cmd/echo.c */
+void	ft_execute_echo(t_argument *argument, int is_parent);
+/* src/execute_cmd/pwd.c */
+void	ft_execute_pwd(t_argument *argument, int is_parent);
+/* src/execute_cmd/cd.c */
+void	ft_execute_cd(t_argument *argument, int is_parent);
+
+/* src/execute_cmd/ft_error.c */
+#define CD_MIN (0)
+#define CD_NO_DIR (1)
+#define CD_NO_SET (2)
+#define CD_MAX (2)
+
+#define PWD_MIN (3)
+#define PWD_ERR (3)
+#define PWD_MAX (3)
+
+#define EXIT_MIN (4)
+#define EXIT_NUMERIC (4)
+#define EXIT_MANY_ARG (5)
+#define EXIT_MAX (5)
+
+#define UNSET_MIN (6)
+#define UNSET_INVALID (6)
+#define UNSET_MAX (6)
+
+#define EXPORT_MIN (7)
+#define EXPORT_INVALID (7)
+#define EXPORT_MAX (7)
+void	ft_error(int error_code, void *info, int is_parent);
+
 #endif
 
 // 1-1. < 여러 개 인 경우

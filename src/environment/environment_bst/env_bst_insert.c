@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 09:14:02 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/20 15:36:23 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/23 14:53:52 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 static int	ft_env_insert_recursive(char *key, char *value, t_env *cur_node);
 static void	ft_env_replace_value(t_env *node, char *new_value);
 
-// Unused key will be automatically freed.
 void	ft_env_insert(t_env_root *root, char *key, char *value)
 {
 	if (root->root == NULL)

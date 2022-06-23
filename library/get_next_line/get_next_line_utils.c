@@ -1,34 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/16 16:05:45 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 02:01:29 by kanghyki         ###   ########.fr       */
+/*   Created: 2021/11/25 13:37:42 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/23 02:45:00 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#include "inc/get_next_line.h"
 
-void	lx_read(t_lexer *lexer)
+size_t	gnl_strlen(const char *str)
 {
-	if (lexer->read_idx < lexer->cmd_str_size)
-		++lexer->read_idx;
+	size_t	i;
+
+	i = 0;
+	while (str[i])
+		++i;
+	return (i);
 }
 
-char	lx_chr(t_lexer *lexer)
+char	*gnl_find_newline(const char *str)
 {
-	return (lexer->cmd_str[lexer->read_idx]);
-}
-
-char	lx_next_chr(t_lexer *lexer)
-{
-	return (lexer->cmd_str[lexer->read_idx + 1]);
-}
-
-char	*lx_ptr(t_lexer *lexer)
-{
-	return (&lexer->cmd_str[lexer->read_idx]);
+	if (!str)
+		return (0);
+	while (*str)
+	{
+		if (*str == '\n')
+			return ((char *)str);
+		++str;
+	}
+	return (0);
 }

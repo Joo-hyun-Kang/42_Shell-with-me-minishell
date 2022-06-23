@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 17:57:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/20 15:37:42 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/23 14:56:07 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,10 @@ bool	ft_is_dictionary(char *str)
 // ft_is_dictionary == 1 가 선행되어야 함
 char	*ft_extract_key_from_str(char *str)
 {
-	char	*rtn_str;
 	char	*s_pos;
 
 	s_pos = str;
-	while (*str != '=')
+	while (*str != '\0' && *str != '=')
 		++str;
 	return (ft_strndup(s_pos, str - s_pos));
 }
@@ -38,9 +37,7 @@ char	*ft_extract_key_from_str(char *str)
 // ft_is_dictionary == 1 가 선행되어야 함
 char	*ft_extract_value_from_str(char *str)
 {
-	char	*rtn_str;
-
-	while (*str != '=')
+	while (*str != '\0' && *str != '=')
 		++str;
 	++str;
 	return (ft_strdup(str));

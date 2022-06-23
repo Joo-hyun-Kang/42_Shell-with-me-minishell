@@ -1,34 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lexer_utils.c                                      :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/16 16:05:45 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 02:01:29 by kanghyki         ###   ########.fr       */
+/*   Created: 2021/11/25 13:37:33 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/23 02:47:27 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../include/minishell.h"
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-void	lx_read(t_lexer *lexer)
-{
-	if (lexer->read_idx < lexer->cmd_str_size)
-		++lexer->read_idx;
-}
+# include <stdlib.h>
+# include <unistd.h>
 
-char	lx_chr(t_lexer *lexer)
-{
-	return (lexer->cmd_str[lexer->read_idx]);
-}
+# define BUFFER_SIZE (64)
 
-char	lx_next_chr(t_lexer *lexer)
-{
-	return (lexer->cmd_str[lexer->read_idx + 1]);
-}
+/* get_next_line.c */
+char		*get_next_line(int fd);
 
-char	*lx_ptr(t_lexer *lexer)
-{
-	return (&lexer->cmd_str[lexer->read_idx]);
-}
+/* get_next_line_utils.c */
+size_t		gnl_strlen(const char *str);
+char		*gnl_find_newline(const char *str);
+
+#endif

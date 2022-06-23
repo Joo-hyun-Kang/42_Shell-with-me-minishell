@@ -1,50 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/14 21:48:20 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 03:56:28 by kanghyki         ###   ########.fr       */
+/*   Created: 2022/06/22 17:27:21 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/23 15:07:05 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_sig_get_extra_line(int sig)
+t_token	*p_heredoc(t_argument *arg, t_token *cur_tok)
 {
-	(void)sig;
-	exit(1);
-}
+	int		pid;
+	int		status;
 
-void	ft_sigint(int sig)
-{
-	pid_t	pid;
-
-	(void)sig;
-	pid = waitpid(-1, NULL, WNOHANG);
-	if (pid == -1)
-	{
-		rl_replace_line("", 0);
-		printf("\n");
-		rl_on_new_line();
-		rl_redisplay();
-	}
-	else
-		printf("\n");
-}
-
-void	ft_sigquit(int sig)
-{
-	pid_t	pid;
-
-	pid = waitpid(-1, NULL, WNOHANG);
-	if (pid == -1)
-	{
-		rl_on_new_line();
-		rl_redisplay();
-	}
-	else
-		printf("Quit: %d\n", sig);
+	pid = fork();
+	signal(SIGQUIT, SIG_IGN);
+	if (pid == 0)
+		p_heredoc_child(arg, cur_tok);
+	wait(&status);
+	if (status != 0)
+		p_heredoc_err(status);
+	arg->next_token_type = GT;
+	free(cur_tok->pa_str);
+	cur_tok->pa_str = ft_strdup(F_HEREDOC);
+	signal(SIGQUIT, ft_sigquit);
+	return (cur_tok);
 }

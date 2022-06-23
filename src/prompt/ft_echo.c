@@ -1,48 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_free_utils.c                                :+:      :+:    :+:   */
+/*   ft_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/12 04:34:39 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/15 11:51:44 by kanghyki         ###   ########.fr       */
+/*   Created: 2022/06/23 03:34:54 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/23 16:29:22 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_free_token(t_token *token)
+void	ft_set_noecho(void)
 {
-	t_token	*prev;
+	struct termios	term;
 
-	prev = token;
-	while (token != NULL)
-	{
-		token = token->next;
-		free(prev);
-		prev = token;
-	}
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag &= ~(ECHOCTL);
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-void	ft_free_argument(t_argument *arg)
+void	ft_set_echo(void)
 {
-	t_argument	*prev;
-	t_argument	*tmp;
-	int			i;
+	struct termios	term;
 
-	prev = arg;
-	while (prev != NULL)
-	{
-		i = 0;
-		while (prev->pa_argument[i] != NULL)
-		{
-			free(prev->pa_argument[i]);
-			++i;
-		}
-		free(prev->pa_argument);
-		tmp = prev->next;
-		free(prev);
-		prev = tmp;
-	}
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag |= ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }

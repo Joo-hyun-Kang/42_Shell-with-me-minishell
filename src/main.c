@@ -6,15 +6,56 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/18 04:30:48 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 04:52:49 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	ft_show_argument_test(t_argument *arg)
+static void	ft_init_minishell(t_env_root **rnv, char **env, int ac, char **av);
+static void	ft_show_argument_test(t_argument *arg); // for test
+
+int main(int argc, char **argv, char **env)
 {
-	const char	*t_type_str_test[8] = {"ARGUMENT", "PIPE", "SEMICOLON", "LT", "DLT", "GT", "DGT", "EOL"};
+	char       		*read_line;
+	t_env_root		*root_env;
+	t_argument		*arg;
+
+	ft_init_minishell(&root_env, env, argc, argv);
+	read_line = readline(READLINE);
+	while (read_line != NULL)
+	{
+		add_history(read_line);
+		arg = ft_parser(read_line, root_env);
+		if (arg != NULL)
+		{
+			ft_show_argument_test(arg); // for test
+			ft_set_echo();
+			//ft_system(arg);
+			ft_free_argument(arg);
+			system("leaks minishell"); // for test
+		}
+		ft_set_noecho();
+		read_line = readline(READLINE);
+	}
+	ft_exit();
+	return (0);
+}
+
+static void	ft_init_minishell(t_env_root **rnv, char **env, int ac, char **av)
+{
+	(void)ac;
+	(void)av;
+	signal(SIGINT, ft_sigint);
+	signal(SIGQUIT, ft_sigquit);
+	ft_set_noecho();
+	printf("%s", BANNER);
+	*rnv = ft_dpenv_to_bstenv(env);
+}
+
+static void	ft_show_argument_test(t_argument *arg) // for test
+{
+	const char	*t_type_str_test[7] = {"ARGUMENT", "PIPE", "LT", "DLT", "GT", "DGT", "EOL"};
 	char		**str;
 
 	if (arg == 0)
@@ -23,33 +64,10 @@ void	ft_show_argument_test(t_argument *arg)
 	str = arg->pa_argument;
 	while (*str != 0)
 		printf("{ arg->pa_argument: %s }\n", *str++);
-	ft_show_argument_test(arg->next);
-}
-
-int main(int argc, char **argv, char **env)
-{
-	char        *str;
-	t_argument	*arg;
-	t_env_root	*root_env;
-
-	g_exit = 0;
-	printf("%s", BANNER);
-	root_env = ft_dpenv_to_bstenv(env);
-	while (1)
+	if (arg->next != NULL)
 	{
-		signal(SIGINT, sigint_handler);
-		str = readline("minishell-4.2$ ");
-		if (str == NULL)
-			str = ft_strdup("exit");
-		add_history(str);
-		arg = ft_parser(str, root_env);
-		if (arg == 0)
-			continue ;
-		ft_show_argument_test(arg);
-		signal(SIGINT, sigint_handler_after_parsing);
-		ft_system(arg);
-		ft_free_argument(arg);
-//		system("leaks minishell");
+		printf(" |\n");
+		printf(" v\n");
+		ft_show_argument_test(arg->next);
 	}
-	return (0);
 }

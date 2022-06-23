@@ -60,10 +60,6 @@ void	ft_execute_mult_cmd(t_argument **arg)
 		{
 			ft_execute_redir(arg, state, pa_pipes);
 		}
-		else if (token == SEMICOLON)
-		{
-			break;
-		}
 	}
 
 	int i = 0;
@@ -85,8 +81,8 @@ void	ft_system(t_argument *argument)
 {
 	while (argument != NULL)
 	{
-		// 첫번쨰 친구들은 EOL 이거나 세미콜론은 여기서 막힌다
-		if (argument->next_token_type == EOL || argument->next_token_type == SEMICOLON)
+		// 첫번쨰 친구들은 EOL 은 여기서 막힌다
+		if (argument->next_token_type == EOL)
 			ft_execute_single_cmd(&argument);
 		else
 			ft_execute_mult_cmd(&argument);

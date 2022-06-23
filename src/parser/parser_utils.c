@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:35:47 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 05:21:55 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 16:34:46 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ void	ft_add_argument_back(t_argument **head, t_argument *arg)
 
 void	ft_free_argument(t_argument *arg)
 {
-	t_argument	*prev;
+	t_argument	*tmp;
 	int			i;
 
-	prev = arg;
+	tmp = arg;
 	while (arg != NULL)
 	{
 		i = 0;
@@ -76,8 +76,8 @@ void	ft_free_argument(t_argument *arg)
 		}
 		free(arg->pa_argument);
 		arg = arg->next;
-		free(prev);
-		prev = arg;
+		free(tmp);
+		tmp = arg;
 	}
 }
 

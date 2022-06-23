@@ -140,10 +140,6 @@ void ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 			state = PIPE_MIDDLE;
 		ft_execute_pipe(arg, state, pipes);
 	}
-	else if (token == SEMICOLON)
-	{
-		return ;
-	}
 	else if (token == EOL)
 	{
 		*arg = (*arg)->next;
@@ -165,7 +161,7 @@ void	ft_sort_redir_command(t_argument **arg, t_arraylist *list_arg, t_arraylist 
 	}
 
 	char *gt_file = NULL;
-	while (p->next_token_type != PIPE && p->next_token_type != SEMICOLON && p->next_token_type != EOL)
+	while (p->next_token_type != PIPE && p->next_token_type != EOL)
 	{
 		if (p->next_token_type == GT)
 		{

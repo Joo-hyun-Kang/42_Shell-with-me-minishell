@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/23 16:29:09 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/23 16:37:39 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,7 +60,7 @@ ENVBST_SRC		=	env_bst_init.c\
 					env_bst_delete.c
 #--------------[ EXECUTE ]----------------
 EXECUTE_DIR		=	src/execute_cmd
-EXECUTE_SRC		=	#cmd.c\
+EXECUTE_SRC		=	cmd.c\
 					builtin.c\
 					ft_atoull.c\
 					pipe.c\
@@ -89,14 +89,16 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(PRPT_SRC:.c=.o))
 #-----------------[ CMD ]-------------------
 CC				=	gcc
-CFLAGS			=	-Wall -Wextra -Werror
+CFLAGS			=	# -Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(LIBFT_DIR)\
 					-I $(GNL_DIR)\
 					-I $(EXECUTE_DIR)\
-					-I/Users/jokang/.brew/opt/readline/include
+					-I/opt/homebrew/opt/readline/include
+					#-I/Users/jokang/.brew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L/Users/jokang/.brew/opt/readline/lib
+					-l readline -L /opt/homebrew/opt/readline/lib
+					#-l readline -L/Users/jokang/.brew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 

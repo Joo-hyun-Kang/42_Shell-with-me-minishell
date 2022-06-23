@@ -35,7 +35,7 @@ void	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 	{
 		ft_execute_pipe(arg, state, pipes);
 	}
-	else if (token == EOL || token == SEMICOLON)
+	else if (token == EOL)
 	{
 		ft_execute_pipe(arg, END, pipes);
 	}

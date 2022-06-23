@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 05:21:59 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 21:25:46 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,11 +148,11 @@ char		*p_env_heredoc(char *str, t_env_root *env);
 void		p_replace_env_heredoc(char **str, char **dst, t_env_root *env);
 
 /*
- *         #########################################################
- *         #                                                       #
- *         #                src/parser/tokenizer/                  #
- *         #                                                       #
- *         #########################################################
+ * #########################################################
+ * #                                                       #
+ * #                src/parser/tokenizer/                  #
+ * #                                                       #
+ * #########################################################
  */
 /* src/parser/tokenizer/tokenizer.c */
 t_token		*ft_tokenizer(char *cmd_str, t_env_root *env);

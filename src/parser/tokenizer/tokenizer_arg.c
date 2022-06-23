@@ -6,11 +6,13 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 15:51:20 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 14:59:18 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 21:23:04 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
+
+static void	tk_unclosed_quote_err(t_lexer *lexer);
 
 void	tk_replace_env(t_lexer *lexer)
 {
@@ -80,6 +82,11 @@ void	tk_quote(t_lexer *lexer)
 		else
 			lx_read(lexer);
 	}
+	tk_unclosed_quote_err(lexer);
+}
+
+static void	tk_unclosed_quote_err(t_lexer *lexer)
+{
 	lexer->err = true;
 	g_exit = 258;
 	printf("minishell: syntax error: unclosed quote\n");

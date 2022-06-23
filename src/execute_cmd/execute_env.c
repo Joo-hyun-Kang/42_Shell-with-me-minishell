@@ -6,18 +6,20 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/10 14:19:31 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/20 15:57:05 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 21:30:14 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
+
+static int	ft_check_valid_identifier(char *key);
 
 void	ft_excute_export_print(t_env *root_node, char *str)
 {
 	if (root_node == NULL)
 		return ;
 	ft_excute_export_print(root_node->left, str);
-	printf("declare -x %s=\"%s\"\n", root_node->pa_key, root_node->pa_value);
+	printf("%s%s=\"%s\"\n", str, root_node->pa_key, root_node->pa_value);
 	ft_excute_export_print(root_node->right, str);
 }
 
@@ -40,7 +42,7 @@ void	ft_execute_export(t_argument *arg, int is_parent)
 		ft_excute_export_print(arg->env->root, "declare -x ");
 	else
 	{
-		if (ft_is_dictionary(arg->pa_argument[ARG]) == 1)
+		if (ft_check_valid_identifier(arg->pa_argument[ARG]) == true)
 		{
 			key = ft_extract_key_from_str(arg->pa_argument[ARG]);
 			value = ft_extract_value_from_str(arg->pa_argument[ARG]);
@@ -66,20 +68,28 @@ void	ft_execute_unset(t_argument *arg, int is_parent)
 
 	if (arg->pa_argument[ARG] == NULL)
 		return ;
-	key = ft_strdup(arg->pa_argument[ARG]);
-	if (key == 0)
-		return ;
+	if (ft_check_valid_identifier(arg->pa_argument[ARG]) == true)
+		ft_env_delete(arg->env, ft_strdup(arg->pa_argument[ARG]));
+	if (is_parent == false)
+		exit(0);
+}
+
+static int	ft_check_valid_identifier(char *key)
+{
+	int	i;
+
 	i = 0;
-	while (key[i])
+	while (key[i] != '\0')
 	{
-		if (ft_isalnum(key[i]) == 0)
+		if (i != 0 && key[i] == '=')
+			break ;
+		if (ft_isalnum(key[i]) == false)
 		{
 			printf("minishell: unset: `%s': not a valid identifier\n", key);
-			return ;
+			g_exit = 1;
+			return (0);
 		}
 		++i;
 	}
-	ft_env_delete(arg->env, key);
-	if (is_parent == false)
-		exit(0);
+	return (1);
 }

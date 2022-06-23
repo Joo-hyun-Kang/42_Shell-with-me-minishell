@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:35:28 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 02:37:30 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 07:28:27 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static int	ft_check_export_valid(char *key)
 	{
 		if (i != 0 && key[i] == '=')
 			break ;
-		if (ft_isalnum(key[i]) == false)
+		if (ft_isalnum(key[i]) == false && key[i] != '_')
 			return (0);
 		++i;
 	}

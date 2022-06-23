@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:39:45 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 02:39:56 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 07:29:44 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	ft_check_unset_vaild(char *key)
 	i = 0;
 	while (key[i] != '\0')
 	{
-		if (ft_isalnum(key[i]) == false)
+		if (ft_isalnum(key[i]) == false && key[i] != '_')
 			return (0);
 		++i;
 	}

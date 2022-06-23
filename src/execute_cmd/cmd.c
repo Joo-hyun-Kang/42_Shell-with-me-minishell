@@ -74,7 +74,7 @@ void	ft_execute_mult_cmd(t_argument **arg)
 	{
 	}
 
-	ft_free_pipe(&pa_pipes);
+	ft_free_pipes(&pa_pipes);
 }
 
 void	ft_system(t_argument *argument)

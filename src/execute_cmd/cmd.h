@@ -117,10 +117,16 @@ void				ft_execute_unset(t_argument *arg, int is_parent);
 
 /* src/execute_cmd/pipe.c */
 
+void		ft_get_pipe_state(int *state);
 void		ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes);
 int			ft_construt_pipes(t_argument *arg, t_pipes *pipes);
 void		ft_set_pipe(t_pipes *pipes, int state);
-void		ft_free_pipe(t_pipes **pipes);
+
+/* src/execute_cmd/pipe_utils.c */
+
+void		ft_close_pipe(t_pipes *pipes);
+void		ft_free_pipes(t_pipes **pipes);
+int			ft_get_pipe_count(t_argument *arg);
 
 /* src/execute_cmd/redir.c */
 

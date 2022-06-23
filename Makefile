@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/23 16:37:39 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/24 02:44:45 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,8 +50,7 @@ PARSER_SRC		=	parser.c\
 					ft_merge_str.c
 #--------------[ ENV ]----------------
 ENV_DIR			=	src/environment
-ENV_SRC			=	env_utils.c\
-					execute_env.c
+ENV_SRC			=	env_utils.c
 #--------------[ ENV_BST ]----------------
 ENVBST_DIR		=	src/environment/environment_bst
 ENVBST_SRC		=	env_bst_init.c\
@@ -65,7 +64,15 @@ EXECUTE_SRC		=	cmd.c\
 					ft_atoull.c\
 					pipe.c\
 					redir.c\
-					arraylist.c
+					arraylist.c\
+					ft_error.c\
+					export.c\
+					env.c\
+					unset.c\
+					echo.c\
+					exit.c\
+					pwd.c\
+					cd.c
 #--------------[ MINISHELL ]----------------
 NAME			=	minishell	
 OBJ_DIR			=	objects

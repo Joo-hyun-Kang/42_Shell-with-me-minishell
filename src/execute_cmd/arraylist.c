@@ -2,6 +2,14 @@
 
 #define BASIC_CAPACITY (10)
 
+void	init_arraylist(t_arraylist *arraylist)
+{
+	arraylist->pa_arr = NULL;
+    arraylist->type = NULL;
+	arraylist->length = 0;
+	arraylist->capacity = 0;
+}
+
 int	add_arraylist(t_arraylist *arraylist, char* value, int type)
 {
 	if (!is_arraylist_full(arraylist))

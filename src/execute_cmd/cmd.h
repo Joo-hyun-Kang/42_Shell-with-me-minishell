@@ -68,6 +68,14 @@ typedef struct arraylist {
 	int		capacity;
 }	t_arraylist;
 
+typedef struct redir_var {
+	t_arraylist	*list_arg;
+	t_arraylist *list_com;
+	t_pipes		*pipes;
+	int			will_stdin_pipe;
+	int			will_stdout_pipe;
+}	t_redir_var;
+
 /*
  * #########################################################
  * #                                                       #
@@ -109,21 +117,29 @@ void				ft_execute_unset(t_argument *arg, int is_parent);
 
 /* src/execute_cmd/pipe.c */
 
+void		ft_get_pipe_state(int *state);
 void		ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes);
 int			ft_construt_pipes(t_argument *arg, t_pipes *pipes);
 void		ft_set_pipe(t_pipes *pipes, int state);
+
+/* src/execute_cmd/pipe_utils.c */
+
+void		ft_close_pipe(t_pipes *pipes);
+void		ft_free_pipes(t_pipes **pipes);
+int			ft_get_pipe_count(t_argument *arg);
 
 /* src/execute_cmd/redir.c */
 
 int			ft_is_redir(enum e_token_type token);
 void		ft_execute_redir(t_argument **arg, int state, t_pipes *pipes);
 void		ft_sort_redir_command(t_argument **arg, t_arraylist *list_arg, t_arraylist *list_com);
-int			ft_set_redir(t_pipes *pipes, t_arraylist *list_arg, t_arraylist *list_com, t_arraylist *argument);
+int			ft_set_redir(t_redir_var *redir, t_arraylist *argument);
 void		ft_relocate_redir_argument(t_argument **arg);
 int			ft_find_next_pipe(t_argument **arg);
 
 /* src/execute_cmd/arraylist.c */
 
+void		init_arraylist(t_arraylist *arraylist);
 int			add_arraylist(t_arraylist *arraylist, char* value, int type);
 int			is_arraylist_full(t_arraylist *arraylist);
 int			allocate_arraylist(t_arraylist *arraylist);

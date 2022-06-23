@@ -68,13 +68,13 @@ void	ft_execute_mult_cmd(t_argument **arg)
 		close(pa_pipes->array[i][PIPE_READ]);
 		close(pa_pipes->array[i][PIPE_WRITE]);
 		i++;
-	}
+	} 
 
 	while (wait(NULL) != -1)
 	{
 	}
 
-	// //free(pa_pipes)--> 2차원
+	ft_free_pipes(&pa_pipes);
 }
 
 void	ft_system(t_argument *argument)

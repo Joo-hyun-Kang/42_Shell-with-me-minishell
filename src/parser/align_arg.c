@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   replace_arg.c                                      :+:      :+:    :+:   */
+/*   align_arg.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 03:09:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 07:06:15 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 08:13:45 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	p_swap_arg(t_argument *cur, t_argument *next)
 	next->pa_argument = new_str;
 }
 
-t_argument	*p_replace_arg(t_argument *arg)
+t_argument	*p_align_arg(t_argument *arg)
 {
 	t_argument	*head;
 
@@ -85,18 +85,3 @@ t_argument	*p_replace_arg(t_argument *arg)
 	}
 	return (head);
 }
-
-/*            > 1.txt echo hello                         echo hello > 1.txt                      |
- *                                                                                               |
- *  { LT }   { EOL }                                   { LT }   { EOL }                          |
- *                                                                                               |
- *          { 1.txt,                                   { echo,   { 1.txt }                       |
- *            echo,                                      hello }                                 |
- *            hello }                                                                            |
- *                                                                                               |
- *                                                                                               |
- *                                                                                               |
- *                                                                                               |
- *                                                                                               |
- *                                                                                               |
- */

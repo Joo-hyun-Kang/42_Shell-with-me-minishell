@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/24 07:26:51 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/24 08:14:23 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,7 +47,7 @@ PARSER_SRC		=	parser.c\
 					extra_pipe.c\
 					heredoc.c\
 					heredoc_utils.c\
-					replace_arg.c\
+					align_arg.c\
 					ft_merge_str.c
 #--------------[ ENV ]----------------
 ENV_DIR			=	src/environment

@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/21 22:49:20 by jokang           ###   ########.fr        #
+#    Updated: 2022/06/23 15:55:57 by jokang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -81,9 +81,9 @@ CC				=	gcc
 CFLAGS			=	-g # -Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(EXECUTE_DIR)\
-					-I /home/linuxbrew/.linuxbrew/Cellar/readline/8.1.2/include
+					-I/Users/jokang/.brew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /home/linuxbrew/.linuxbrew/Cellar/readline/8.1.2/lib
+					-l readline -L/Users/jokang/.brew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 

@@ -47,14 +47,6 @@ void	ft_execute_mult_cmd(t_argument **arg)
 	if (ret == false)
 		return ;
 
-			t_argument *p = *arg;
-		while (p != NULL)
-		{
-			printf("%s : %s\n", "init", p->pa_argument[0]);
-			p = p->next;
-		}
-
-
 	state = INIT;
 	while (*arg != NULL)
 	{
@@ -62,7 +54,6 @@ void	ft_execute_mult_cmd(t_argument **arg)
 		
 		if (token == PIPE)
 		{
-			printf("HI!!\n");
 			ft_execute_pipe(arg, state, pa_pipes);
 		}
 		else if (ft_is_redir(token))
@@ -75,21 +66,17 @@ void	ft_execute_mult_cmd(t_argument **arg)
 		}
 	}
 
-
 	int i = 0;
 	while (i < pa_pipes->pipe_count)
 	{
 		close(pa_pipes->array[i][PIPE_READ]);
 		close(pa_pipes->array[i][PIPE_WRITE]);
-		ft_putstr_fd("finished\n", 2);
 		i++;
 	}
 
 	while (wait(NULL) != -1)
 	{
 	}
-
-	printf("IH\n");
 
 	// //free(pa_pipes)--> 2차원
 }
@@ -118,9 +105,7 @@ int		ft_execute_nopath(t_argument *arg, char *pa_path)
 	free(arg->pa_argument[COMMAND_POSITION]);
 	arg->pa_argument[COMMAND_POSITION] = pa_path;
 
-	ft_putstr_fd("child\n", 2);
 	g_exit = execve(pa_path, arg->pa_argument, NULL);
-	ft_putstr_fd("errer\n", 2);
 	return 0;
 }
 
@@ -173,13 +158,11 @@ void	ft_execute(t_argument *argument, int is_parent)
 
 	//CASE0 : Bulltein 명령어인 경경우	
 	command = argument->pa_argument[COMMAND_POSITION];
-	ft_putstr_fd(command, 2);
 	bull_type = INVAILD;
 
 	if (is_builtin(command, &bull_type) == true)
 	{
 		ft_builtin(argument, bull_type, is_parent);
-		ft_putstr_fd("b1\n", 2);
 		return ;
 	}
 
@@ -192,26 +175,21 @@ void	ft_execute(t_argument *argument, int is_parent)
 
 	if (is_path)
 	{
-		ft_putstr_fd("b2\n", 2);
 		ft_execute_path(argument);
 	}
 
 	//CASE2 : 경로 없이 COMMAND만 들어왔는데 환경변수를 훑었을 때 명령어가 있는 경우
 	pa_path = ft_search_command_path_malloc(argument->env, argument->pa_argument[COMMAND_POSITION]);
-	ft_putstr_fd(pa_path, 2);
 	if (pa_path != NULL)
 	{
-		ft_putstr_fd("b3\n", 2);
 		ft_execute_nopath(argument, pa_path);
 	}
 	//CASE3 : 커맨드이고 현재 디렉토리가 커맨드가 있는 곳(일반적으로 환경변수에 등록되는 곳)인 경우
 	//	      커맨드와 현재 디렉토리 내에 있으면 그냥 실행함
 	if (ft_is_command_dir())
 	{
-		ft_putstr_fd("b4\n", 2);
 		ft_execute_except_case(argument);
 	}
-	ft_putstr_fd("b5\n", 2);
 	exit(127);
 }
 
@@ -273,15 +251,6 @@ char	*ft_search_command_path_malloc(t_env_root *root, char *command)
 
 	pa_directories = ft_split(env_path, ':');
 
-	int out_len = ft_get_length_2d_arr(pa_directories);
-	int k = 0;
-	while (k < 2)
-	{
-		ft_putstr_fd(pa_directories[k], 2);
-		k++;
-	}
-	ft_putstr_fd("\n\n", 2);
-
 	//현재 디렉토리도 넣는 로직 추가
 	i = 0;
 	position = -1;
@@ -306,7 +275,6 @@ char	*ft_search_command_path_malloc(t_env_root *root, char *command)
 		{
 		/* could not open directory */
 			perror ("");
-			ft_putstr_fd("here!\n", 2);
 			return NULL;
 		}
 		i++;

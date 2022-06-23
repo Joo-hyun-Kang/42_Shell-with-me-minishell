@@ -175,7 +175,7 @@ void	ft_execute_cd(t_argument *argument, int is_parent)
 			t_env	*find = ft_env_search(argument->env, ft_strdup("OLDPWD"));
 			if (find == NULL)
 			{
-				printf("OLDPWD Blabla...\n");
+				printf("minishell cd: OLDPWD not set\n");
 			}
 			else
 			{

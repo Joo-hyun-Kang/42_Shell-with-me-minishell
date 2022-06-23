@@ -95,8 +95,8 @@ void ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 	ft_sort_redir_command(arg, list_arg, list_com);
 
 	pid_t pid;
-	//pid = fork();
-	pid = 0;
+	pid = fork();
+	//pid = 0;
 	if (pid == -1)
 	{
 		printf("minishell : %s\n", strerror(errno));
@@ -139,11 +139,18 @@ void ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 		*arg = (*arg)->next;
 		if (state == INIT)
 			state = PIPE_START;
-		if (state == PIPE_START)
+		else if (state == PIPE_START)
 			state = PIPE_MIDDLE;
-		if ((*arg)->next_token_type == EOL)
-			state = PIPE_END;
-		ft_execute_pipe(arg, state, pipes);
+		if (ft_is_redir((*arg)->next_token_type) == false)
+		{
+			if ((*arg)->next_token_type == EOL)
+				state = PIPE_END;
+			ft_execute_pipe(arg, state, pipes);
+		}
+		else
+		{
+			ft_execute_redir(arg, state, pipes);
+		}
 	}
 	else if (token == EOL)
 	{
@@ -226,15 +233,13 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 	char		*pa_gt_files;
 	char		*lt_dlt_files;
 	int			is_same_file;
-
-	printf("Hi\n");
+	
 	open_files = (t_arraylist *)malloc(sizeof(t_arraylist));
 	init_arraylist(open_files);
 	
 	pa_gt_files = NULL;
 	lt_dlt_files = NULL;
 
-	printf("0\n");
 	// 사용할 변수들을 다시 가져옴
 	char **strs = redir->list_com->pa_arr;
 	int	*type = redir->list_com->type;
@@ -252,6 +257,20 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 		i++;
 	}
 
+	// 같은 파일을 여는 경우 예외처리
+	if (open_files->pa_arr != NULL)
+	{
+		lt_dlt_files = open_files->pa_arr[open_files->length - 1];
+		if (lt_dlt_files != NULL && pa_gt_files != NULL)
+		{
+			if (ft_strcmp(lt_dlt_files, pa_gt_files) == 0)
+			{
+				exit(0);
+			}
+		}
+	}
+
+
 	// 커맨드를 따서 pa_arguemt를 만듬
 	i = 0;
 	while (i < redir->list_arg->length)
@@ -263,10 +282,8 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 
 	// 그리고 동시에 파일들을 오픈 시킬 건 오픈 시키고
 	// 가장 마지막 파일들은 빼고
-	is_same_file = false;
 	if (open_files->pa_arr != NULL)
 	{
-		printf("1\n");
 		int j = 0;
 		int fd;
 		while (j < open_files->length - 1)
@@ -295,7 +312,6 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 		}
 		if (j == open_files->length - 1)
 		{
-			printf("2\n");
 			if (open_files->type[j] == LT_OPEN)
 			{
 				redir->will_stdout_pipe = false;
@@ -315,7 +331,7 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 
 	if (pa_gt_files != NULL)
 	{
-		printf("3\n");
+		//printf("3\n");
 		int fd;
 		fd = open(pa_gt_files, O_RDONLY);
 		if (fd < 0)
@@ -332,12 +348,10 @@ int	ft_set_redir(t_redir_var *redir, t_arraylist *argument)
 	{
 		if (redir->will_stdin_pipe == true)
 		{
-			printf("4\n");
 			dup2(redir->pipes->array[redir->pipes->current_idx - 1][PIPE_READ], STDIN_FILENO);
 		}
 		if (redir->will_stdout_pipe == true)
 		{
-			printf("5\n");
 			dup2(redir->pipes->array[redir->pipes->current_idx][PIPE_WRITE], STDOUT_FILENO);
 		}
 	}

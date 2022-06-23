@@ -68,7 +68,7 @@ void	ft_execute_mult_cmd(t_argument **arg)
 		close(pa_pipes->array[i][PIPE_READ]);
 		close(pa_pipes->array[i][PIPE_WRITE]);
 		i++;
-	}
+	} 
 
 	while (wait(NULL) != -1)
 	{

@@ -6,11 +6,11 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:39:45 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 07:29:44 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 08:33:14 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 static int	ft_check_unset_vaild(char *key);
 

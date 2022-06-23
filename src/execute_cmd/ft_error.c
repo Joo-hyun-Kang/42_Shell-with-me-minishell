@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 00:57:21 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 04:02:53 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/24 08:25:40 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,10 @@ int	ft_export_error(int error_code, void *info)
 	return (1);
 }
 
-int	ft_exeve_error(int error_code, void *info)
+int	ft_exe_error(int error_code, void *info)
 {
 	printf("%s: ", (char *)info);
-	if (error_code == EXE_COM_NOT)
+	if (error_code == EXE_CMD_NOT)
 	{
 		printf("command not found\n");
 		return (127);
@@ -85,7 +85,7 @@ int	ft_exeve_error(int error_code, void *info)
 	return (0);
 }
 
-void	ft_error(int error_code, void *info, int is_parent)
+void	ft_error(enum e_err_code error_code, void *info, int is_parent)
 {
 	int	exit_status;
 
@@ -101,7 +101,7 @@ void	ft_error(int error_code, void *info, int is_parent)
 	else if (error_code >= EXPORT_MIN && error_code <= EXPORT_MAX)
 		exit_status = ft_export_error(error_code, info);
 	else if (error_code >= EXE_MIN && error_code <= EXE_MAX)
-		exit_status = ft_exeve_error(error_code, info);
+		exit_status = ft_exe_error(error_code, info);
 
 
 	if (is_parent == 0)

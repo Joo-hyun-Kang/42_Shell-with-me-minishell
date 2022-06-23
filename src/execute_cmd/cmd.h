@@ -42,17 +42,6 @@ typedef struct pipes {
 	size_t		current_idx;
 } t_pipes;
 
-enum e_builtin_type {
-    BUL_ECHO,
-    BUL_CD,
-    BUL_PWD,
-    BUL_EXPORT,
-    BUL_UNSET,
-    BUL_ENV,
-    BUL_EXIT,
-	INVAILD
-};
-
 enum redir_type {
 	RE_COM,
 	LT_OPEN,
@@ -98,15 +87,6 @@ void				ft_free_command(char **pa_char);
 int					ft_get_length_2d_arr(char **array);
 void            	ft_execute_mult_cmd(t_argument **arg);
 
-/* src/execute_cmd/builtin.c */
-int					is_builtin(char *command, enum e_builtin_type *out_type);
-void   				ft_execute_exit(t_argument *argument, int is_parent);
-int   				ft_try_cd_parent(t_argument *argumnet);
-void				ft_builtin(t_argument *argument, enum e_builtin_type bull_type, int is_parent);
-void				ft_execute_echo(t_argument *argument, int is_parent);
-void				ft_execute_pwd(t_argument *argument, int is_parent);
-void				ft_execute_cd(t_argument *argument, int is_parent);
-
 /* src/execute_cmd/ft_atoull.c */
 unsigned long long	ft_atoull(const char *str, int *is_numeric);
 
@@ -148,52 +128,32 @@ void	    ft_copy_char_arr_malloc(char **dst, char **src);
 void		exit_malloc_fail(void *p);
 void		free_arraylist(t_arraylist *arraylist);
 
+enum e_err_code {
+	CD_MIN,
+	CD_NO_DIR,
+	CD_NO_SET,
+	CD_MAX,
+	PWD_MIN,
+	PWD_ERR,
+	PWD_MAX,
+	EXIT_MIN,
+	EXIT_NUMERIC,
+	EXIT_MANY_ARG,
+	EXIT_MAX,
+	UNSET_MIN,
+	UNSET_INVALID,
+	UNSET_MAX,
+	EXPORT_MIN,
+	EXPORT_INVALID,
+	EXPORT_MAX,
+	EXE_MIN,
+	EXE_CMD_NOT,
+	EXE_IS_DIR,
+	EXE_NO_DIR,
+	EXE_MAX
+};
 
-/* src/execute_cmd/export.c */
-void	ft_execute_export(t_argument *arg, int is_parent);
-/* src/execute_cmd/env.c */
-void	ft_execute_env(t_argument *arg, int is_parent);
-/* src/execute_cmd/unset.c */
-void	ft_execute_unset(t_argument *arg, int is_parent);
-/* src/execute_cmd/exit.c */
-void	ft_execute_exit(t_argument *argument, int is_parent);
-/* src/execute_cmd/echo.c */
-void	ft_execute_echo(t_argument *argument, int is_parent);
-/* src/execute_cmd/pwd.c */
-void	ft_execute_pwd(t_argument *argument, int is_parent);
-/* src/execute_cmd/cd.c */
-void	ft_execute_cd(t_argument *argument, int is_parent);
-
-/* src/execute_cmd/ft_error.c */
-#define CD_MIN (0)
-#define CD_NO_DIR (1)
-#define CD_NO_SET (2)
-#define CD_MAX (2)
-
-#define PWD_MIN (3)
-#define PWD_ERR (3)
-#define PWD_MAX (3)
-
-#define EXIT_MIN (4)
-#define EXIT_NUMERIC (4)
-#define EXIT_MANY_ARG (5)
-#define EXIT_MAX (5)
-
-#define UNSET_MIN (6)
-#define UNSET_INVALID (6)
-#define UNSET_MAX (6)
-
-#define EXPORT_MIN (7)
-#define EXPORT_INVALID (7)
-#define EXPORT_MAX (7)
-
-#define	EXE_MIN (8)
-#define EXE_COM_NOT (8)
-#define EXE_IS_DIR (9)
-#define EXE_NO_DIR (10)
-#define	EXE_MAX (10)
-
-void	ft_error(int error_code, void *info, int is_parent);
+void	ft_error(enum e_err_code error_code, void *info, int is_parent);
 
 #endif
 

@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 08:14:14 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 08:53:15 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,23 @@ int	g_exit;
 
 enum e_token_type {
 	ARGUMENT,
-	PIPE,					// |
-	/* Redirections */
-	LT,						// >
-	DLT,					// >>
-	GT,						// <
-	DGT,					// <<
+	PIPE,
+	LT,
+	DLT,
+	GT,
+	DGT,
 	EOL
+};
+
+enum e_btype {
+	BUL_ECHO,
+	BUL_CD,
+	BUL_PWD,
+	BUL_EXPORT,
+	BUL_UNSET,
+	BUL_ENV,
+	BUL_EXIT,
+	INVAILD
 };
 
 typedef struct s_env {
@@ -214,5 +224,37 @@ void		ft_env_delete(t_env_root *root, char *key);
 void		ft_set_echo(void);
 void		ft_set_noecho(void);
 void		ft_exit(void);
+
+/*
+ * #########################################################
+ * #                                                       #
+ * #                     src/builtin/                      #
+ * #                                                       #
+ * #########################################################
+ */
+/* src/builtin/builtin.c */
+int			is_builtin(char *command, enum e_btype *out_type);
+void		ft_builtin(t_argument *arg, enum e_btype bull_type, int is_parent);
+
+/* src/builtin/export.c */
+void		ft_execute_export(t_argument *arg, int is_parent);
+
+/* src/builtin/env.c */
+void		ft_execute_env(t_argument *arg, int is_parent);
+
+/* src/builtin/unset.c */
+void		ft_execute_unset(t_argument *arg, int is_parent);
+
+/* src/builtin/exit.c */
+void		ft_execute_exit(t_argument *arg, int is_parent);
+
+/* src/builtin/echo.c */
+void		ft_execute_echo(t_argument *arg, int is_parent);
+
+/* src/builtin/pwd.c */
+void		ft_execute_pwd(int is_parent);
+
+/* src/builtin/cd.c */
+void		ft_execute_cd(t_argument *arg, int is_parent);
 
 #endif

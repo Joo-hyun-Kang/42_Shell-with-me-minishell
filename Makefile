@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/24 08:14:23 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/24 08:55:13 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,13 +62,15 @@ ENVBST_SRC		=	env_bst_init.c\
 #--------------[ EXECUTE ]----------------
 EXECUTE_DIR		=	src/execute_cmd
 EXECUTE_SRC		=	cmd.c\
-					builtin.c\
 					ft_atoull.c\
 					pipe.c\
 					pipe_utils.c\
 					redir.c\
 					arraylist.c\
-					ft_error.c\
+					ft_error.c
+#--------------[ BUILTIN ]----------------
+BUILTIN_DIR		=	src/builtin
+BUILTIN_SRC		=	builtin.c\
 					export.c\
 					env.c\
 					unset.c\
@@ -96,7 +98,8 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(ENVBST_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(SIG_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(EXECUTE_SRC:.c=.o))\
-					$(addprefix $(OBJ_DIR)/, $(PRPT_SRC:.c=.o))
+					$(addprefix $(OBJ_DIR)/, $(PRPT_SRC:.c=.o))\
+					$(addprefix $(OBJ_DIR)/, $(BUILTIN_SRC:.c=.o))\
 #-----------------[ CMD ]-------------------
 CC				=	gcc
 CFLAGS			=	-fsanitize=address# -Wall -Wextra -Werror
@@ -112,7 +115,7 @@ LDLIBS			=	-l ft -L $(LIBFT_DIR)\
 AR				=	ar -rcs
 RM				=	rm -rf
 
-vpath %.c $(SRC_DIR) $(GNL_DIR) $(TOKEN_DIR) $(PARSER_DIR) $(ENV_DIR) $(ENVBST_DIR) $(SIG_DIR) $(EXECUTE_DIR) $(PRPT_DIR)
+vpath %.c $(SRC_DIR) $(GNL_DIR) $(TOKEN_DIR) $(PARSER_DIR) $(ENV_DIR) $(ENVBST_DIR) $(SIG_DIR) $(EXECUTE_DIR) $(PRPT_DIR) $(BUILTIN_DIR)
 
 all: $(NAME)
 

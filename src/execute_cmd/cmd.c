@@ -1,4 +1,5 @@
 #include "cmd.h"
+#include <string.h>
 
 /*
  * 그냥 에러를 출력하고 나가버리는데
@@ -23,7 +24,7 @@ void	ft_fork_execute(t_argument *argument)
 
 void	ft_execute_single_cmd(t_argument **arg)
 {
-	enum e_builtin_type		bull_type;
+	enum e_btype		bull_type;
 
 	if (is_builtin((*arg)->pa_argument[COMMAND_POSITION], &bull_type) == true)
 		ft_builtin((*arg), bull_type, true);
@@ -147,10 +148,10 @@ int		ft_execute_except_case(t_argument *arg)
 
 void	ft_execute(t_argument *argument, int is_parent)
 {
-	int						is_path;
-	char					*pa_path;
-	char					*command;
-	enum e_builtin_type		bull_type;
+	int				is_path;
+	char			*pa_path;
+	char			*command;
+	enum e_btype	bull_type;
 
 	//CASE0 : Bulltein 명령어인 경경우	
 	command = argument->pa_argument[COMMAND_POSITION];
@@ -187,12 +188,11 @@ void	ft_execute(t_argument *argument, int is_parent)
 		ft_execute_except_case(argument);
 	}
 
-	//error code 수정
-	int	error_code;
-	error_code = EXE_COM_NOT;
+	printf("@@@%s\n", strerror(errno));
 	if (errno == 13)
-		error_code = EXE_IS_DIR;
-	ft_error(error_code, command, is_parent);
+		ft_error(EXE_IS_DIR, command, is_parent);
+	else
+		ft_error(EXE_CMD_NOT, command, is_parent);
 }
 
 int	ft_is_command_dir()

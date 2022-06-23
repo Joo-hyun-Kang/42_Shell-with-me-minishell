@@ -6,11 +6,11 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:38:16 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 02:39:21 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 08:33:29 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 static void	ft_execute_env_print_node(t_env *root_node);
 
@@ -29,4 +29,3 @@ static void	ft_execute_env_print_node(t_env *root_node)
 	printf("%s=%s\n", root_node->pa_key, root_node->pa_value);
 	ft_execute_env_print_node(root_node->right);
 }
-

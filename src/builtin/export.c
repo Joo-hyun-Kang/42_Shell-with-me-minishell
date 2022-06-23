@@ -6,11 +6,11 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:35:28 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 07:28:27 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 08:32:59 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 static void	ft_execute_export_print_env(t_env *root_node);
 static int	ft_check_export_valid(char *key);

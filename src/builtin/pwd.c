@@ -6,13 +6,13 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:42:08 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 02:42:15 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 08:52:49 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
-void	ft_execute_pwd(t_argument *argument, int is_parent)
+void	ft_execute_pwd(int is_parent)
 {
 	char		*pa_path;
 	const int	SIZE = 0;

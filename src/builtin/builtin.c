@@ -1,6 +1,6 @@
-#include "cmd.h"
+#include "../../include/minishell.h"
 
-int	is_builtin(char *command, enum e_builtin_type *out_type)
+int	is_builtin(char *command, enum e_btype *out_type)
 {
 	if (ft_strcmp(command, "echo") == 0)
 		*out_type = BUL_ECHO;
@@ -23,21 +23,21 @@ int	is_builtin(char *command, enum e_builtin_type *out_type)
 	return(true);
 }
 
-void	ft_builtin(t_argument *argument, enum e_builtin_type bull_type, int is_parent)
+void	ft_builtin(t_argument *arg, enum e_btype bull_type, int is_parent)
 {
 	//내장 명령어 실행
 	if (bull_type == BUL_ECHO)
-		ft_execute_echo(argument, is_parent);
+		ft_execute_echo(arg, is_parent);
 	else if (bull_type == BUL_CD)
-		ft_execute_cd(argument, is_parent);
+		ft_execute_cd(arg, is_parent);
 	else if (bull_type == BUL_PWD)
-		ft_execute_pwd(argument, is_parent);
+		ft_execute_pwd(is_parent);
     else if (bull_type == BUL_EXIT)
-        ft_execute_exit(argument, is_parent);
+        ft_execute_exit(arg, is_parent);
 	else if (bull_type == BUL_EXPORT )
-		ft_execute_export(argument, is_parent);
+		ft_execute_export(arg, is_parent);
 	else if (bull_type == BUL_ENV )
-		ft_execute_env(argument, is_parent);
+		ft_execute_env(arg, is_parent);
 	else if (bull_type == BUL_UNSET )
-		ft_execute_unset(argument, is_parent);
+		ft_execute_unset(arg, is_parent);
 }

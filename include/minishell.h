@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 21:36:56 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 00:17:16 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct s_env {
 }	t_env;
 
 typedef struct s_env_root {
+	int						size;
 	struct s_env			*root;
 }	t_env_root;
 
@@ -183,6 +184,10 @@ char		*ft_extract_key_from_str(char *str);
 char		*ft_extract_value_from_str(char *str);
 void		ft_free_env_node(t_env *node);
 t_env_root	*ft_dpenv_to_bstenv(char **env);
+void	ft_copy_bstenv_recursive(t_env *node, char **env, int *idx);
+char	**ft_copy_bstenv(t_env_root *root);
+void	ft_remove_copy_env(char **env);
+void	ft_print_copy_env(char **env);
 
 /* src/environment/environment_bst/env_bst_init.c */
 t_env_root	*ft_init_env_root(void);

@@ -143,63 +143,46 @@ void	ft_execute_pwd(t_argument *argument, int is_parent)
 		exit(0);
 }
 
+void	ft_not_set_err(char *env_key)
+{
+	printf("minishell: cd: %s not set\n", env_key);
+	g_exit = 1;
+}
+
+void	ft_chdir_err(char *dir_path)
+{
+	ft_putstr_fd("minishell: cd: ", STDOUT_FILENO);
+	ft_putstr_fd(dir_path, STDOUT_FILENO);
+	ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
+}
+
 void	ft_execute_cd(t_argument *argument, int is_parent)
 {
+	t_env		*find;
 	int			result;
-	int			length;
-	const int	CHDIR_ERROR = -1;
-	const int	SECOND_ARG = 1;
+	const int	length = ft_get_length_2d_arr(argument->pa_argument);
+	char		*dir_path;
+	char		*key;
 
-	length = ft_get_length_2d_arr(argument->pa_argument);
-	//Please check when argument 2 is, some cases is like no error
-	if (length > 2)
-	{
-		ft_putstr_fd("cd: ", STDOUT_FILENO);
-		ft_putstr_fd(argument->pa_argument[SECOND_ARG], STDOUT_FILENO);
-		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
-		if (is_parent == 0)
-			exit (1);
-		return ;
-	}
-
+	key = NULL;
 	if (length == 1)
-	{
-		ft_env_insert(argument->env, ft_strdup("OLDPWD"), getcwd(NULL, 0));
-		result = chdir("/");
-		ft_env_insert(argument->env, ft_strdup("PWD"), getcwd(NULL, 0));
-	}
-	else if (length == 2)
-	{
-		if (ft_strcmp(argument->pa_argument[COMMAND_ARG_POSITION], "-") == 0)
-		{
-			t_env	*find = ft_env_search(argument->env, ft_strdup("OLDPWD"));
-			if (find == NULL)
-			{
-				printf("OLDPWD Blabla...\n");
-			}
-			else
-			{
-				ft_env_insert(argument->env, ft_strdup("OLDPWD"), getcwd(NULL, 0));
-				result = chdir(find->pa_value);
-			}
-		}
-		else
-		{
-			ft_env_insert(argument->env, ft_strdup("OLDPWD"), getcwd(NULL, 0));
-			result = chdir(argument->pa_argument[COMMAND_ARG_POSITION]);
-		}
-		ft_env_insert(argument->env, ft_strdup("PWD"), getcwd(NULL, 0));
-	}
+		key = "HOME";
+	else if (ft_strcmp(argument->pa_argument[1], "-") == 0)
+		key = "OLDPWD";
+	if (key == NULL)
+		dir_path = argument->pa_argument[1];
 	else
 	{
-		ft_print_error();
+		find = ft_env_search(argument->env, ft_strdup(key));
+		if (find != NULL)
+			dir_path = find->pa_value;
+		else
+			ft_not_set_err(key);
 	}
-	if (result == CHDIR_ERROR)
-	{
-		ft_putstr_fd("cd: ", STDOUT_FILENO);
-		ft_putstr_fd(argument->pa_argument[length - 1], STDOUT_FILENO);
-		ft_putstr_fd(": No such file or directory\n", STDOUT_FILENO);
-	}
+	ft_env_insert(argument->env, ft_strdup("OLDPWD"), getcwd(NULL, 0));
+	if (chdir(dir_path) == -1)
+		ft_chdir_err(dir_path);
+	ft_env_insert(argument->env, ft_strdup("PWD"), getcwd(NULL, 0));
 	if (is_parent == 0)
 		exit(1);
 }

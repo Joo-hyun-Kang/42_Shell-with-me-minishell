@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 09:14:46 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 14:52:59 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/23 23:02:17 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ void	ft_env_delete(t_env_root *root, char *key)
 		ft_env_delete_if_right_null(root, cur_node);
 	else
 		ft_env_delete_if_both_not_null(root, cur_node);
+	--root->size;
 	ft_free_env_node(cur_node);
 }
 

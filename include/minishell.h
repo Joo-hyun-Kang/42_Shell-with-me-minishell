@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 03:32:13 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 07:25:54 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,11 +186,11 @@ bool		ft_is_dictionary(char *str);
 char		*ft_extract_key_from_str(char *str);
 char		*ft_extract_value_from_str(char *str);
 void		ft_free_env_node(t_env *node);
+
+/* src/environment/environment_bst/env_cpy.c */
 t_env_root	*ft_dpenv_to_bstenv(char **env);
-void	ft_copy_bstenv_recursive(t_env *node, char **env, int *idx);
-char	**ft_copy_bstenv(t_env_root *root);
-void	ft_remove_copy_env(char **env);
-void	ft_print_copy_env(char **env);
+char		**ft_bstenv_to_dpenv(t_env_root *root);
+void		ft_remove_copy_env(char **env);
 
 /* src/environment/environment_bst/env_bst_init.c */
 t_env_root	*ft_init_env_root(void);

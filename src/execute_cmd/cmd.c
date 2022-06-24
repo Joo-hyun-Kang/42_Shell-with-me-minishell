@@ -85,7 +85,6 @@ void	ft_wait_child(pid_t child_pid)
 	int		status;
 
 	status = 0;
-	pid = INT32_MIN;
 	while (true)
 	{
 		pid = waitpid(-1, &status, 0);
@@ -94,7 +93,6 @@ void	ft_wait_child(pid_t child_pid)
 		else if (pid == -1)
 			break;
 	}
-
 }
 
 void	ft_system(t_argument *argument)

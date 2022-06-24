@@ -118,11 +118,12 @@ void		ft_relocate_redir_argument(t_argument **arg);
 int			ft_find_next_pipe(t_argument **arg);
 
 /* src/execute_cmd/arraylist.c */
-
 void		init_arraylist(t_arraylist *arraylist);
 int			add_arraylist(t_arraylist *arraylist, char* value, int type);
 int			is_arraylist_full(t_arraylist *arraylist);
 int			allocate_arraylist(t_arraylist *arraylist);
+
+/* src/execute_cmd/arraylist_utils.c */
 void		ft_free_list_value(char **pa_char, int lenght);
 void	    ft_copy_char_arr_malloc(char **dst, char **src);
 void		exit_malloc_fail(void *p);

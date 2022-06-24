@@ -1,36 +1,45 @@
 #include "cmd.h"
 
-int	ft_set_redir(t_redir *redir, t_lst *argument)
+void	ft_split_command(t_redir *redir, t_lst *arg, t_lst **files, char **gt)
 {
-	t_lst *open_files;
+	char	**strs;
+	int		*type;
+	int		i;
+
+	*files = (t_lst *)malloc(sizeof(t_lst));
+	if (*files == NULL)
+		ft_system_err(FAILED_MALLOC);
+	init_arraylist(*files);
+
+	strs = redir->list_com->pa_arr;
+	type = redir->list_com->type;
+	i = 0;
+	while (i < redir->list_com->length)
+	{
+		if (type[i] == RE_COM)
+			add_arraylist(arg, ft_strdup(strs[i]), NONE);
+		else if (type[i] == LT_OPEN)
+			add_arraylist(*files, ft_strdup(strs[i]), LT_OPEN);
+		else if (type[i] == DLT_OPEN)
+			add_arraylist(*files, ft_strdup(strs[i]), DLT_OPEN);
+		else if (type[i] == GT_FILE)
+			*gt = ft_strdup(strs[i]);
+		i++;
+	}
+}
+
+//void	ft_set_opne_file()
+
+int	ft_set_redir(t_redir *redir, t_lst *arg)
+{
+	t_lst		*open_files;
 	char		*pa_gt_files;
 	char		*lt_dlt_files;
 	int			is_same_file;
 
-	open_files = (t_lst *)malloc(sizeof(t_lst));
-	if (open_files == NULL)
-		ft_system_err(FAILED_MALLOC);
-	init_arraylist(open_files);
-	
 	pa_gt_files = NULL;
 	lt_dlt_files = NULL;
-
-	// 사용할 변수들을 다시 가져옴
-	char **strs = redir->list_com->pa_arr;
-	int	*type = redir->list_com->type;
-	int i = 0;
-	while (i < redir->list_com->length)
-	{
-		if (type[i] == RE_COM)
-			add_arraylist(argument, ft_strdup(strs[i]), NONE);
-		else if (type[i] == LT_OPEN)
-			add_arraylist(open_files, ft_strdup(strs[i]), LT_OPEN);
-		else if (type[i] == DLT_OPEN)
-			add_arraylist(open_files, ft_strdup(strs[i]), DLT_OPEN);
-		else if (type[i] == GT_FILE)
-			pa_gt_files = ft_strdup(strs[i]);
-		i++;
-	}
+	ft_split_command(redir, arg, &open_files, &pa_gt_files);
 
 	// 같은 파일을 여는 경우 예외처리
 	if (open_files->pa_arr != NULL)
@@ -39,21 +48,19 @@ int	ft_set_redir(t_redir *redir, t_lst *argument)
 		if (lt_dlt_files != NULL && pa_gt_files != NULL)
 		{
 			if (ft_strcmp(lt_dlt_files, pa_gt_files) == 0)
-			{
 				exit(0);
-			}
 		}
 	}
 
 
 	// 커맨드를 따서 pa_arguemt를 만듬
-	i = 0;
+	int i = 0;
 	while (i < redir->list_arg->length)
 	{
-		add_arraylist(argument, ft_strdup(redir->list_arg->pa_arr[i]), NONE);
-		i++;
+		add_arraylist(arg, ft_strdup(redir->list_arg->pa_arr[i]), NONE);
+		++i;
 	}
-	add_arraylist(argument, NULL, NONE);
+	add_arraylist(arg, NULL, NONE);
 
 	// 그리고 동시에 파일들을 오픈 시킬 건 오픈 시키고
 	// 가장 마지막 파일들은 빼고
@@ -104,7 +111,6 @@ int	ft_set_redir(t_redir *redir, t_lst *argument)
 
 	if (pa_gt_files != NULL)
 	{
-		//printf("3\n");
 		int fd;
 		fd = open(pa_gt_files, O_RDONLY);
 		if (fd < 0)
@@ -126,14 +132,8 @@ int	ft_set_redir(t_redir *redir, t_lst *argument)
 		}
 	}
 
-	i = 0;
-	while (i < redir->pipes->pipe_count)
-	{
-		close(redir->pipes->array[i][PIPE_READ]);
-		close(redir->pipes->array[i][PIPE_WRITE]);
-		i++;
-	}
 
+	ft_close_pipe(redir->pipes);
 	free_arraylist(open_files);
 	free(pa_gt_files);
 	return (true);

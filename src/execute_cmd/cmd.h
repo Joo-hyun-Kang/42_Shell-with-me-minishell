@@ -132,6 +132,7 @@ void		ft_sort_redir_command(t_argument **arg, t_lst *list_arg, t_lst *list_com);
 
 /* src/execute_cmd/redir_set.c */
 int			ft_set_redir(t_redir *redir, t_lst *argument);
+void		ft_split_command(t_redir *redir, t_lst *arg, t_lst **files, char **gt);
 
 /* src/execute_cmd/arraylist.c */
 void		init_arraylist(t_lst *arraylist);

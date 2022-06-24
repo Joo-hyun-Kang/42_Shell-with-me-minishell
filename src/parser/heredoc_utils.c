@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/23 03:25:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 16:20:07 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 16:28:18 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,6 @@ static void	p_read_heredoc(char *heredoc, t_argument *arg)
 	}
 	if (read_line != NULL)
 		free(read_line);
-	else
-		printf("\x1b[1A\033[2C");
 	close(fd);
 }
 

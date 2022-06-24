@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 10:34:01 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 10:59:13 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,17 @@
 static void	ft_init_minishell(t_env_root **rnv, char **env, int ac, char **av);
 static void	ft_show_argument_test(t_argument *arg); // for test
 
-char	*ft_get_cur_dir(char *pa_path)
+char	*ft_replace_cur_dir(char *pa_path)
 {
 	char	*pos;
 	char	*cur_dir;
 
 	pos = ft_strrchr(pa_path, '/');
-	cur_dir = ft_strdup(pos + 1);
-	if (ft_strlen(cur_dir) > 0)
-		return (cur_dir);
-	free(cur_dir);
-	cur_dir = ft_strdup("/");
+	if (ft_strlen(pos) > 1)
+		cur_dir = ft_strdup(pos + 1);
+	else
+		cur_dir = ft_strdup("/");
+	free(pa_path);
 	return (cur_dir);
 }
 
@@ -36,9 +36,9 @@ char	*ft_readline(void)
 
 	pa_path = getcwd(NULL, 0);
 	if (pa_path == NULL)
-		pa_path = ft_strdup("?");
+		pa_path = ft_strdup("Undefined");
 	else
-		pa_path = ft_get_cur_dir(pa_path);
+		pa_path = ft_replace_cur_dir(pa_path);
 	pa_path = ft_merge_str(ft_strdup(" \033[1;33m"), pa_path);
 	pa_path = ft_merge_str(pa_path, ft_strdup("\033[0;0m "));
 	pa_path = ft_merge_str(strdup(STT_READ), pa_path);
@@ -62,11 +62,11 @@ int main(int argc, char **argv, char **env)
 		arg = ft_parser(read_line, root_env);
 		if (arg != NULL)
 		{
-//			ft_show_argument_test(arg); // for test
+			ft_show_argument_test(arg); // for test
 			ft_set_echo();
 			ft_system(arg);
 			ft_free_argument(arg);
-//			system("leaks minishell"); // for test
+			system("leaks minishell"); // for test
 		}
 		ft_set_noecho();
 		read_line = ft_readline();

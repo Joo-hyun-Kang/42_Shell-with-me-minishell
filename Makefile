@@ -104,7 +104,7 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(BUILTIN_SRC:.c=.o))\
 #-----------------[ CMD ]-------------------
 CC				=	gcc
-CFLAGS			=	-fsanitize=address# -Wall -Wextra -Werror
+CFLAGS			=	# -Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(LIBFT_DIR)\
 					-I $(GNL_DIR)\

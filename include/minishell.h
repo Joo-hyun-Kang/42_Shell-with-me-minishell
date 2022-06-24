@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 10:35:03 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 11:37:51 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,19 @@ typedef struct s_argument {
  */
 /* src/system_err.c */
 void		ft_system_err(enum e_system_err error_code);
+
+/*
+ * #########################################################
+ * #                                                       #
+ * #                       src/malloc                      #
+ * #                                                       #
+ * #########################################################
+ */
+/* src/malloc/ft_strdup.c */
+char	*ft_strdup(const char *s);
+
+/* src/malloc/ft_strndup.c */
+char	*ft_strndup(const char *src, size_t n);
 
 /*
  * #########################################################

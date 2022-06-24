@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/23 03:25:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 16:28:18 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 19:54:57 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	p_read_heredoc(char *heredoc, t_argument *arg)
 	char	*write_line;
 	int		fd;
 
-	fd = open(F_HEREDOC, (O_CREAT | O_TRUNC | O_RDWR), 0666);
+	fd = open(F_HEREDOC, (O_CREAT | O_TRUNC | O_RDWR), 0644);
 	if (fd < 0)
 		exit(3);
 	pa_str = NULL;

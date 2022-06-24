@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 16:04:24 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 19:54:25 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	p_extra_pipe_child(void)
 		close(fd);
 		exit (2);
 	}
-	fd = open(F_EXTRA, (O_CREAT | O_TRUNC | O_RDWR), 0666);
+	fd = open(F_EXTRA, (O_CREAT | O_TRUNC | O_RDWR), 0644);
 	if (fd < 0)
 		exit (3);
 	ft_putstr_fd(read_line, fd);

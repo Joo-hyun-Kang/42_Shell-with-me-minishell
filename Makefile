@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/24 16:11:34 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/24 19:31:46 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,8 @@ SIG_SRC			=	signal.c
 #--------------[ PROMPT ]-----------------
 PRPT_DIR		=	src/prompt
 PRPT_SRC		=	ft_echo.c\
-					ft_exit.c
+					ft_exit.c\
+					ft_readline.c
 #--------------[ TOKENIZER ]-----------------
 TOKEN_DIR		=	src/parser/tokenizer
 TOKEN_SRC		=	tokenizer.c\

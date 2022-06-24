@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 11:37:51 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 19:31:30 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,10 +250,15 @@ void		ft_env_delete(t_env_root *root, char *key);
  * #                                                       #
  * #########################################################
  */
-/* src/prompt/echo.c */
+/* src/prompt/ft_echo.c */
 void		ft_set_echo(void);
 void		ft_set_noecho(void);
+
+/* src/prompt/ft_exit.c */
 void		ft_exit(void);
+
+/* src/prompt/ft_readline.c */
+char		*ft_readline(void);
 
 /*
  * #########################################################

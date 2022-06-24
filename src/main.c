@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 10:59:13 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 11:46:10 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,11 @@ int main(int argc, char **argv, char **env)
 		arg = ft_parser(read_line, root_env);
 		if (arg != NULL)
 		{
-			ft_show_argument_test(arg); // for test
+//			ft_show_argument_test(arg); // for test
 			ft_set_echo();
 			ft_system(arg);
 			ft_free_argument(arg);
-			system("leaks minishell"); // for test
+//			system("leaks minishell"); // for test
 		}
 		ft_set_noecho();
 		read_line = ft_readline();

@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 00:57:21 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 08:59:50 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 12:15:08 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ int	ft_cd_error(int error_code, void *free_info)
 		ft_putstr_fd(": No such file or directory\n", 2);
 	else if (error_code == CD_NO_SET)
 		ft_putstr_fd(" not set\n", 2);
+	else if (error_code == CD_NOT_DIR)
+		ft_putstr_fd(": Not a directory\n", 2);
 	free(free_info);
 	return (1);
 }
@@ -83,16 +85,17 @@ int	ft_exe_error(int error_code, void *info)
 		ft_putstr_fd("command not found\n", 2);
 		return (127);
 	}
-	else if (error_code == EXE_IS_DIR)
-	{
-		ft_putstr_fd("is a directory\n", 2);
-		return (126);
-	}
 	else if (error_code == EXE_NO_DIR)
 	{
 		ft_putstr_fd("No such file or directory\n", 2);
-		return (1);
+		return (127);
 	}
+	else if (error_code == EXE_PERMISSION)
+	{
+		ft_putstr_fd("Permission denied\n", 2);
+		return (126);
+	}
+
 	return (0);
 }
 

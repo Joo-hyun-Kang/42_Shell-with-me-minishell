@@ -134,6 +134,7 @@ enum e_err_code {
 	CD_MIN,
 	CD_NO_DIR,
 	CD_NO_SET,
+	CD_NOT_DIR,
 	CD_MAX,
 	PWD_MIN,
 	PWD_ERR,
@@ -150,8 +151,8 @@ enum e_err_code {
 	EXPORT_MAX,
 	EXE_MIN,
 	EXE_CMD_NOT,
-	EXE_IS_DIR,
 	EXE_NO_DIR,
+	EXE_PERMISSION,
 	EXE_MAX
 };
 

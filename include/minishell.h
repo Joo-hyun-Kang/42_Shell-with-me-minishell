@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 08:53:15 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 09:46:39 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,12 @@ enum e_btype {
 	INVAILD
 };
 
+enum e_system_err {
+	FAILED_MALLOC,
+	FAILED_FORK,
+	FAILED_PIPE
+};
+
 typedef struct s_env {
 	char					*pa_key;
 	char					*pa_value;
@@ -100,6 +106,15 @@ typedef struct s_argument {
 }	t_argument;
 
 # include "../src/execute_cmd/cmd.h"
+/*
+ * #########################################################
+ * #                                                       #
+ * #                           src/                        #
+ * #                                                       #
+ * #########################################################
+ */
+/* src/system_err.c */
+void		ft_system_err(enum e_system_err error_code);
 
 /*
  * #########################################################

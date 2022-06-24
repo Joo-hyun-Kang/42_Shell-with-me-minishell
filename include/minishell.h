@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 09:46:39 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 10:35:03 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@
                                                     \n\
                                                     \n"
 
-# define READLINE "\033[1;35mminishell\033[0;0m-\033[1;33m0.0\033[1;32m$\033[0;0m "
+# define STT_READ "\033[1;34m❯ \033[0;0m\033[1;35mminishell\033[0;0m"
+# define END_READ "\033[1;32m$\033[0;0m "
+
 int	g_exit;
 
 enum e_token_type {

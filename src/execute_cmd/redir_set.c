@@ -28,7 +28,55 @@ void	ft_split_command(t_redir *redir, t_lst *arg, t_lst **files, char **gt)
 	}
 }
 
-//void	ft_set_opne_file()
+void	ft_set_opne_file(t_lst *open_files, t_redir *redir)
+{
+	int	j;
+	int fd;	
+	
+	if (open_files->pa_arr != NULL)
+	{
+		j = 0;
+		while (j < open_files->length - 1)
+		{
+			if (open_files->type[j] == LT_OPEN)
+			{
+				fd = open(open_files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0644);
+				if (fd < 0)
+					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
+				close(fd);
+			}
+			else
+			{
+				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0644);
+				if (fd < 0)
+					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
+				close(fd);
+			}
+			j++;
+		}
+		if (j == open_files->length - 1)
+		{
+			if (open_files->type[j] == LT_OPEN)
+			{
+				redir->will_stdout_pipe = false;
+				fd = open(open_files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0644);
+				if (fd < 0)
+					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
+				dup2(fd, STDOUT_FILENO);
+				close(fd);
+			}
+			else
+			{
+				redir->will_stdout_pipe = false;
+				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0644);
+				if (fd < 0)
+					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
+				dup2(fd, STDOUT_FILENO);
+				close(fd);
+			}
+		}
+	}
+}
 
 int	ft_set_redir(t_redir *redir, t_lst *arg)
 {
@@ -62,8 +110,12 @@ int	ft_set_redir(t_redir *redir, t_lst *arg)
 	}
 	add_arraylist(arg, NULL, NONE);
 
+	ft_set_opne_file(open_files, redir);
+
 	// 그리고 동시에 파일들을 오픈 시킬 건 오픈 시키고
 	// 가장 마지막 파일들은 빼고
+
+	/*
 	if (open_files->pa_arr != NULL)
 	{
 		int j = 0;
@@ -108,6 +160,7 @@ int	ft_set_redir(t_redir *redir, t_lst *arg)
 			}
 		}
 	}
+	*/
 
 	if (pa_gt_files != NULL)
 	{

@@ -55,15 +55,16 @@ typedef struct arraylist {
     int     *type;
 	int		length;
 	int		capacity;
-}	t_arraylist;
+}	t_lst;
 
 typedef struct redir_var {
-	t_arraylist	*list_arg;
-	t_arraylist *list_com;
+	t_lst		*list_arg;
+	t_lst		*list_com;
+	t_lst		*redir_arg;
 	t_pipes		*pipes;
 	int			will_stdin_pipe;
 	int			will_stdout_pipe;
-}	t_redir_var;
+}	t_redir;
 
 /*
  * #########################################################
@@ -111,24 +112,40 @@ int			ft_get_pipe_count(t_argument *arg);
 
 /* src/execute_cmd/redir.c */
 
-int			ft_is_redir(enum e_token_type token);
+void		ft_get_redir_state(t_argument **arg, t_redir *redir, int state);
+void		ft_init_redir_variable(t_redir *redir);
+t_argument	ft_get_sorted_command(t_lst *redir_arg, t_argument **arg);
 pid_t		ft_execute_redir(t_argument **arg, int state, t_pipes *pipes);
-void		ft_sort_redir_command(t_argument **arg, t_arraylist *list_arg, t_arraylist *list_com);
-int			ft_set_redir(t_redir_var *redir, t_arraylist *argument);
-void		ft_relocate_redir_argument(t_argument **arg);
+pid_t		ft_redir_recursive(t_argument **arg, int state, t_pipes *pipes, int pid);
+
+/* src/execute_cmd/redir_utils.c */
+
+int			ft_is_redir(enum e_token_type token);
 int			ft_find_next_pipe(t_argument **arg);
+void		ft_free_redir_variable(t_redir *redir);
+
+/* src/execute_cmd/redir_sort.c */
+void   		ft_copy_origin_command(t_argument **arg, t_lst *list_com);
+void   		ft_get_gt_variable(t_argument *p, t_lst *list_arg, char **gt_file);
+void		ft_get_lt_dlt(t_argument *p, t_lst *l_arg, t_lst *l_com, int token);
+void		ft_sort_redir_command(t_argument **arg, t_lst *list_arg, t_lst *list_com);
+
+/* src/execute_cmd/redir_set.c */
+int			ft_set_redir(t_redir *redir, t_lst *argument);
 
 /* src/execute_cmd/arraylist.c */
-void		init_arraylist(t_arraylist *arraylist);
-int			add_arraylist(t_arraylist *arraylist, char* value, int type);
-int			is_arraylist_full(t_arraylist *arraylist);
-int			allocate_arraylist(t_arraylist *arraylist);
+void		init_arraylist(t_lst *arraylist);
+int			add_arraylist(t_lst *arraylist, char* value, int type);
+int			allocate_arraylist(t_lst *arraylist);
+void		allocate_list_first(t_lst *arraylist);
+void		allocate_list_sec(t_lst *arraylist);
 
 /* src/execute_cmd/arraylist_utils.c */
 void		ft_free_list_value(char **pa_char, int lenght);
 void	    ft_copy_char_arr_malloc(char **dst, char **src);
 void		exit_malloc_fail(void *p);
-void		free_arraylist(t_arraylist *arraylist);
+void		free_arraylist(t_lst *arraylist);
+int			is_arraylist_full(t_lst *arraylist);
 
 enum e_err_code {
 	CD_MIN,

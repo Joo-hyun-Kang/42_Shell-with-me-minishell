@@ -39,14 +39,14 @@ pid_t	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 	pipes->current_idx++;
 	*arg = (*arg)->next;
 	if (*arg == NULL)
-		return pid;
+		return (pid);
 	token = (*arg)->next_token_type;
 	if (token == PIPE)
-		return ft_execute_pipe(arg, state, pipes);
+		return (ft_execute_pipe(arg, state, pipes));
 	else if (ft_is_redir(token))
-		return ft_execute_redir(arg, state, pipes);
+		return (ft_execute_redir(arg, state, pipes));
 	else
-		return ft_execute_pipe(arg, END, pipes);
+		return (ft_execute_pipe(arg, END, pipes));
 	return (pid);
 }
 

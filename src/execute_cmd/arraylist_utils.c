@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arraylist_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 09:44:19 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 09:44:24 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 12:27:52 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,18 @@ void	exit_malloc_fail(void *p)
 	}
 }
 
-void	free_arraylist(t_arraylist *arraylist)
+void	free_arraylist(t_lst *arraylist)
 {
 	ft_free_list_value(arraylist->pa_arr, arraylist->length);
 	free(arraylist->type);
 	free(arraylist);
+}
+
+int	is_arraylist_full(t_lst *arraylist)
+{
+	if (arraylist->length >= arraylist->capacity)
+	{
+		return (true);
+	}
+	return (false);
 }

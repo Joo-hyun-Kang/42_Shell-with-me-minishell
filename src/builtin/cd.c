@@ -6,42 +6,52 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:42:38 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 11:53:48 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 15:46:15 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_execute_cd(t_argument *arg, int is_parent)
+char	*ft_get_cdstr(t_argument *arg, int is_parent)
 {
-	t_env		*find;
-	int			result;
-	char		*dir_path;
-	char		*key;
+	char	*key;
+	char	*cdstr;
+	t_env	*find;
 
+	cdstr = NULL;
 	key = NULL;
 	if (ft_get_length_2d_arr(arg->pa_argument) == 1)
-		key = ft_strdup("HOME");
+		key = "HOME";
 	else if (ft_strcmp(arg->pa_argument[1], "-") == 0)
-		key = ft_strdup("OLDPWD");
+		key = "OLDPWD";
 	if (key == NULL)
-		dir_path = ft_strdup(arg->pa_argument[1]);
+		cdstr = ft_strdup(arg->pa_argument[1]);
 	else
 	{
 		find = ft_env_search(arg->env, ft_strdup(key));
 		if (find != NULL)
-			dir_path = ft_strdup(find->pa_value);
+			cdstr = ft_strdup(find->pa_value);
 		else
-			return (ft_error(CD_NO_SET, key, is_parent));
+			ft_error(CD_NO_SET, key, is_parent);
 	}
+	return (cdstr);
+}
+
+void	ft_execute_cd(t_argument *arg, int is_parent)
+{
+	char		*cdstr;
+
+	cdstr = ft_get_cdstr(arg, is_parent);
+	if (cdstr == NULL)
+		return ;
 	ft_env_insert(arg->env, ft_strdup("OLDPWD"), getcwd(NULL, 0));
-	if (chdir(dir_path) == -1)
+	if (chdir(cdstr) == -1)
 	{
 		if (errno == 20)
-			return (ft_error(CD_NOT_DIR, (void *)dir_path, is_parent));
-		return (ft_error(CD_NO_DIR, (void *)dir_path, is_parent));
+			return (ft_error(CD_NOT_DIR, (void *)cdstr, is_parent));
+		return (ft_error(CD_NO_DIR, (void *)cdstr, is_parent));
 	}
-	free(dir_path);
+	free(cdstr);
 	ft_env_insert(arg->env, ft_strdup("PWD"), getcwd(NULL, 0));
 	if (is_parent == 0)
 		exit(g_exit);

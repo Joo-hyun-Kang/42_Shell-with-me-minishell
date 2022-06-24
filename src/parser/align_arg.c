@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 03:09:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 10:08:21 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 16:20:57 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char	**ft_append_str(char **str, char *src)
 	new_str = (char **)malloc(sizeof(char *) * (str_size + 2));
 	if (new_str == NULL)
 		ft_system_err(FAILED_MALLOC);
-	new_str[str_size + 1] = 0;
+	new_str[str_size + 1] = NULL;
 	idx = 0;
 	while (idx < str_size)
 	{
@@ -60,12 +60,13 @@ void	p_swap_arg(t_argument *cur, t_argument *next)
 	new_str = (char **)malloc(sizeof(char *) * 2);
 	if (new_str == NULL)
 		ft_system_err(FAILED_MALLOC);
-	new_str[1] = 0;
+	new_str[1] = NULL;
 	new_str[0] = next->pa_argument[0];
 	idx = 1;
 	while (next->pa_argument[idx] != NULL)
 	{
-		cur->pa_argument = ft_append_str(cur->pa_argument, next->pa_argument[idx]);
+		cur->pa_argument = ft_append_str(cur->pa_argument, \
+				next->pa_argument[idx]);
 		++idx;
 	}
 	free(next->pa_argument);
@@ -81,7 +82,8 @@ t_argument	*p_align_arg(t_argument *arg)
 	head = arg;
 	while (arg->next_token_type != EOL)
 	{
-		if (arg->next_token_type == LT || arg->next_token_type == DLT || arg->next_token_type == GT)
+		if (arg->next_token_type == LT
+			|| arg->next_token_type == DLT || arg->next_token_type == GT)
 			p_swap_arg(arg, arg->next);
 		arg = arg->next;
 	}

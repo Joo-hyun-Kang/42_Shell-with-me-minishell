@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/24 16:07:08 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/24 16:11:34 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -70,6 +70,9 @@ EXECUTE_SRC		=	cmd.c\
 					pipe.c\
 					pipe_utils.c\
 					redir.c\
+					redir_set.c\
+					redir_sort.c\
+					redir_utils.c\
 					arraylist.c\
 					arraylist_utils.c\
 					ft_error.c

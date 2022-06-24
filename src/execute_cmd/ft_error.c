@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 00:57:21 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 08:25:40 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 08:59:50 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,28 @@
 
 int	ft_cd_error(int error_code, void *free_info)
 {
-	printf("cd: ");
+	ft_putstr_fd("cd: ", 2);
+	ft_putstr_fd((char *)free_info, 2);
 	if (error_code == CD_NO_DIR)
-		printf("%s: No such file or directory\n", (char *)free_info);
+		ft_putstr_fd(": No such file or directory\n", 2);
 	else if (error_code == CD_NO_SET)
-		printf("%s not set\n", (char *)free_info);
+		ft_putstr_fd(" not set\n", 2);
 	free(free_info);
 	return (1);
 }
 
 int	ft_exit_error(int error_code, void *info)
 {
-	printf("exit: ");
+	ft_putstr_fd("exit: ", 2);
 	if (error_code == EXIT_NUMERIC)
 	{
-		printf("%s: numeric argument required\n", (char *)info);
+		ft_putstr_fd((char *)info, 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
 		return (255);
 	}
 	else if (error_code == EXIT_MANY_ARG)
 	{
-		printf("too many arguments\n");
+		ft_putstr_fd("too many arguments\n", 2);
 		return (1);
 	}
 	return (0);
@@ -41,45 +43,54 @@ int	ft_exit_error(int error_code, void *info)
 
 int	ft_pwd_error(int error_code, void *free_info)
 {
-	printf("pwd: ");
+	ft_putstr_fd("pwd: ", 2);
 	if (error_code == PWD_ERR)
-		printf("can't get current path\n");
+		ft_putstr_fd("can't get current path\n", 2);
 	free(free_info);
 	return (0);
 }
 
 int	ft_unset_error(int error_code, void *info)
 {
-	printf("unset: ");
+	ft_putstr_fd("unset: ", 2);
 	if (error_code == UNSET_INVALID)
-		printf("`%s': not a valid identifier\n", (char *)info);
+	{
+		ft_putchar_fd('`', 2);
+		ft_putstr_fd((char *)info, 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
+	}
 	return (1);
 }
 
 int	ft_export_error(int error_code, void *info)
 {
-	printf("export: ");
+	ft_putstr_fd("export: ", 2);
 	if (error_code == EXPORT_INVALID)
-		printf("`%s': not a valid identifier\n", (char *)info);
+	{
+		ft_putchar_fd('`', 2);
+		ft_putstr_fd((char *)info, 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
+	}
 	return (1);
 }
 
 int	ft_exe_error(int error_code, void *info)
 {
-	printf("%s: ", (char *)info);
+	ft_putstr_fd((char *)info, 2);
+	ft_putstr_fd(": ", 2);
 	if (error_code == EXE_CMD_NOT)
 	{
-		printf("command not found\n");
+		ft_putstr_fd("command not found\n", 2);
 		return (127);
 	}
 	else if (error_code == EXE_IS_DIR)
 	{
-		printf("is a directory\n");
+		ft_putstr_fd("is a directory\n", 2);
 		return (126);
 	}
 	else if (error_code == EXE_NO_DIR)
 	{
-		printf("No such file or directory\n");
+		ft_putstr_fd("No such file or directory\n", 2);
 		return (1);
 	}
 	return (0);
@@ -89,7 +100,7 @@ void	ft_error(enum e_err_code error_code, void *info, int is_parent)
 {
 	int	exit_status;
 
-	printf("minishell: ");
+	ft_putstr_fd("minishell: ", 2);
 	if (error_code >= CD_MIN && error_code <= CD_MAX)
 		exit_status = ft_cd_error(error_code, info);
 	else if (error_code >= PWD_MIN && error_code <= PWD_MAX)

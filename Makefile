@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/24 08:55:13 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/24 09:57:42 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,6 +67,7 @@ EXECUTE_SRC		=	cmd.c\
 					pipe_utils.c\
 					redir.c\
 					arraylist.c\
+					arraylist_utils.c\
 					ft_error.c
 #--------------[ BUILTIN ]----------------
 BUILTIN_DIR		=	src/builtin
@@ -82,13 +83,14 @@ BUILTIN_SRC		=	builtin.c\
 NAME			=	minishell	
 OBJ_DIR			=	objects
 SRC_DIR			=	src
-# SRC				=	main.c
-ifdef TEST
-	SRC = test.c
-	NAME = testshell
-else
-	SRC = main.c
-endif
+SRC				=	main.c\
+					system_err.c
+#ifdef TEST
+#	SRC = test.c
+#	NAME = testshell
+#else
+#	SRC = main.c
+#endif
 
 OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(GNL_SRC:.c=.o))\

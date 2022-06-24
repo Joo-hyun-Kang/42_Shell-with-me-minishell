@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:35:47 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 16:34:46 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 10:04:41 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_argument	*ft_init_argument(t_token *cur_tok, t_env_root *env)
 
 	argument = (t_argument *)malloc(sizeof(t_argument));
 	if (argument == NULL)
-		return (NULL);
+		ft_system_err(FAILED_MALLOC);
 	ft_memset(argument, 0, sizeof(t_argument));
 	argument->pa_argument = ft_init_pa_argument(cur_tok);
 	argument->env = env;
@@ -40,7 +40,7 @@ char	**ft_init_pa_argument(t_token *cur_tok)
 	}
 	pa_argument = (char **)malloc(sizeof(char *) * (i + 1));
 	if (pa_argument == NULL)
-		return (NULL);
+		ft_system_err(FAILED_MALLOC);
 	ft_memset(pa_argument, 0, sizeof(char *) * (i + 1));
 	return (pa_argument);
 }

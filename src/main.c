@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/07 22:42:17 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 07:59:25 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 09:58:03 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,20 @@
 static void	ft_init_minishell(t_env_root **rnv, char **env, int ac, char **av);
 static void	ft_show_argument_test(t_argument *arg); // for test
 
+char	*ft_readline(void)
+{
+	char	*pa_path;
+	char	*read_line;
+
+	pa_path = getcwd(NULL, 0);
+	if (pa_path == NULL)
+		ft_error(PWD_ERR, (void *)pa_path, true);
+	pa_path = ft_merge_str(pa_path, strdup(READLINE));
+	read_line = readline(pa_path);
+	free(pa_path);
+	return (read_line);
+}
+
 int main(int argc, char **argv, char **env)
 {
 	char       		*read_line;
@@ -22,7 +36,7 @@ int main(int argc, char **argv, char **env)
 	t_argument		*arg;
 
 	ft_init_minishell(&root_env, env, argc, argv);
-	read_line = readline(READLINE);
+	read_line = ft_readline();
 	while (read_line != NULL)
 	{
 		add_history(read_line);
@@ -36,7 +50,7 @@ int main(int argc, char **argv, char **env)
 //			system("leaks minishell"); // for test
 		}
 		ft_set_noecho();
-		read_line = readline(READLINE);
+		read_line = ft_readline();
 	}
 	ft_exit();
 	return (0);

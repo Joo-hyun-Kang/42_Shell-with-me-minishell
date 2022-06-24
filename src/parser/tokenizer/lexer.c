@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 23:03:18 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 04:28:32 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 10:00:36 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_lexer	*lx_init(char *cmd_str, t_env_root *env)
 
 	lexer = (t_lexer *)malloc(sizeof(t_lexer));
 	if (lexer == NULL)
-		return (NULL);
+		ft_system_err(FAILED_MALLOC);
 	ft_memset(lexer, 0, sizeof(t_lexer));
 	lexer->cmd_str = cmd_str;
 	lexer->cmd_str_size = ft_strlen(cmd_str);

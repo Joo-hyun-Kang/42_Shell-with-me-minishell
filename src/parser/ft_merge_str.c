@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:12:34 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/21 20:34:23 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 10:04:23 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_merge_str(char *s1, char *s2)
 	s2_size = ft_strlen(s2);
 	str = (char *)malloc(sizeof(char) * (s1_size + s2_size + 1));
 	if (str == NULL)
-		return (NULL);
+		ft_system_err(FAILED_MALLOC);
 	ft_strlcpy(str, s1, s1_size + 1);
 	ft_strlcat(str, s2, s1_size + s2_size + 1);
 	free(s1);

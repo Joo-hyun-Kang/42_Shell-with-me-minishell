@@ -20,24 +20,23 @@ int	is_builtin(char *command, enum e_btype *out_type)
 		*out_type = INVAILD;
 	if (*out_type == INVAILD)
 		return (false);
-	return(true);
+	return (true);
 }
 
 void	ft_builtin(t_argument *arg, enum e_btype bull_type, int is_parent)
 {
-	//내장 명령어 실행
 	if (bull_type == BUL_ECHO)
 		ft_execute_echo(arg, is_parent);
 	else if (bull_type == BUL_CD)
 		ft_execute_cd(arg, is_parent);
 	else if (bull_type == BUL_PWD)
 		ft_execute_pwd(is_parent);
-    else if (bull_type == BUL_EXIT)
-        ft_execute_exit(arg, is_parent);
-	else if (bull_type == BUL_EXPORT )
+	else if (bull_type == BUL_EXIT)
+		ft_execute_exit(arg, is_parent);
+	else if (bull_type == BUL_EXPORT)
 		ft_execute_export(arg, is_parent);
-	else if (bull_type == BUL_ENV )
+	else if (bull_type == BUL_ENV)
 		ft_execute_env(arg, is_parent);
-	else if (bull_type == BUL_UNSET )
+	else if (bull_type == BUL_UNSET)
 		ft_execute_unset(arg, is_parent);
 }

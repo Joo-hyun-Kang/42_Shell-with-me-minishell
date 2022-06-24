@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:03:15 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 04:49:09 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 10:01:10 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_token	*tk_init(t_lexer *lexer, enum e_token_type t_type)
 
 	new_tok = (t_token *)malloc(sizeof(t_token));
 	if (new_tok == NULL)
-		return (NULL);
+		ft_system_err(FAILED_MALLOC);
 	ft_memset(new_tok, 0, sizeof(t_token));
 	new_tok->token_type = t_type;
 	if (lexer != NULL)

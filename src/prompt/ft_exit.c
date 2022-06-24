@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/23 03:37:32 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 03:37:39 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 10:05:48 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,5 @@
 
 void	ft_exit(void)
 {
-	printf("\033[1A\033[15Cexit\n");
 	exit(g_exit);
 }

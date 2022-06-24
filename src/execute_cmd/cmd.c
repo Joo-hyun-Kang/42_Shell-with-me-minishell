@@ -19,7 +19,7 @@ void	ft_fork_execute(t_argument *argument)
 		ft_print_error();
 	if (pid == 0)
 		ft_execute(argument, false);
-	wait(NULL);
+	ft_wait_child(pid);
 }
 
 void	ft_execute_single_cmd(t_argument **arg)
@@ -41,6 +41,7 @@ void	ft_execute_mult_cmd(t_argument **arg)
 	int	state;
 	int	ret;
 	int			status;
+	pid_t		child_pid;
 
 	pa_pipes = (t_pipes *)malloc(sizeof(t_pipes));
 	ret = ft_construt_pipes(*arg, pa_pipes);
@@ -55,11 +56,11 @@ void	ft_execute_mult_cmd(t_argument **arg)
 		
 		if (token == PIPE)
 		{
-			ft_execute_pipe(arg, state, pa_pipes);
+			child_pid = ft_execute_pipe(arg, state, pa_pipes);
 		}
 		else if (ft_is_redir(token))
 		{
-			ft_execute_redir(arg, state, pa_pipes);
+			child_pid = ft_execute_redir(arg, state, pa_pipes);
 		}
 	}
 
@@ -71,15 +72,33 @@ void	ft_execute_mult_cmd(t_argument **arg)
 		i++;
 	} 
 
-	while (wait(NULL) != -1)
-	{
-	}
+	ft_wait_child(child_pid);
 
 	ft_free_pipes(&pa_pipes);
 }
 
+void	ft_wait_child(pid_t child_pid)
+{
+	pid_t	pid;
+	int		status;
+
+	status = 0;
+	pid = INT32_MIN;
+	while (true)
+	{
+		pid = waitpid(-1, &status, 0);
+		if (pid == child_pid)
+			g_exit = (status >> 8);
+		else if (pid == -1)
+			break;
+	}
+
+}
+
 void	ft_system(t_argument *argument)
 {
+	if (argument->pa_argument[COMMAND_POSITION] == NULL)
+		return ;
 	while (argument != NULL)
 	{
 		// 첫번쨰 친구들은 EOL 은 여기서 막힌다

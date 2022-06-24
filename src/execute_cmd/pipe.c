@@ -22,7 +22,7 @@ void	ft_get_pipe_state(int *state)
 		*state = PIPE_END;
 }
 
-void	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
+pid_t	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 {
 	pid_t				pid;
 	enum e_token_type	token;
@@ -39,14 +39,15 @@ void	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 	pipes->current_idx++;
 	*arg = (*arg)->next;
 	if (*arg == NULL)
-		return ;
+		return pid;
 	token = (*arg)->next_token_type;
 	if (token == PIPE)
-		ft_execute_pipe(arg, state, pipes);
-	else if (token == EOL)
-		ft_execute_pipe(arg, END, pipes);
+		return ft_execute_pipe(arg, state, pipes);
 	else if (ft_is_redir(token))
-		ft_execute_redir(arg, state, pipes);
+		return ft_execute_redir(arg, state, pipes);
+	else
+		return ft_execute_pipe(arg, END, pipes);
+	return (pid);
 }
 
 int	ft_construt_pipes(t_argument *arg, t_pipes *pipes)

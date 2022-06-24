@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:42:08 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 11:00:04 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 16:31:44 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,5 @@ void	ft_execute_pwd(int is_parent)
 	}
 	if (is_parent == 0)
 		exit(0);
+	g_exit = 0;
 }

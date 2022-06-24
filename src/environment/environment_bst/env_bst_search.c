@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 09:15:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/23 14:53:31 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 18:08:15 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ t_env	*ft_env_search(t_env_root *root, char *key)
 	t_env	*find_node;
 
 	if (root->root == NULL)
+	{
+		free(key);
 		return (NULL);
+	}
 	find_node = ft_env_search_recursive(root->root, key);
 	free(key);
 	return (find_node);

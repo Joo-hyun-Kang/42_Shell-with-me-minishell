@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:38:16 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 08:33:29 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 16:30:59 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	ft_execute_env(t_argument *arg, int is_parent)
 	ft_execute_env_print_node(arg->env->root);
 	if (is_parent == false)
 		exit(0);
+	g_exit = 0;
 }
 
 static void	ft_execute_env_print_node(t_env *root_node)

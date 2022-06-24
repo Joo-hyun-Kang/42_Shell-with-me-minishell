@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 09:14:46 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 02:57:54 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/24 19:27:08 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ static void	ft_env_delete_if_left_null(t_env_root *root, t_env *cur_node)
 			cur_node->parent->left = cur_node->right;
 		else
 			cur_node->parent->right = cur_node->right;
+		cur_node->right->parent = cur_node->parent;
 	}
 }
 
@@ -72,6 +73,7 @@ static void	ft_env_delete_if_right_null(t_env_root *root, t_env *cur_node)
 			cur_node->parent->left = cur_node->left;
 		else
 			cur_node->parent->right = cur_node->left;
+		cur_node->left->parent = cur_node->parent;
 	}
 }
 
@@ -82,10 +84,6 @@ static void	ft_env_delete_if_both_not_null(t_env_root *root, t_env *cur_node)
 	replace_node = cur_node->right;
 	while (replace_node->left)
 		replace_node = replace_node->left;
-	if (replace_node->parent->left == cur_node)
-		replace_node->parent->left = NULL;
-	else
-		replace_node->parent->right = NULL;
 	if (cur_node->parent == NULL)
 		root->root = replace_node;
 	else
@@ -94,7 +92,15 @@ static void	ft_env_delete_if_both_not_null(t_env_root *root, t_env *cur_node)
 			cur_node->parent->left = replace_node;
 		else
 			cur_node->parent->right = replace_node;
+		replace_node->parent = cur_node->parent;
 	}
-	replace_node->left = cur_node->left;
-	replace_node->right = cur_node->right;
+	if (cur_node->right == replace_node)
+		replace_node->left = cur_node->left;
+	else
+	{
+		replace_node->left = cur_node->left;
+		replace_node->right = cur_node->right;
+	}
+	replace_node->left->parent = replace_node;
+	replace_node->right->parent = replace_node;
 }

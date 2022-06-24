@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:35:28 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 08:32:59 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 16:31:34 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void	ft_execute_export(t_argument *arg, int is_parent)
 	}
 	if (is_parent == false)
 		exit(0);
+	g_exit = 0;
 }
 
 static void	ft_execute_export_print_env(t_env *root_node)

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:39:45 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 08:33:14 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 18:07:17 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	ft_execute_unset(t_argument *arg, int is_parent)
 	ft_env_delete(arg->env, ft_strdup(arg->pa_argument[idx]));
 	if (is_parent == false)
 		exit(0);
+	g_exit = 0;
 }
 
 static int	ft_check_unset_vaild(char *key)

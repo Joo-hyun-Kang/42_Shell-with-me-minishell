@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:41:36 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 08:52:11 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 16:30:37 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,5 @@ void	ft_execute_echo(t_argument *arg, int is_parent)
 		printf("\n");
 	if (is_parent == 0)
 		exit(0);
+	g_exit = 0;
 }

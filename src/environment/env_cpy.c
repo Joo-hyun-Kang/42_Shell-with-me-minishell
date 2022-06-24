@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 07:22:45 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 10:06:15 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 20:34:59 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,14 @@ t_env_root	*ft_dpenv_to_bstenv(char **env)
 	return (root);
 }
 
+void	print_env(char **env)
+{
+	for (int i = 0; env[i] != NULL; ++i)
+	{
+		printf("%s\n", env[i]);
+	}
+}
+
 char	**ft_bstenv_to_dpenv(t_env_root *root)
 {
 	char	**env;
@@ -47,6 +55,7 @@ char	**ft_bstenv_to_dpenv(t_env_root *root)
 	env[root->size] = 0;
 	idx = 0;
 	ft_bstenv_to_dpenv_recursive(root->root, env, &idx);
+	print_env(env);
 	return (env);
 }
 
@@ -65,14 +74,12 @@ void	ft_remove_copy_env(char **env)
 
 static void	ft_bstenv_to_dpenv_recursive(t_env *node, char **env, int *idx)
 {
-	const int	index = *idx;
-
 	if (node == NULL)
 		return ;
 	ft_bstenv_to_dpenv_recursive(node->left, env, idx);
-	env[index] = strdup(node->pa_key);
-	env[index] = ft_merge_str(env[index], ft_strdup("="));
-	env[index] = ft_merge_str(env[index], ft_strdup(node->pa_value));
+	env[*idx] = NULL;
+	env[*idx] = ft_merge_str(strdup(node->pa_key), ft_strdup("="));
+	env[*idx] = ft_merge_str(env[*idx], ft_strdup(node->pa_value));
 	++(*idx);
 	ft_bstenv_to_dpenv_recursive(node->right, env, idx);
 }

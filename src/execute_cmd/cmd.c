@@ -113,17 +113,26 @@ void	ft_system(t_argument *argument)
 
 int		ft_execute_path(t_argument *arg)
 {
-	g_exit = execve(arg->pa_argument[COMMAND_POSITION], arg->pa_argument, NULL);
+	char	**env;
+
+	env = ft_bstenv_to_dpenv(arg->env);
+	g_exit = execve(arg->pa_argument[COMMAND_POSITION], arg->pa_argument, env);
+	ft_remove_copy_env(env);
 	return 0;
 }
 
 int		ft_execute_nopath(t_argument *arg, char *pa_path)
 {
-	char *pa_orgin_command = ft_strdup(arg->pa_argument[COMMAND_POSITION]);
+	char	**env;
+	char	*pa_orgin_command;
+
+	pa_orgin_command = ft_strdup(arg->pa_argument[COMMAND_POSITION]);
 	free(arg->pa_argument[COMMAND_POSITION]);
 	arg->pa_argument[COMMAND_POSITION] = pa_path;
 
-	g_exit = execve(pa_path, arg->pa_argument, NULL);
+	env = ft_bstenv_to_dpenv(arg->env);
+	g_exit = execve(pa_path, arg->pa_argument, env);
+	ft_remove_copy_env(env);
 	return 0;
 }
 
@@ -163,7 +172,10 @@ int		ft_execute_except_case(t_argument *arg)
 	//swap arg->pa_argument
 	arg->pa_argument[COMMAND_POSITION] = pa_path;
 
-	g_exit = execve(pa_path, arg->pa_argument, NULL);
+	char	**env;
+	env = ft_bstenv_to_dpenv(arg->env);
+	g_exit = execve(pa_path, arg->pa_argument, env);
+	ft_remove_copy_env(env);
 	return 0;
 }
 

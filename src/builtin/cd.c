@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:42:38 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 15:46:15 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 20:00:38 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*ft_get_cdstr(t_argument *arg, int is_parent)
 		if (find != NULL)
 			cdstr = ft_strdup(find->pa_value);
 		else
-			ft_error(CD_NO_SET, key, is_parent);
+			ft_error(CD_NO_SET, ft_strdup(key), is_parent);
 	}
 	return (cdstr);
 }
@@ -40,12 +40,14 @@ char	*ft_get_cdstr(t_argument *arg, int is_parent)
 void	ft_execute_cd(t_argument *arg, int is_parent)
 {
 	char		*cdstr;
+	int			rst;
 
 	cdstr = ft_get_cdstr(arg, is_parent);
 	if (cdstr == NULL)
 		return ;
 	ft_env_insert(arg->env, ft_strdup("OLDPWD"), getcwd(NULL, 0));
-	if (chdir(cdstr) == -1)
+	rst = chdir(cdstr);
+	if (rst == -1)
 	{
 		if (errno == 20)
 			return (ft_error(CD_NOT_DIR, (void *)cdstr, is_parent));

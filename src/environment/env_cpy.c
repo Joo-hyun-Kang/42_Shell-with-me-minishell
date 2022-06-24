@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 07:22:45 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 20:34:59 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 20:44:40 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,6 @@ t_env_root	*ft_dpenv_to_bstenv(char **env)
 	return (root);
 }
 
-void	print_env(char **env)
-{
-	for (int i = 0; env[i] != NULL; ++i)
-	{
-		printf("%s\n", env[i]);
-	}
-}
-
 char	**ft_bstenv_to_dpenv(t_env_root *root)
 {
 	char	**env;
@@ -55,7 +47,6 @@ char	**ft_bstenv_to_dpenv(t_env_root *root)
 	env[root->size] = 0;
 	idx = 0;
 	ft_bstenv_to_dpenv_recursive(root->root, env, &idx);
-	print_env(env);
 	return (env);
 }
 

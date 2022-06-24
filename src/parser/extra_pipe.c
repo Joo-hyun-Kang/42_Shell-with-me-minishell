@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 08:11:03 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 10:07:06 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ t_token	*p_extra_pipe(t_token *cur_tok, t_env_root *env)
 
 	signal(SIGQUIT, SIG_IGN);
 	pid = fork();
+	if (pid < 0)
+		ft_system_err(FAILED_FORK);
 	if (pid == 0)
 		p_extra_pipe_child();
 	wait(&status);

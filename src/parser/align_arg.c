@@ -6,16 +6,16 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 03:09:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 08:13:45 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 10:08:21 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int		p_strdlen(char **str)
+int	p_strdlen(char **str)
 {
 	int	i;
-	
+
 	i = 0;
 	while (str[i] != NULL)
 		++i;
@@ -29,10 +29,12 @@ char	**ft_append_str(char **str, char *src)
 	int			idx;
 
 	if (str != NULL)
-		str_size  = p_strdlen(str);
+		str_size = p_strdlen(str);
 	else
 		str_size = 0;
 	new_str = (char **)malloc(sizeof(char *) * (str_size + 2));
+	if (new_str == NULL)
+		ft_system_err(FAILED_MALLOC);
 	new_str[str_size + 1] = 0;
 	idx = 0;
 	while (idx < str_size)
@@ -57,7 +59,7 @@ void	p_swap_arg(t_argument *cur, t_argument *next)
 		return ;
 	new_str = (char **)malloc(sizeof(char *) * 2);
 	if (new_str == NULL)
-		return ;
+		ft_system_err(FAILED_MALLOC);
 	new_str[1] = 0;
 	new_str[0] = next->pa_argument[0];
 	idx = 1;

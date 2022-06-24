@@ -206,10 +206,10 @@ void	ft_execute(t_argument *argument, int is_parent)
 	{
 		ft_execute_except_case(argument);
 	}
-
-	printf("@@@%s\n", strerror(errno));
 	if (errno == 13)
-		ft_error(EXE_IS_DIR, command, is_parent);
+		ft_error(EXE_PERMISSION, command, is_parent);
+	else if (errno == 2)
+		ft_error(EXE_NO_DIR, command, is_parent);
 	else
 		ft_error(EXE_CMD_NOT, command, is_parent);
 }

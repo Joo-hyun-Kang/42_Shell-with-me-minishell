@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/24 08:55:13 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/24 11:34:24 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,10 @@ PARSER_SRC		=	parser.c\
 					heredoc_utils.c\
 					align_arg.c\
 					ft_merge_str.c
+#--------------[ MALLOC ]----------------
+MALLOC_DIR		=	src/malloc
+MALLOC_SRC		=	ft_strdup.c\
+					ft_strndup.c
 #--------------[ ENV ]----------------
 ENV_DIR			=	src/environment
 ENV_SRC			=	env_utils.c\
@@ -67,6 +71,7 @@ EXECUTE_SRC		=	cmd.c\
 					pipe_utils.c\
 					redir.c\
 					arraylist.c\
+					arraylist_utils.c\
 					ft_error.c
 #--------------[ BUILTIN ]----------------
 BUILTIN_DIR		=	src/builtin
@@ -82,13 +87,14 @@ BUILTIN_SRC		=	builtin.c\
 NAME			=	minishell	
 OBJ_DIR			=	objects
 SRC_DIR			=	src
-# SRC				=	main.c
-ifdef TEST
-	SRC = test.c
-	NAME = testshell
-else
-	SRC = main.c
-endif
+SRC				=	main.c\
+					system_err.c
+#ifdef TEST
+#	SRC = test.c
+#	NAME = testshell
+#else
+#	SRC = main.c
+#endif
 
 OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(GNL_SRC:.c=.o))\
@@ -96,13 +102,14 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(TOKEN_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(ENV_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(ENVBST_SRC:.c=.o))\
+					$(addprefix $(OBJ_DIR)/, $(MALLOC_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(SIG_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(EXECUTE_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(PRPT_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(BUILTIN_SRC:.c=.o))\
 #-----------------[ CMD ]-------------------
 CC				=	gcc
-CFLAGS			=	-fsanitize=address# -Wall -Wextra -Werror
+CFLAGS			=	# -Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(LIBFT_DIR)\
 					-I $(GNL_DIR)\
@@ -115,7 +122,7 @@ LDLIBS			=	-l ft -L $(LIBFT_DIR)\
 AR				=	ar -rcs
 RM				=	rm -rf
 
-vpath %.c $(SRC_DIR) $(GNL_DIR) $(TOKEN_DIR) $(PARSER_DIR) $(ENV_DIR) $(ENVBST_DIR) $(SIG_DIR) $(EXECUTE_DIR) $(PRPT_DIR) $(BUILTIN_DIR)
+vpath %.c $(SRC_DIR) $(GNL_DIR) $(TOKEN_DIR) $(PARSER_DIR) $(ENV_DIR) $(ENVBST_DIR) $(MALLOC_DIR) $(SIG_DIR) $(EXECUTE_DIR) $(PRPT_DIR) $(BUILTIN_DIR)
 
 all: $(NAME)
 

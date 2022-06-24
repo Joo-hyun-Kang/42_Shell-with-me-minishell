@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 09:46:39 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 11:37:51 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@
                                                     \n\
                                                     \n"
 
-# define READLINE "\033[1;35mminishell\033[0;0m-\033[1;33m0.0\033[1;32m$\033[0;0m "
+# define STT_READ "\033[1;34m❯ \033[0;0m\033[1;35mminishell\033[0;0m"
+# define END_READ "\033[1;32m$\033[0;0m "
+
 int	g_exit;
 
 enum e_token_type {
@@ -115,6 +117,19 @@ typedef struct s_argument {
  */
 /* src/system_err.c */
 void		ft_system_err(enum e_system_err error_code);
+
+/*
+ * #########################################################
+ * #                                                       #
+ * #                       src/malloc                      #
+ * #                                                       #
+ * #########################################################
+ */
+/* src/malloc/ft_strdup.c */
+char	*ft_strdup(const char *s);
+
+/* src/malloc/ft_strndup.c */
+char	*ft_strndup(const char *src, size_t n);
 
 /*
  * #########################################################

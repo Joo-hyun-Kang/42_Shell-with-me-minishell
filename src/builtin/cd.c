@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:42:38 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 08:51:54 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/24 11:53:48 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,12 @@ void	ft_execute_cd(t_argument *arg, int is_parent)
 	}
 	ft_env_insert(arg->env, ft_strdup("OLDPWD"), getcwd(NULL, 0));
 	if (chdir(dir_path) == -1)
+	{
+		if (errno == 20)
+			return (ft_error(CD_NOT_DIR, (void *)dir_path, is_parent));
 		return (ft_error(CD_NO_DIR, (void *)dir_path, is_parent));
+	}
+	free(dir_path);
 	ft_env_insert(arg->env, ft_strdup("PWD"), getcwd(NULL, 0));
 	if (is_parent == 0)
 		exit(g_exit);

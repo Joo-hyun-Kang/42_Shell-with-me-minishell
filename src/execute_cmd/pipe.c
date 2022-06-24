@@ -6,7 +6,7 @@
 /*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 01:35:04 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/24 01:35:05 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/24 20:08:05 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ pid_t	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 	ft_get_pipe_state(&state);
 	pid = fork();
 	if (pid == -1)
-		printf("error\n");
+		ft_system_err(FAILED_FORK);
 	else if (pid == 0)
 	{
 		ft_set_pipe(pipes, state);
@@ -69,7 +69,7 @@ int	ft_construt_pipes(t_argument *arg, t_pipes *pipes)
 		pipes->array[i] = (int *)malloc(sizeof(int) * PIPE_COUNT);
 		ret = pipe(pipes->array[i]);
 		if (ret < -1)
-			printf("error\n");
+			ft_system_err(FAILED_PIPE);
 		i++;
 	}
 	return (true);

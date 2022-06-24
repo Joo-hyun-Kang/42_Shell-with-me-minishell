@@ -16,7 +16,7 @@ void	ft_fork_execute(t_argument *argument)
 
 	pid = fork();
 	if (pid == -1)
-		ft_print_error();
+		ft_system_err(FAILED_FORK);
 	if (pid == 0)
 		ft_execute(argument, false);
 	ft_wait_child(pid);
@@ -44,6 +44,8 @@ void	ft_execute_mult_cmd(t_argument **arg)
 	pid_t		child_pid;
 
 	pa_pipes = (t_pipes *)malloc(sizeof(t_pipes));
+	if (pa_pipes == NULL)
+		ft_system_err(FAILED_MALLOC);
 	ret = ft_construt_pipes(*arg, pa_pipes);
 	// 요거 실패했을 떄 처리 따로 할 것
 	if (ret == false)

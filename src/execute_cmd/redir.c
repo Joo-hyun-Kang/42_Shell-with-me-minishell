@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 11:38:39 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/24 12:30:14 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/24 20:12:27 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,14 @@ void	ft_get_redir_state(t_argument **arg, t_redir *redir, int state)
 void	ft_init_redir_variable(t_redir *redir)
 {
 	redir->list_arg = (t_lst *)malloc(sizeof(t_lst));
+	if (redir->list_arg == NULL)
+		ft_system_err(FAILED_MALLOC);
 	redir->list_com = (t_lst *)malloc(sizeof(t_lst));
+	if (redir->list_com == NULL)
+		ft_system_err(FAILED_MALLOC);
 	redir->redir_arg = (t_lst *)malloc(sizeof(t_lst));
+	if (redir->redir_arg == NULL)
+		ft_system_err(FAILED_MALLOC);
 	init_arraylist(redir->list_arg);
 	init_arraylist(redir->list_com);
 	init_arraylist(redir->redir_arg);
@@ -66,7 +72,7 @@ pid_t	ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 	ft_sort_redir_command(arg, redir.list_arg, redir.list_com);
 	pid = fork();
 	if (pid == -1)
-		printf("minishell : %s\n", strerror(errno));
+		ft_system_err(FAILED_FORK);
 	else if (pid == 0)
 	{
 		redir.pipes = pipes;

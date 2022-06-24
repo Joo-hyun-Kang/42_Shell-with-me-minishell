@@ -8,6 +8,8 @@ int	ft_set_redir(t_redir *redir, t_lst *argument)
 	int			is_same_file;
 
 	open_files = (t_lst *)malloc(sizeof(t_lst));
+	if (open_files == NULL)
+		ft_system_err(FAILED_MALLOC);
 	init_arraylist(open_files);
 	
 	pa_gt_files = NULL;

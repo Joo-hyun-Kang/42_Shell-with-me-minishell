@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/24 11:34:24 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/24 16:07:08 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ DEL_COLOR		=	"\033[1;31m"
 END				=	"\033[0;0m"
 CLEAR			=	"\x1b[1A\x1b[M"
 #---------------[ libft ]-------------------
-LIBFT			=	$(LIBFT_DIR)libft.a
+LIBFT			=	$(LIBFT_DIR)/libft.a
 LIBFT_DIR		=	library/libft
 LIBFT_INC		=	$(LIBFT_DIR)/inc
 #---------------[ libft ]-------------------

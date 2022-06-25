@@ -33,3 +33,15 @@ void	ft_free_redir_variable(t_redir *redir)
 	free_arraylist(redir->list_com);
 	free_arraylist(redir->redir_arg);
 }
+
+ void	ft_make_redir_com(t_redir *redir, t_lst *arg)
+ {
+	int i;
+
+	i = 0;
+	while (i < redir->list_arg->length)
+	{
+		add_arraylist(arg, ft_strdup(redir->list_arg->pa_arr[i]), NONE);
+		++i;
+	}
+ }

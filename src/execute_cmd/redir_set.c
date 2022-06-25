@@ -28,7 +28,7 @@ void	ft_split_command(t_redir *redir, t_lst *arg, t_lst **files, char **gt)
 void	ft_open_non_write(int j, t_lst *files)
 {
 	int	fd;
-	
+
 	if (files->type[j] == LT_OPEN)
 	{
 		fd = open(files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0644);
@@ -93,13 +93,11 @@ int	ft_set_redir(t_redir *redir, t_lst *arg)
 	t_lst		*open_files;
 	char		*pa_gt_files;
 	char		*lt_dlt_files;
-	int			is_same_file;
+	int			i;
 
 	pa_gt_files = NULL;
 	lt_dlt_files = NULL;
 	ft_split_command(redir, arg, &open_files, &pa_gt_files);
-
-	// 같은 파일을 여는 경우 예외처리
 	if (open_files->pa_arr != NULL)
 	{
 		lt_dlt_files = open_files->pa_arr[open_files->length - 1];
@@ -110,52 +108,13 @@ int	ft_set_redir(t_redir *redir, t_lst *arg)
 		}
 	}
 
-	// 커맨드를 따서 pa_arguemt를 만듬
-	int i = 0;
-	while (i < redir->list_arg->length)
-	{
-		add_arraylist(arg, ft_strdup(redir->list_arg->pa_arr[i]), NONE);
-		++i;
-	}
+	ft_make_redir_com(redir, arg);
 	add_arraylist(arg, NULL, NONE);
-
 	ft_set_opne_file(open_files, redir);
-
 	ft_set_read_file(pa_gt_files, redir);
-
-		/*
-	if (pa_gt_files != NULL)
-	{
-		int fd;
-		fd = open(pa_gt_files, O_RDONLY);
-		if (fd < 0)
-			ft_error(EXE_NO_DIR, pa_gt_files, false);
-		dup2(fd, STDIN_FILENO);
-		close(fd);
-		redir->will_stdin_pipe = false;
-	}
-	*/
-
 	ft_pipe_redir(redir);
-
-	/*
-	if (redir->will_stdin_pipe == true || redir->will_stdout_pipe == true)
-	{
-		if (redir->will_stdin_pipe == true)
-		{
-			dup2(redir->pipes->array[redir->pipes->current_idx - 1][PIPE_READ], STDIN_FILENO);
-		}
-		if (redir->will_stdout_pipe == true)
-		{
-			dup2(redir->pipes->array[redir->pipes->current_idx][PIPE_WRITE], STDOUT_FILENO);
-		}
-	}
-	*/
-
-
 	ft_close_pipe(redir->pipes);
 	free_arraylist(open_files);
 	free(pa_gt_files);
 	return (true);
 }
-

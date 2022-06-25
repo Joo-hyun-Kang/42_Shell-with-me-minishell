@@ -134,6 +134,7 @@ pid_t		ft_redir_recursive(t_argument **arg, int state, t_pipes *pipes, int pid);
 int			ft_is_redir(enum e_token_type token);
 int			ft_find_next_pipe(t_argument **arg);
 void		ft_free_redir_variable(t_redir *redir);
+void		ft_make_redir_com(t_redir *redir, t_lst *arg);
 
 /* src/execute_cmd/redir_sort.c */
 void   		ft_copy_origin_command(t_argument **arg, t_lst *list_com);

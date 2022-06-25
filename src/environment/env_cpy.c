@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 07:22:45 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 11:30:41 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 19:19:49 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ static void	ft_bstenv_to_dpenv_recursive(t_env *node, char **env, int *idx)
 		return ;
 	ft_bstenv_to_dpenv_recursive(node->left, env, idx);
 	env[*idx] = NULL;
-	env[*idx] = ft_merge_str(strdup(node->pa_key), ft_strdup("="));
+	env[*idx] = ft_merge_str(ft_strdup(node->pa_key), ft_strdup("="));
 	env[*idx] = ft_merge_str(env[*idx], ft_strdup(node->pa_value));
 	++(*idx);
 	ft_bstenv_to_dpenv_recursive(node->right, env, idx);

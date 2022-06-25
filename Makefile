@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/25 17:22:46 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/25 19:20:06 by jokang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -121,11 +121,9 @@ CFLAGS			=	-Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(LIBFT_DIR)\
 					-I $(GNL_DIR)\
-					-I/opt/homebrew/opt/readline/include
-					#-I/Users/jokang/.brew/opt/readline/include
+					-I/Users/jokang/.brew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /opt/homebrew/opt/readline/lib
-					#-l readline -L/Users/jokang/.brew/opt/readline/lib
+					-l readline -L/Users/jokang/.brew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 

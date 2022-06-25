@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 00:57:21 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 17:15:56 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 19:31:30 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	ft_exe_error(int error_code, void *info)
 	else if (error_code == EXE_NO_DIR)
 	{
 		ft_putstr_fd("No such file or directory\n", 2);
-		return (127);
+		return (1);
 	}
 	else if (error_code == EXE_PERMISSION)
 	{

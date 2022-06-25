@@ -6,7 +6,7 @@
 /*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:53:50 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 17:15:33 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 19:35:54 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	ft_system(t_argument *argument)
 	{
 		argument = argument->next;
 		command = ft_strdup(argument->pa_argument[COMMAND_POSITION]);
-		ft_error(CD_NO_DIR, command, true);
+		ft_error(EXE_NO_DIR, command, true);
+		free(command);
 		return ;
 	}
 	while (argument != NULL)

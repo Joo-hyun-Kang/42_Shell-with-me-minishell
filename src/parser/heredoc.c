@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/22 17:27:21 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 10:07:41 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 11:45:05 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,7 @@ t_token	*p_heredoc(t_argument *arg, t_token *cur_tok)
 	int		status;
 
 	signal(SIGQUIT, SIG_IGN);
-	pid = fork();
-	if (pid < 0)
-		ft_system_err(FAILED_FORK);
+	pid = fork_safe();
 	if (pid == 0)
 		p_heredoc_child(arg, cur_tok);
 	wait(&status);
@@ -43,6 +41,6 @@ static t_token	*p_heredoc_err(int status)
 		unlink(F_HEREDOC);
 	}
 	else if ((status / 256) == 3)
-		printf("Can't open file!\n");
+		ft_putstr_fd("Can't open file!\n", 2);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 01:35:04 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/24 20:08:05 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 11:48:35 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,8 @@ pid_t	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 	enum e_token_type	token;
 
 	ft_get_pipe_state(&state);
-	pid = fork();
-	if (pid == -1)
-		ft_system_err(FAILED_FORK);
-	else if (pid == 0)
+	pid = fork_safe();
+	if (pid == 0)
 	{
 		ft_set_pipe(pipes, state);
 		ft_execute(*arg, false);
@@ -58,15 +56,13 @@ int	ft_construt_pipes(t_argument *arg, t_pipes *pipes)
 	int			ret;
 
 	pipe_count = ft_get_pipe_count(arg);
-	pipes->array = (int **)malloc(sizeof(int *) * pipe_count);
-	if (pipes->array == NULL)
-		printf("error\n");
+	pipes->array = (int **)malloc_safe(sizeof(int *) * pipe_count);
 	pipes->pipe_count = pipe_count;
 	pipes->current_idx = 0;
 	i = 0;
 	while (i < pipe_count)
 	{
-		pipes->array[i] = (int *)malloc(sizeof(int) * PIPE_COUNT);
+		pipes->array[i] = (int *)malloc_safe(sizeof(int) * PIPE_COUNT);
 		ret = pipe(pipes->array[i]);
 		if (ret < -1)
 			ft_system_err(FAILED_PIPE);

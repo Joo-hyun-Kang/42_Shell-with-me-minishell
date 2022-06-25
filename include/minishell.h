@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 19:31:30 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 11:45:34 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,6 @@ enum e_btype {
 };
 
 enum e_system_err {
-	FAILED_MALLOC,
-	FAILED_FORK,
 	FAILED_PIPE
 };
 
@@ -126,10 +124,23 @@ void		ft_system_err(enum e_system_err error_code);
  * #########################################################
  */
 /* src/malloc/ft_strdup.c */
-char	*ft_strdup(const char *s);
+char		*ft_strdup(const char *s);
 
 /* src/malloc/ft_strndup.c */
-char	*ft_strndup(const char *src, size_t n);
+char		*ft_strndup(const char *src, size_t n);
+
+/*
+ * #########################################################
+ * #                                                       #
+ * #                       src/safe                        #
+ * #                                                       #
+ * #########################################################
+ */
+/* src/safe/malloc_safe.c */
+void		*malloc_safe(size_t n);
+
+/* src/safe/fork_safe.c */
+pid_t		fork_safe(void);
 
 /*
  * #########################################################

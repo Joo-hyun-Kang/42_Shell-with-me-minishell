@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/15 22:22:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 11:33:06 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 11:29:08 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ char	*ft_strndup(const char *src, size_t n)
 	src_size = ft_strlen(src);
 	if (src_size < n)
 		n = src_size;
-	dup = (char *)malloc(sizeof(char) * (n + 1));
-	if (dup == NULL)
-		ft_system_err(FAILED_MALLOC);
+	dup = (char *)malloc_safe(sizeof(char) * (n + 1));
 	while (i < n)
 	{
 		dup[i] = src[i];

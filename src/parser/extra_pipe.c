@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 19:54:25 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 11:45:17 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,7 @@ t_token	*p_extra_pipe(t_token *cur_tok, t_env_root *env)
 	int		status;
 
 	signal(SIGQUIT, SIG_IGN);
-	pid = fork();
-	if (pid < 0)
-		ft_system_err(FAILED_FORK);
+	pid = fork_safe();
 	if (pid == 0)
 		p_extra_pipe_child();
 	wait(&status);
@@ -87,11 +85,11 @@ static t_token	*p_extra_pipe_err(int status)
 	}
 	else if ((status / 256) == 2)
 	{
-		printf("\033[1A\033[2C");
-		printf("minishell: syntax error: unexpected end of file\n");
+		ft_putstr_fd("\033[1A\033[2C", 1);
+		ft_putstr_fd("minishell: syntax error: unexpected end of file\n", 2);
 		g_exit = 258;
 	}
 	else if ((status / 256) == 3)
-		printf("Can't open file!\n");
+		ft_putstr_fd("Can't open file!\n", 2);
 	return (NULL);
 }

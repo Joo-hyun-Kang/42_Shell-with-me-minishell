@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/16 15:51:20 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 07:32:56 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 11:36:03 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,5 +89,5 @@ static void	tk_unclosed_quote_err(t_lexer *lexer)
 {
 	lexer->err = true;
 	g_exit = 258;
-	printf("minishell: syntax error: unclosed quote\n");
+	ft_putstr_fd("minishell: syntax error: unclosed quote\n", 2);
 }

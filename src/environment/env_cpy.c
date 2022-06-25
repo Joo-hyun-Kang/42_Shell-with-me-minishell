@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 07:22:45 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 20:44:40 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 11:30:41 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,7 @@ char	**ft_bstenv_to_dpenv(t_env_root *root)
 
 	if (root->size == 0)
 		return (NULL);
-	env = (char **)malloc(sizeof(char *) * (root->size + 1));
-	if (env == NULL)
-		ft_system_err(FAILED_MALLOC);
+	env = (char **)malloc_safe(sizeof(char *) * (root->size + 1));
 	env[root->size] = 0;
 	idx = 0;
 	ft_bstenv_to_dpenv_recursive(root->root, env, &idx);

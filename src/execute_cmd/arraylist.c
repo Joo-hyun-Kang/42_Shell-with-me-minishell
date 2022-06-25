@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 10:11:14 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/24 20:17:58 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 11:47:22 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,8 @@ int	allocate_arraylist(t_lst *arraylist)
 
 void	allocate_list_first(t_lst *arraylist)
 {
-	arraylist->pa_arr = (char **)malloc(BASIC_CAPACITY * sizeof(char *));
-	if (arraylist->pa_arr == NULL)
-		ft_system_err(FAILED_MALLOC);
-	arraylist->type = (int *)malloc(BASIC_CAPACITY * sizeof(int));
-	if (arraylist->type == NULL)
-		ft_system_err(FAILED_MALLOC);
+	arraylist->pa_arr = (char **)malloc_safe(BASIC_CAPACITY * sizeof(char *));
+	arraylist->type = (int *)malloc_safe(BASIC_CAPACITY * sizeof(int));
 	arraylist->length = 0;
 	arraylist->capacity = BASIC_CAPACITY;
 }
@@ -71,15 +67,11 @@ void	allocate_list_sec(t_lst *arraylist)
 	char	**tmp;
 	int		*tmp2;
 
-	tmp = (char **)malloc(arraylist->capacity * 2 * sizeof(char *));
-	if (tmp == NULL)
-		ft_system_err(FAILED_MALLOC);
+	tmp = (char **)malloc_safe(arraylist->capacity * 2 * sizeof(char *));
 	ft_copy_char_arr_malloc(tmp, arraylist->pa_arr);
 	ft_free_list_value(arraylist->pa_arr, arraylist->length);
 	tmp = NULL;
-	tmp2 = (int *)malloc(arraylist->capacity * 2 * sizeof(int));
-	if (tmp2 == NULL)
-		ft_system_err(FAILED_MALLOC);
+	tmp2 = (int *)malloc_safe(arraylist->capacity * 2 * sizeof(int));
 	ft_memcpy(tmp2, arraylist->type, arraylist->length);
 	free(arraylist->type);
 	arraylist->type = tmp2;

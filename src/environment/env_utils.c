@@ -3,93 +3,47 @@
 /*                                                        :::      ::::::::   */
 /*   env_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/09 16:52:07 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/13 13:25:45 by kanghyki         ###   ########.fr       */
+/*   Created: 2022/06/15 17:57:29 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/24 07:26:04 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-int	ft_strdplen(char **str)
+bool	ft_is_dictionary(char *str)
 {
-	int	i;
-
-	i = 0;
-	while (str[i] != 0)
-		++i;
-	return (i);
-}
-
-char	**ft_envdup(char **env)
-{
-	char	**new_env;
-	int		env_len;
-	int		i;
-
-	i = 0;
-	env_len = ft_strdplen(env);
-	new_env = (char **)malloc(sizeof(char *) * (env_len + 1));
-	if (new_env == 0)
-		return (0);
-	new_env[env_len] = 0;
-	while (env[i] != 0)
+	while (*str != '\0')
 	{
-		new_env[i] = ft_strdup(env[i]);
-		++i;
-	}
-	return (new_env);
-}
-
-int	ft_is_key_match(char *env, char *key)
-{
-	int	i;
-
-	i = 0;
-	while (env[i] != 0 && key[i] != 0)
-	{
-		if (env[i] != key[i])
-			break ;
-		++i;
-	}
-	if (env[i] == '=' && key[i] == 0)
-		return (1);
-	return (0);
-}
-
-char	**ft_find_match_key(char **env, char *key)
-{
-	int		i;
-	char	*value;
-
-	i = 0;
-	while (env[i] != 0)
-	{
-		if (ft_is_key_match(env[i], key) == 1)
-			return (&env[i]);
-		++i;
+		if (*str == '=')
+			return (1);
+		++str;
 	}
 	return (0);
 }
 
-char	*ft_get_value_from_env(char **env, char *key)
+char	*ft_extract_key_from_str(char *str)
 {
-	int		i;
-	char	*value;
+	char	*s_pos;
 
-	i = 0;
-	while (*env != 0)
-	{
-		if (ft_is_key_match(*env, key) == 1)
-		{
-			while ((*env)[i] != '=')
-				++i;
-			++i;
-			return (ft_strdup(&(*env)[i]));
-		}
-		else
-			++env;
-	}
-	return (ft_strdup(""));
+	s_pos = str;
+	while (*str != '\0' && *str != '=')
+		++str;
+	return (ft_strndup(s_pos, str - s_pos));
+}
+
+char	*ft_extract_value_from_str(char *str)
+{
+	while (*str != '\0' && *str != '=')
+		++str;
+	++str;
+	return (ft_strdup(str));
+}
+
+void	ft_free_env_node(t_env *node)
+{
+	free(node->pa_key);
+	free(node->pa_value);
+	free(node);
 }

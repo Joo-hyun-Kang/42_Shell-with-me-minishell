@@ -1,26 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env_free_utils.c                                   :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/12 16:04:09 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/13 00:49:28 by kanghyki         ###   ########.fr       */
+/*   Created: 2022/06/23 03:37:32 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/24 10:24:10 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_free_env(char **env)
+void	ft_exit(void)
 {
-	int	i;
-
-	i = 0;
-	while (env[i] != 0)
-	{
-		free(env[i]);
-		++i;
-	}
-	free(env);
+	printf("exit\n");
+	exit(g_exit);
 }

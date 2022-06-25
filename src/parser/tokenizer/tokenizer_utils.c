@@ -6,69 +6,53 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:03:15 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/13 00:47:34 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 11:36:13 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../include/minishell.h"
 
-char	*ft_strchr_except_null(const char *str, int c)
+t_token	*tk_init(t_lexer *lexer, enum e_token_type t_type)
 {
-	while (*str != 0)
+	t_token	*new_tok;
+
+	new_tok = (t_token *)malloc_safe(sizeof(t_token));
+	ft_memset(new_tok, 0, sizeof(t_token));
+	new_tok->token_type = t_type;
+	if (lexer != NULL)
 	{
-		if (*str == (char)c)
-			return ((char *)str);
-		++str;
+		new_tok->pa_str = lexer->pa_str;
+		lexer->pa_str = 0;
 	}
-	return (0);
+	return (new_tok);
 }
 
-char	*ft_strndup(const char *src, size_t n)
+void	tk_free(t_token *token)
 {
-	size_t	i;
-	size_t	src_size;
-	char	*dup;
+	t_token	*prev;
 
-	i = 0;
-	src_size = ft_strlen(src);
-	if (src_size < n)
-		n = src_size;
-	dup = (char *)malloc(sizeof(char) * (n + 1));
-	if (dup == 0)
-		return (0);
-	while (i < n)
+	prev = token;
+	while (token != NULL)
 	{
-		dup[i] = src[i];
-		++i;
+		if (token->pa_str != NULL)
+			free(token->pa_str);
+		token = token->next;
+		free(prev);
+		prev = token;
 	}
-	dup[i] = 0;
-	return (dup);
 }
 
-t_token	*ft_init_token(char *str, enum e_token_type token_type)
-{
-	t_token	*new_token;
-
-	new_token = (t_token *)malloc(sizeof(t_token));
-	if (new_token == 0)
-		return (0);
-	ft_memset(new_token, 0, sizeof(t_token));
-	new_token->pa_str = str;
-	new_token->token_type = token_type;
-	return (new_token);
-}
-
-void	ft_add_token_back(t_token **head, t_token *new_token)
+void	tk_add_back(t_token **head, t_token *new_tok)
 {
 	t_token	*iter;
 
-	if (*head == 0)
-		*head = new_token;
+	if (*head == NULL)
+		*head = new_tok;
 	else
 	{
 		iter = *head;
-		while (iter->next != 0)
+		while (iter->next != NULL)
 			iter = iter->next;
-		iter->next = new_token;
+		iter->next = new_tok;
 	}
 }

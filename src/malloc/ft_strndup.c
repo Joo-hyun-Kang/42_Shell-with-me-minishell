@@ -1,28 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_common_utils.c                              :+:      :+:    :+:   */
+/*   ft_strndup.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/12 04:12:34 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/12 04:12:40 by kanghyki         ###   ########.fr       */
+/*   Created: 2022/06/15 22:22:29 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/25 11:29:08 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-void	ft_merge_string(char **dst, char *src)
+char	*ft_strndup(const char *src, size_t n)
 {
-	char	*new_str;
+	size_t	i;
+	size_t	src_size;
+	char	*dup;
 
-	if (*dst == 0)
-		*dst = src;
-	else
+	i = 0;
+	src_size = ft_strlen(src);
+	if (src_size < n)
+		n = src_size;
+	dup = (char *)malloc_safe(sizeof(char) * (n + 1));
+	while (i < n)
 	{
-		new_str = ft_strjoin(*dst, src);
-		free(*dst);
-		free(src);
-		*dst = new_str;
+		dup[i] = src[i];
+		++i;
 	}
+	dup[i] = 0;
+	return (dup);
 }

@@ -6,11 +6,11 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/12 03:42:10 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/05/30 19:18:25 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 11:28:12 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "inc/libft.h"
+#include "../../include/minishell.h"
 
 char	*ft_strdup(const char *s)
 {
@@ -18,9 +18,7 @@ char	*ft_strdup(const char *s)
 	char	*s_dup;
 
 	i = 0;
-	s_dup = (char *)malloc(sizeof(char) * (ft_strlen(s) + 1));
-	if (!s_dup)
-		return (0);
+	s_dup = (char *)malloc_safe(sizeof(char) * (ft_strlen(s) + 1));
 	while (s[i])
 	{
 		s_dup[i] = s[i];

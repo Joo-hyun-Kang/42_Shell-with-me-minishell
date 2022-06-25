@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 18:19:14 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 19:41:19 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,8 +32,8 @@
 # define M_HOME		'~'
 # define M_SEP		"|>< \r\v\f\t\"'$~"
 
-# define F_HEREDOC	"heredoc.tmp"
-# define F_EXTRA	"extra.tmp"
+# define F_HEREDOC	".heredoc.tmp"
+# define F_EXTRA	".extra.tmp"
 
 # define BANNER "\
                                                     \n\

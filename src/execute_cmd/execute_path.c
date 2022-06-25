@@ -41,6 +41,7 @@ void	ft_find_dir_pos(char *command, char **pa_directories, int *p)
 			{
 				if (ft_strcmp(command, ent->d_name) == 0)
 					*p = i;
+				ent = readdir(dir);
 			}
 			closedir(dir);
 		}

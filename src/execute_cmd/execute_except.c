@@ -27,6 +27,7 @@ int	ft_is_command_exist(char *current_path, t_argument *arg)
 			{
 				return (true);
 			}
+			ent = readdir (dir);
 		}
 		closedir (dir);
 	}

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:42:38 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 20:00:38 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 15:32:40 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,6 @@ char	*ft_get_cdstr(t_argument *arg, int is_parent)
 		find = ft_env_search(arg->env, ft_strdup(key));
 		if (find != NULL)
 			cdstr = ft_strdup(find->pa_value);
-		else
-			ft_error(CD_NO_SET, ft_strdup(key), is_parent);
 	}
 	return (cdstr);
 }

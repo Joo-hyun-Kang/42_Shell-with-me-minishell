@@ -33,13 +33,13 @@ void	ft_wait_child(pid_t child_pid)
 		if (pid == child_pid)
 			g_exit = (status >> 8);
 		else if (pid == -1)
-			break;
+			break ;
 	}
 }
 
 void	ft_free_command(char **pa_char)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (pa_char[i] != NULL)

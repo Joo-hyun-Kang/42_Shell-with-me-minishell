@@ -32,7 +32,7 @@
 # define PIPE_END (4)
 # define REDIRECTION (5)
 
-#define ENV_PATH_NAME_LENGTH (5)
+# define ENV_PATH_NAME_LENGTH (5)
 
 // out_copy는 마지막 파이프의 READ fd값을 가짐
 // 짝수일 때는 pipe1의 READ를 홀수일 때는 pipe2의 READ를 가짐
@@ -40,7 +40,7 @@ typedef struct pipes {
 	int			**array;
 	size_t		pipe_count;
 	size_t		current_idx;
-} t_pipes;
+}	t_pipes;
 
 enum redir_type {
 	RE_COM,
@@ -52,7 +52,7 @@ enum redir_type {
 
 typedef struct arraylist {
 	char	**pa_arr;
-    int     *type;
+	int		*type;
 	int		length;
 	int		capacity;
 }	t_lst;
@@ -100,36 +100,36 @@ enum e_err_code {
  * #########################################################
  */
 /* src/execute_cmd/cmd.c */
-void				ft_system(t_argument *argument);
-void				ft_execute_mult_cmd(t_argument **arg);
-char				*ft_join_path_command_malloc(char *path, char *command);
+void		ft_system(t_argument *argument);
+void		ft_execute_mult_cmd(t_argument **arg);
+char		*ft_join_path_command_malloc(char *path, char *command);
 
 /* src/execute_cmd/cmd_single.c */
-void				ft_fork_execute(t_argument *argument);
-void				ft_execute_single_cmd(t_argument **arg);
-void				ft_wait_child(pid_t child_pid);
-void				ft_free_command(char **pa_char);
-int					ft_get_length_2d_arr(char **array);
+void		ft_fork_execute(t_argument *argument);
+void		ft_execute_single_cmd(t_argument **arg);
+void		ft_wait_child(pid_t child_pid);
+void		ft_free_command(char **pa_char);
+int			ft_get_length_2d_arr(char **array);
 
 /* src/execute_cmd/execute.c */
-void				ft_execute(t_argument *argument, int is_parent);
-int					ft_execute_path(t_argument *arg);
-void				ft_execute_error(char * command, int is_parent);
+void		ft_execute(t_argument *argument, int is_parent);
+int			ft_execute_path(t_argument *arg);
+void		ft_execute_error(char *command, int is_parent);
 
 /* src/execute_cmd/execute_path.c */
-int					ft_execute_nopath(t_argument *arg, char *pa_path);
-char				*ft_search_command_path_malloc(t_env_root *root, char *command);
-void				ft_find_dir_pos(char *command, char **pa_directories, int *position);
+int			ft_execute_nopath(t_argument *arg, char *pa_path);
+char		*ft_search_command_path_malloc(t_env_root *root, char *command);
+void		ft_find_dir_pos(char *command, char **pa_directories, int *position);
 
 /* src/execute_cmd/execute_except.c */
-void			ft_execute_except_case(t_argument *arg);
-int				ft_is_command_dir();
-int				ft_is_command_exist(char *current_path, t_argument *arg);
+void		ft_execute_except_case(t_argument *arg);
+int			ft_is_command_dir(void);
+int			ft_is_command_exist(char *current_path, t_argument *arg);
 
 /* src/environment/execute_env.c */
-void				ft_execute_export(t_argument *arg, int is_parent);
-void				ft_execute_env(t_argument *arg, int is_parent);
-void				ft_execute_unset(t_argument *arg, int is_parent);
+void		ft_execute_export(t_argument *arg, int is_parent);
+void		ft_execute_env(t_argument *arg, int is_parent);
+void		ft_execute_unset(t_argument *arg, int is_parent);
 
 /* src/execute_cmd/pipe.c */
 
@@ -160,8 +160,8 @@ void		ft_free_redir_variable(t_redir *redir);
 void		ft_make_redir_com(t_redir *redir, t_lst *arg);
 
 /* src/execute_cmd/redir_sort.c */
-void   		ft_copy_origin_command(t_argument **arg, t_lst *list_com);
-void   		ft_get_gt_variable(t_argument *p, t_lst *list_arg, char **gt_file);
+void		ft_copy_origin_command(t_argument **arg, t_lst *list_com);
+void		ft_get_gt_variable(t_argument *p, t_lst *list_arg, char **gt_file);
 void		ft_get_lt_dlt(t_argument *p, t_lst *l_arg, t_lst *l_com, int token);
 void		ft_sort_redir_command(t_argument **arg, t_lst *l_arg, t_lst *l_com);
 
@@ -178,14 +178,14 @@ void		ft_pipe_redir(t_redir *redir);
 
 /* src/execute_cmd/arraylist.c */
 void		init_arraylist(t_lst *arraylist);
-int			add_arraylist(t_lst *arraylist, char* value, int type);
+int			add_arraylist(t_lst *arraylist, char *value, int type);
 int			allocate_arraylist(t_lst *arraylist);
 void		allocate_list_first(t_lst *arraylist);
 void		allocate_list_sec(t_lst *arraylist);
 
 /* src/execute_cmd/arraylist_utils.c */
 void		ft_free_list_value(char **pa_char, int lenght);
-void	    ft_copy_char_arr_malloc(char **dst, char **src);
+void		ft_copy_char_arr_malloc(char **dst, char **src);
 void		exit_malloc_fail(void *p);
 void		free_arraylist(t_lst *arraylist);
 int			is_arraylist_full(t_lst *arraylist);

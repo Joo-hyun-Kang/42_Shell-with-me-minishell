@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:40:52 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 15:02:15 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 15:23:48 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,18 @@ void	ft_execute_exit(t_argument *arg, int is_parent)
 	{
 		rtn = ft_atoull(arg->pa_argument[1], &is_numeric);
 		if (is_numeric != 1)
+		{
 			ft_error(EXIT_NUMERIC, arg->pa_argument[1], is_parent);
+			exit(g_exit);
+		}
 		else if (arg->pa_argument[2] != NULL)
 			return (ft_error(EXIT_MANY_ARG, NULL, is_parent));
 	}
 	if (is_parent != 0)
 		printf("exit\n");
-	exit(g_exit);
+	exit(rtn % 256);
+}
+
+static void	ft_print_exit(unsigned long long n)
+{
 }

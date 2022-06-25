@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/23 03:25:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 17:18:28 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 19:48:01 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static void	p_read_heredoc(char *heredoc, t_argument *arg)
 		free(pa_str);
 		pa_str = 0;
 		ft_putstr_fd(write_line, fd);
+		free(write_line);
 		read_line = readline("> ");
 	}
 	if (read_line != NULL)

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 03:09:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 16:20:57 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 11:33:27 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,7 @@ char	**ft_append_str(char **str, char *src)
 		str_size = p_strdlen(str);
 	else
 		str_size = 0;
-	new_str = (char **)malloc(sizeof(char *) * (str_size + 2));
-	if (new_str == NULL)
-		ft_system_err(FAILED_MALLOC);
+	new_str = (char **)malloc_safe(sizeof(char *) * (str_size + 2));
 	new_str[str_size + 1] = NULL;
 	idx = 0;
 	while (idx < str_size)
@@ -57,9 +55,7 @@ void	p_swap_arg(t_argument *cur, t_argument *next)
 		next_size = p_strdlen(next->pa_argument);
 	if (next_size < 1)
 		return ;
-	new_str = (char **)malloc(sizeof(char *) * 2);
-	if (new_str == NULL)
-		ft_system_err(FAILED_MALLOC);
+	new_str = (char **)malloc_safe(sizeof(char *) * 2);
 	new_str[1] = NULL;
 	new_str[0] = next->pa_argument[0];
 	idx = 1;

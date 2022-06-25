@@ -6,9 +6,7 @@ void	ft_split_command(t_redir *redir, t_lst *arg, t_lst **files, char **gt)
 	int		*type;
 	int		i;
 
-	*files = (t_lst *)malloc(sizeof(t_lst));
-	if (*files == NULL)
-		ft_system_err(FAILED_MALLOC);
+	*files = (t_lst *)malloc_safe(sizeof(t_lst));
 	init_arraylist(*files);
 	strs = redir->list_com->pa_arr;
 	type = redir->list_com->type;

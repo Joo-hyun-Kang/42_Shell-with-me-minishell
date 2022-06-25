@@ -20,9 +20,7 @@ void	ft_execute_mult_cmd(t_argument **arg)
 	int					state;
 	pid_t				child_pid;
 
-	pa_pipes = (t_pipes *)malloc(sizeof(t_pipes));
-	if (pa_pipes == NULL)
-		ft_system_err(FAILED_MALLOC);
+	pa_pipes = (t_pipes *)malloc_safe(sizeof(t_pipes));
 	ft_construt_pipes(*arg, pa_pipes);
 	state = INIT;
 	while (*arg != NULL)

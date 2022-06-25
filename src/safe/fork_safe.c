@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   system_err.c                                       :+:      :+:    :+:   */
+/*   fork_safe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/24 09:35:36 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 11:45:41 by kanghyki         ###   ########.fr       */
+/*   Created: 2022/06/25 11:37:31 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/25 11:39:16 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-void	ft_system_err(enum e_system_err error_code)
+pid_t	fork_safe(void)
 {
-	ft_putstr_fd("System error: ", 2);
-	if (error_code == FAILED_PIPE)
-		ft_putendl_fd("pipe() failed, EXIT", 2);
-	exit(-1);
+	int	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		ft_putstr_fd("Fatal: Failed to fork()", 2);
+		exit(-1);
+	}
+	return (pid);
 }

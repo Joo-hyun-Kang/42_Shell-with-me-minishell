@@ -1,21 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   system_err.c                                       :+:      :+:    :+:   */
+/*   malloc_safe.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/24 09:35:36 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 11:45:41 by kanghyki         ###   ########.fr       */
+/*   Created: 2022/06/25 11:22:07 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/25 11:26:02 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-void	ft_system_err(enum e_system_err error_code)
+void	*malloc_safe(size_t n)
 {
-	ft_putstr_fd("System error: ", 2);
-	if (error_code == FAILED_PIPE)
-		ft_putendl_fd("pipe() failed, EXIT", 2);
-	exit(-1);
+	void	*ptr;
+
+	ptr = malloc(n);
+	if (ptr == NULL)
+	{
+		ft_putstr_fd("Fatal: Failed to memory allocate ", 2);
+		ft_putnbr_fd(n, 2);
+		ft_putstr_fd(" bytes.", 2);
+		exit(-1);
+	}
+	return (ptr);
 }

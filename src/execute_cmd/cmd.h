@@ -93,10 +93,12 @@ void				ft_execute_error(char * command, int is_parent);
 /* src/execute_cmd/execute_path.c */
 int					ft_execute_nopath(t_argument *arg, char *pa_path);
 char				*ft_search_command_path_malloc(t_env_root *root, char *command);
+void				ft_find_dir_pos(char *command, char **pa_directories, int *position);
 
 /* src/execute_cmd/execute_except.c */
-int					ft_execute_except_case(t_argument *arg);
-int					ft_is_command_dir();
+void			ft_execute_except_case(t_argument *arg);
+int				ft_is_command_dir();
+int				ft_is_command_exist(char *current_path, t_argument *arg);
 
 /* src/execute_cmd/ft_atoull.c */
 unsigned long long	ft_atoull(const char *str, int *is_numeric);

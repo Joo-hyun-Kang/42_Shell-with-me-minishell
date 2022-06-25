@@ -2,8 +2,15 @@
 
 void	ft_system(t_argument *argument)
 {
+	char *command;
+	
 	if (argument->pa_argument[COMMAND_POSITION] == NULL)
+	{
+		argument = argument->next;
+		command = ft_strdup(argument->pa_argument[COMMAND_POSITION]);
+		ft_error(CD_NO_DIR, command, true);
 		return ;
+	}
 	while (argument != NULL)
 	{
 		if (argument->next_token_type == EOL)

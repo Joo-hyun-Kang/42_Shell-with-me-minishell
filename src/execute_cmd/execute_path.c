@@ -15,14 +15,40 @@ int		ft_execute_nopath(t_argument *arg, char *pa_path)
 	return 0;
 }
 
+void	ft_find_dir_pos(char *command, char **pa_directories, int *position)
+{
+	struct dirent	*ent;
+	DIR				*dir;
+	int 			i;
+
+	i = 0;
+	while (pa_directories[i] != NULL)
+	{
+		if ((dir = opendir(pa_directories[i])) != NULL) 
+		{
+			while ((ent = readdir (dir)) != NULL) 
+			{
+				if (ft_strcmp(command, ent->d_name) == 0)
+				{
+					*position = i;
+					break;
+				}
+			}
+			closedir (dir);
+		} 
+		else 
+			return ;
+		i++;
+		if (*position > 0)
+			break;
+	}
+}
+
 char	*ft_search_command_path_malloc(t_env_root *root, char *command)
 {
 	char	*env_path;
 	char	**pa_directories;
-	int		length;
-	int		i;
 	int		position;
-	char	*pa_temp;
 	char	*pa_command_with_path;
 	t_env	*env_path_node;
 
@@ -31,53 +57,16 @@ char	*ft_search_command_path_malloc(t_env_root *root, char *command)
 		env_path = NULL;
 	else
 		env_path = env_path_node->pa_value;
-
 	if (env_path == NULL)
-	{
-		//환경변수 PATH가 없는 상태
 		return (NULL);
-	}
-
 	pa_directories = ft_split(env_path, ':');
-
-	//현재 디렉토리도 넣는 로직 추가
-	i = 0;
 	position = -1;
-	length = ft_strlen(command);
-	while (pa_directories[i] != NULL)
-	{
-		DIR *dir;
-		struct dirent *ent;
-		if ((dir = opendir(pa_directories[i])) != NULL) 
-		{
-			while ((ent = readdir (dir)) != NULL) 
-			{
-				if (ft_strcmp(command, ent->d_name) == 0)
-				{
-					position = i;
-					break;
-				}
-			}
-			closedir (dir);
-		} 
-		else 
-		{
-		/* could not open directory */
-			perror ("");
-			return NULL;
-		}
-		i++;
-		if (position > 0)
-		{
-			break;
-		}
-	}
+	ft_find_dir_pos(command, pa_directories, &position);
 	if (position < 0)
 	{
 		ft_free_command(pa_directories);
 		return (NULL);
 	}
-
 	pa_command_with_path = ft_join_path_command_malloc(pa_directories[position], command);
 	ft_free_command(pa_directories);
 	return (pa_command_with_path);

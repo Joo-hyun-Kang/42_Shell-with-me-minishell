@@ -1,21 +1,16 @@
 #include "cmd.h"
 
-int		ft_execute_except_case(t_argument *arg)
+int	ft_is_command_exist(char *current_path, t_argument *arg)
 {
-	const int	SIZE = 0;
-	int			is_command_exist = false;
-	char 		*pa_current_path = getcwd(NULL, SIZE);
-	char		*pa_path;
-	
-	DIR *dir;
-	struct dirent *ent;
-	if ((dir = opendir(pa_current_path)) != NULL) {
+	DIR				*dir;
+	struct dirent	*ent;
+
+	if ((dir = opendir(current_path)) != NULL) {
 		while ((ent = readdir (dir)) != NULL) 
 		{
 			if (ft_strcmp(arg->pa_argument[COMMAND_POSITION], ent->d_name) == 0)
 			{
-				is_command_exist = true;
-				break;
+				return (true);
 			}
 		}
 	closedir (dir);
@@ -25,22 +20,30 @@ int		ft_execute_except_case(t_argument *arg)
 	/* could not open directory */
 		perror ("");
 	}
+	return (false);
+}
 
-	//get PATH + COMMAND
+void	ft_execute_except_case(t_argument *arg)
+{
+	const int	size = 0;
+	int			is_command_exist;
+	char 		*pa_current_path;
+	char		*pa_path;
+	
+	is_command_exist = false;
+	pa_current_path = getcwd(NULL, size);
+	is_command_exist = ft_is_command_exist(pa_current_path, arg);
+	if (is_command_exist == false)
+		return ;
 	pa_path = ft_join_path_command_malloc(pa_current_path, arg->pa_argument[COMMAND_POSITION]);
 	free(pa_current_path);
-	
 	char *pa_orgin_command = ft_strdup(arg->pa_argument[COMMAND_POSITION]);
 	free(arg->pa_argument[COMMAND_POSITION]);
-	
-	//swap arg->pa_argument
 	arg->pa_argument[COMMAND_POSITION] = pa_path;
-
 	char	**env;
 	env = ft_bstenv_to_dpenv(arg->env);
 	g_exit = execve(pa_path, arg->pa_argument, env);
 	ft_remove_copy_env(env);
-	return 0;
 }
 
 int	ft_is_command_dir()

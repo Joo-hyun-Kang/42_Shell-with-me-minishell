@@ -46,17 +46,17 @@ void	ft_exe_except(char *pa_path, t_argument *arg, char **env)
 void	ft_execute_except_case(t_argument *arg)
 {
 	int			is_command_exist;
-	char		*pa_current_path;
+	char		*pa_current;
 	char		*pa_path;
 	char		*pa_orgin_command;
 
 	is_command_exist = false;
-	pa_current_path = getcwd(NULL, 0);
-	is_command_exist = ft_is_command_exist(pa_current_path, arg);
+	pa_current = getcwd(NULL, 0);
+	is_command_exist = ft_is_command_exist(pa_current, arg);
 	if (is_command_exist == false)
 		return ;
-	pa_path = ft_join_path_command_malloc(pa_current_path, arg->pa_argument[COMMAND_POSITION]);
-	free(pa_current_path);
+	pa_path = ft_join_path_command(pa_current, arg->pa_argument[0]);
+	free(pa_current);
 	pa_orgin_command = ft_strdup(arg->pa_argument[COMMAND_POSITION]);
 	free(arg->pa_argument[COMMAND_POSITION]);
 	arg->pa_argument[COMMAND_POSITION] = pa_path;

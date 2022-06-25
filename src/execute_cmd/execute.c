@@ -33,7 +33,7 @@ void	ft_execute(t_argument *argument, int is_parent)
 		is_path = false;
 	if (is_path)
 		ft_execute_path(argument);
-	pa_path = ft_search_command_path_malloc(argument->env, argument->pa_argument[COMMAND_POSITION]);
+	pa_path = ft_search_command_path(argument->env, argument->pa_argument[0]);
 	if (pa_path != NULL)
 		ft_execute_nopath(argument, pa_path);
 	if (ft_is_command_dir())

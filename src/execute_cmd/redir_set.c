@@ -6,13 +6,13 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:13:05 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 16:14:14 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/25 16:59:02 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd.h"
 
-void	ft_split_command(t_redir *redir, t_lst *arg, t_lst **files, char **gt)
+void	split_com(t_redir *redir, t_lst *arg, t_lst **files, char **gt)
 {
 	char	**strs;
 	int		*type;
@@ -109,7 +109,7 @@ int	ft_set_redir(t_redir *redir, t_lst *arg)
 
 	pa_gt_files = NULL;
 	lt_dlt_files = NULL;
-	ft_split_command(redir, arg, &open_files, &pa_gt_files);
+	split_com(redir, arg, &open_files, &pa_gt_files);
 	if (open_files->pa_arr != NULL)
 	{
 		lt_dlt_files = open_files->pa_arr[open_files->length - 1];

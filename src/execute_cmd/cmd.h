@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/25 16:54:27 by jokang            #+#    #+#             */
+/*   Updated: 2022/06/25 16:58:35 by jokang           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CMD_H
 # define CMD_H
 
@@ -42,7 +54,7 @@ typedef struct pipes {
 	size_t		current_idx;
 }	t_pipes;
 
-enum redir_type {
+enum e_redir_type {
 	RE_COM,
 	LT_OPEN,
 	DLT_OPEN,
@@ -102,7 +114,7 @@ enum e_err_code {
 /* src/execute_cmd/cmd.c */
 void		ft_system(t_argument *argument);
 void		ft_execute_mult_cmd(t_argument **arg);
-char		*ft_join_path_command_malloc(char *path, char *command);
+char		*ft_join_path_command(char *path, char *command);
 
 /* src/execute_cmd/cmd_single.c */
 void		ft_fork_execute(t_argument *argument);
@@ -118,14 +130,14 @@ void		ft_execute_error(char *command, int is_parent);
 
 /* src/execute_cmd/execute_path.c */
 int			ft_execute_nopath(t_argument *arg, char *pa_path);
-char		*ft_search_command_path_malloc(t_env_root *root, char *command);
-void		ft_find_dir_pos(char *command, char **pa_directories, int *position);
+char		*ft_search_command_path(t_env_root *root, char *command);
+void		ft_find_dir_pos(char *command, char **pa_directories, int *p);
 
 /* src/execute_cmd/execute_except.c */
-void			ft_execute_except_case(t_argument *arg);
-int				ft_is_command_dir(void);
-int				ft_is_command_exist(char *current_path, t_argument *arg);
-void			ft_exe_except(char *pa_path, t_argument *arg, char **env);
+void		ft_execute_except_case(t_argument *arg);
+int			ft_is_command_dir(void);
+int			ft_is_command_exist(char *current_path, t_argument *arg);
+void		ft_exe_except(char *pa_path, t_argument *arg, char **env);
 
 /* src/environment/execute_env.c */
 void		ft_execute_export(t_argument *arg, int is_parent);
@@ -151,7 +163,7 @@ void		ft_get_redir_state(t_argument **arg, t_redir *redir, int state);
 void		ft_init_redir_variable(t_redir *redir);
 t_argument	ft_get_sorted_command(t_lst *redir_arg, t_argument **arg);
 pid_t		ft_execute_redir(t_argument **arg, int state, t_pipes *pipes);
-pid_t		ft_redir_recursive(t_argument **arg, int state, t_pipes *pipes, int pid);
+pid_t		ft_redir_re(t_argument **arg, int state, t_pipes *pipes, int pid);
 
 /* src/execute_cmd/redir_utils.c */
 
@@ -168,7 +180,7 @@ void		ft_sort_redir_command(t_argument **arg, t_lst *l_arg, t_lst *l_com);
 
 /* src/execute_cmd/redir_set.c */
 int			ft_set_redir(t_redir *redir, t_lst *argument);
-void		ft_split_command(t_redir *redir, t_lst *arg, t_lst **files, char **gt);
+void		split_com(t_redir *redir, t_lst *arg, t_lst **files, char **gt);
 void		ft_set_opne_file(t_lst *open_files, t_redir *redir);
 void		ft_open_non_write(int j, t_lst *files);
 void		ft_open_write(int j, t_lst *files, t_redir *redir);

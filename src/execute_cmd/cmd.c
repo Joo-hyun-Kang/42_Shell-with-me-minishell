@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/25 16:53:50 by jokang            #+#    #+#             */
+/*   Updated: 2022/06/25 16:53:50 by jokang           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd.h"
 
 void	ft_system(t_argument *argument)
@@ -43,7 +55,7 @@ void	ft_execute_mult_cmd(t_argument **arg)
 	ft_free_pipes(&pa_pipes);
 }
 
-char	*ft_join_path_command_malloc(char *path, char *command)
+char	*ft_join_path_command(char *path, char *command)
 {
 	char	*pa_temp;
 	char	*pa_path_with_command;

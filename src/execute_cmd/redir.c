@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 11:38:39 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 11:49:56 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 16:58:19 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,10 +76,10 @@ pid_t	ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 	}
 	pipes->current_idx++;
 	ft_free_redir_variable(&redir);
-	return (ft_redir_recursive(arg, state, pipes, pid));
+	return (ft_redir_re(arg, state, pipes, pid));
 }
 
-pid_t	ft_redir_recursive(t_argument **arg, int state, t_pipes *pipes, int pid)
+pid_t	ft_redir_re(t_argument **arg, int state, t_pipes *pipes, int pid)
 {
 	enum e_token_type	token;
 

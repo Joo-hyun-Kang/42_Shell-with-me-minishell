@@ -26,7 +26,7 @@ int	ft_execute_nopath(t_argument *arg, char *pa_path)
 	return (0);
 }
 
-void	ft_find_dir_pos(char *command, char **pa_directories, int *position)
+void	ft_find_dir_pos(char *command, char **pa_directories, int *p)
 {
 	struct dirent	*ent;
 	DIR				*dir;
@@ -38,31 +38,28 @@ void	ft_find_dir_pos(char *command, char **pa_directories, int *position)
 		dir = opendir(pa_directories[i]);
 		if (dir != NULL)
 		{
-			ent = readdir (dir);
+			ent = readdir(dir);
 			while (ent != NULL)
 			{
 				if (ft_strcmp(command, ent->d_name) == 0)
-				{
-					*position = i;
-					break ;
-				}
+					*p = i;
 			}
-			closedir (dir);
+			closedir(dir);
 		}
 		else
 			return ;
 		i++;
-		if (*position > 0)
+		if (*p > 0)
 			break ;
 	}
 }
 
-char	*ft_search_command_path_malloc(t_env_root *root, char *command)
+char	*ft_search_command_path(t_env_root *root, char *command)
 {
 	char	*env_path;
 	char	**pa_directories;
 	int		position;
-	char	*pa_command_with_path;
+	char	*command_with_path;
 	t_env	*env_path_node;
 
 	env_path_node = ft_env_search(root, ft_strdup("PATH"));
@@ -80,7 +77,7 @@ char	*ft_search_command_path_malloc(t_env_root *root, char *command)
 		ft_free_command(pa_directories);
 		return (NULL);
 	}
-	pa_command_with_path = ft_join_path_command_malloc(pa_directories[position], command);
+	command_with_path = ft_join_path_command(pa_directories[position], command);
 	ft_free_command(pa_directories);
-	return (pa_command_with_path);
+	return (command_with_path);
 }

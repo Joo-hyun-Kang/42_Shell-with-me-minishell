@@ -74,20 +74,29 @@ typedef struct redir_var {
  * #########################################################
  */
 /* src/execute_cmd/cmd.c */
-void				ft_print_error();
-void				ft_execute_single_cmd(t_argument **arg);
 void				ft_system(t_argument *argument);
-int					ft_execute_path(t_argument *arg);
-int					ft_execute_nopath(t_argument *arg, char *pa_path);
-int					ft_execute_except_case(t_argument *arg);
-void				ft_execute(t_argument *argument, int is_parent);
-int					ft_is_command_dir();
-char	            *ft_search_command_path_malloc(t_env_root *root, char *command);
+void				ft_execute_mult_cmd(t_argument **arg);
 char				*ft_join_path_command_malloc(char *path, char *command);
+
+/* src/execute_cmd/cmd_single.c */
+void				ft_fork_execute(t_argument *argument);
+void				ft_execute_single_cmd(t_argument **arg);
+void				ft_wait_child(pid_t child_pid);
 void				ft_free_command(char **pa_char);
 int					ft_get_length_2d_arr(char **array);
-void            	ft_execute_mult_cmd(t_argument **arg);
-void				ft_wait_child(pid_t child_pid);
+
+/* src/execute_cmd/execute.c */
+void				ft_execute(t_argument *argument, int is_parent);
+int					ft_execute_path(t_argument *arg);
+void				ft_execute_error(char * command, int is_parent);
+
+/* src/execute_cmd/execute_path.c */
+int					ft_execute_nopath(t_argument *arg, char *pa_path);
+char				*ft_search_command_path_malloc(t_env_root *root, char *command);
+
+/* src/execute_cmd/execute_except.c */
+int					ft_execute_except_case(t_argument *arg);
+int					ft_is_command_dir();
 
 /* src/execute_cmd/ft_atoull.c */
 unsigned long long	ft_atoull(const char *str, int *is_numeric);
@@ -134,6 +143,12 @@ void		ft_sort_redir_command(t_argument **arg, t_lst *list_arg, t_lst *list_com);
 int			ft_set_redir(t_redir *redir, t_lst *argument);
 void		ft_split_command(t_redir *redir, t_lst *arg, t_lst **files, char **gt);
 void		ft_set_opne_file(t_lst *open_files, t_redir *redir);
+void		ft_open_non_write(int j, t_lst *files);
+void		ft_open_write(int j, t_lst *files, t_redir *redir);
+
+/* src/execute_cmd/redir_set_utils.c */
+void		ft_set_read_file(char *pa_gt_files, t_redir *redir);
+void		ft_pipe_redir(t_redir *redir);
 
 /* src/execute_cmd/arraylist.c */
 void		init_arraylist(t_lst *arraylist);

@@ -10,7 +10,6 @@ void	ft_split_command(t_redir *redir, t_lst *arg, t_lst **files, char **gt)
 	if (*files == NULL)
 		ft_system_err(FAILED_MALLOC);
 	init_arraylist(*files);
-
 	strs = redir->list_com->pa_arr;
 	type = redir->list_com->type;
 	i = 0;
@@ -28,52 +27,65 @@ void	ft_split_command(t_redir *redir, t_lst *arg, t_lst **files, char **gt)
 	}
 }
 
+void	ft_open_non_write(int j, t_lst *files)
+{
+	int	fd;
+	
+	if (files->type[j] == LT_OPEN)
+	{
+		fd = open(files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0644);
+		if (fd < 0)
+			ft_error(EXE_NO_DIR, files->pa_arr[j], false);
+		close(fd);
+	}
+	else
+	{
+		fd = open(files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0644);
+		if (fd < 0)
+			ft_error(EXE_NO_DIR, files->pa_arr[j], false);
+		close(fd);
+	}
+}
+
+void	ft_open_write(int j, t_lst *files, t_redir *redir)
+{
+	int	fd;
+
+	if (files->type[j] == LT_OPEN)
+	{
+		redir->will_stdout_pipe = false;
+		fd = open(files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0644);
+		if (fd < 0)
+			ft_error(EXE_NO_DIR, files->pa_arr[j], false);
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+	}
+	else
+	{
+		redir->will_stdout_pipe = false;
+		fd = open(files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0644);
+		if (fd < 0)
+			ft_error(EXE_NO_DIR, files->pa_arr[j], false);
+		dup2(fd, STDOUT_FILENO);
+		close(fd);
+	}
+}
+
 void	ft_set_opne_file(t_lst *open_files, t_redir *redir)
 {
 	int	j;
-	int fd;	
-	
+
 	if (open_files->pa_arr != NULL)
 	{
 		j = 0;
 		while (j < open_files->length - 1)
 		{
-			if (open_files->type[j] == LT_OPEN)
-			{
-				fd = open(open_files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0644);
-				if (fd < 0)
-					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
-				close(fd);
-			}
-			else
-			{
-				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0644);
-				if (fd < 0)
-					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
-				close(fd);
-			}
+			ft_open_non_write(j, open_files);
 			j++;
 		}
 		if (j == open_files->length - 1)
 		{
-			if (open_files->type[j] == LT_OPEN)
-			{
-				redir->will_stdout_pipe = false;
-				fd = open(open_files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0644);
-				if (fd < 0)
-					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
-				dup2(fd, STDOUT_FILENO);
-				close(fd);
-			}
-			else
-			{
-				redir->will_stdout_pipe = false;
-				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0644);
-				if (fd < 0)
-					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
-				dup2(fd, STDOUT_FILENO);
-				close(fd);
-			}
+			ft_open_write(j, open_files, redir);
 		}
 	}
 }
@@ -100,7 +112,6 @@ int	ft_set_redir(t_redir *redir, t_lst *arg)
 		}
 	}
 
-
 	// 커맨드를 따서 pa_arguemt를 만듬
 	int i = 0;
 	while (i < redir->list_arg->length)
@@ -112,56 +123,9 @@ int	ft_set_redir(t_redir *redir, t_lst *arg)
 
 	ft_set_opne_file(open_files, redir);
 
-	// 그리고 동시에 파일들을 오픈 시킬 건 오픈 시키고
-	// 가장 마지막 파일들은 빼고
+	ft_set_read_file(pa_gt_files, redir);
 
-	/*
-	if (open_files->pa_arr != NULL)
-	{
-		int j = 0;
-		int fd;
-		while (j < open_files->length - 1)
-		{
-			if (open_files->type[j] == LT_OPEN)
-			{
-				fd = open(open_files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0744);
-				if (fd < 0)
-					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
-				close(fd);
-			}
-			else
-			{
-				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0744);
-				if (fd < 0)
-					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
-				close(fd);
-			}
-			j++;
-		}
-		if (j == open_files->length - 1)
-		{
-			if (open_files->type[j] == LT_OPEN)
-			{
-				redir->will_stdout_pipe = false;
-				fd = open(open_files->pa_arr[j], (O_CREAT | O_TRUNC | O_RDWR), 0744);
-				if (fd < 0)
-					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
-				dup2(fd, STDOUT_FILENO);
-				close(fd);
-			}
-			else
-			{
-				redir->will_stdout_pipe = false;
-				fd = open(open_files->pa_arr[j], (O_CREAT | O_APPEND | O_RDWR), 0744);
-				if (fd < 0)
-					ft_error(EXE_NO_DIR, open_files->pa_arr[j], false);
-				dup2(fd, STDOUT_FILENO);
-				close(fd);
-			}
-		}
-	}
-	*/
-
+		/*
 	if (pa_gt_files != NULL)
 	{
 		int fd;
@@ -172,7 +136,11 @@ int	ft_set_redir(t_redir *redir, t_lst *arg)
 		close(fd);
 		redir->will_stdin_pipe = false;
 	}
+	*/
 
+	ft_pipe_redir(redir);
+
+	/*
 	if (redir->will_stdin_pipe == true || redir->will_stdout_pipe == true)
 	{
 		if (redir->will_stdin_pipe == true)
@@ -184,6 +152,7 @@ int	ft_set_redir(t_redir *redir, t_lst *arg)
 			dup2(redir->pipes->array[redir->pipes->current_idx][PIPE_WRITE], STDOUT_FILENO);
 		}
 	}
+	*/
 
 
 	ft_close_pipe(redir->pipes);
@@ -191,3 +160,4 @@ int	ft_set_redir(t_redir *redir, t_lst *arg)
 	free(pa_gt_files);
 	return (true);
 }
+

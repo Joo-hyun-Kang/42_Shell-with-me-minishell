@@ -67,11 +67,16 @@ ENVBST_SRC		=	env_bst_init.c\
 #--------------[ EXECUTE ]----------------
 EXECUTE_DIR		=	src/execute_cmd
 EXECUTE_SRC		=	cmd.c\
+					cmd_single.c\
+					execute.c\
+					execute_path.c\
+					execute_except.c\
 					ft_atoull.c\
 					pipe.c\
 					pipe_utils.c\
 					redir.c\
 					redir_set.c\
+					redir_set_utils.c\
 					redir_sort.c\
 					redir_utils.c\
 					arraylist.c\
@@ -118,10 +123,12 @@ CPPFLAGS		=	-I include\
 					-I $(LIBFT_DIR)\
 					-I $(GNL_DIR)\
 					-I $(EXECUTE_DIR)\
-					-I/opt/homebrew/opt/readline/include
+					-I/home/linuxbrew/.linuxbrew/Cellar/readline/8.1.2/include
+					#-I/opt/homebrew/opt/readline/include
 					#-I/Users/jokang/.brew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /opt/homebrew/opt/readline/lib
+					-l readline -L /home/linuxbrew/.linuxbrew/Cellar/readline/8.1.2/lib
+					#-l readline -L /opt/homebrew/opt/readline/lib
 					#-l readline -L/Users/jokang/.brew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf

@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/25 14:58:11 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/25 15:17:50 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -57,7 +57,8 @@ MALLOC_SRC		=	ft_strdup.c\
 #--------------[ SAFE ]----------------
 SAFE_DIR		=	src/safe
 SAFE_SRC		=	malloc_safe.c\
-					fork_safe.c
+					fork_safe.c\
+					pipe_safe.c
 #--------------[ ENV ]----------------
 ENV_DIR			=	src/environment
 ENV_SRC			=	env_utils.c\
@@ -100,8 +101,7 @@ BUILTIN_SRC		=	builtin.c\
 NAME			=	minishell	
 OBJ_DIR			=	objects
 SRC_DIR			=	src
-SRC				=	main.c\
-					system_err.c
+SRC				=	main.c
 
 OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(GNL_SRC:.c=.o))\

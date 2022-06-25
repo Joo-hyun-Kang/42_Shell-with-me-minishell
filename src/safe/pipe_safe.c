@@ -1,21 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   system_err.c                                       :+:      :+:    :+:   */
+/*   pipe_safe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/06/24 09:35:36 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 11:45:41 by kanghyki         ###   ########.fr       */
+/*   Created: 2022/06/25 15:09:12 by kanghyki          #+#    #+#             */
+/*   Updated: 2022/06/25 15:16:17 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/minishell.h"
+#include "../../include/minishell.h"
 
-void	ft_system_err(enum e_system_err error_code)
+int	pipe_safe(int pp[2])
 {
-	ft_putstr_fd("System error: ", 2);
-	if (error_code == FAILED_PIPE)
-		ft_putendl_fd("pipe() failed, EXIT", 2);
-	exit(-1);
+	int	rtn;
+
+	rtn = pipe(pp);
+	if (rtn != 0)
+	{
+		ft_putstr_fd("Fatal: Failed to pipe()", 2);
+		exit(-1);
+	}
+	return (rtn);
 }

@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 11:45:34 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 15:17:36 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,6 @@ enum e_btype {
 	INVAILD
 };
 
-enum e_system_err {
-	FAILED_PIPE
-};
-
 typedef struct s_env {
 	char					*pa_key;
 	char					*pa_value;
@@ -106,15 +102,6 @@ typedef struct s_argument {
 }	t_argument;
 
 # include "../src/execute_cmd/cmd.h"
-/*
- * #########################################################
- * #                                                       #
- * #                           src/                        #
- * #                                                       #
- * #########################################################
- */
-/* src/system_err.c */
-void		ft_system_err(enum e_system_err error_code);
 
 /*
  * #########################################################
@@ -141,6 +128,9 @@ void		*malloc_safe(size_t n);
 
 /* src/safe/fork_safe.c */
 pid_t		fork_safe(void);
+
+/* src/safe/pipe_safe.c */
+int			pipe_safe(int pp[2]);
 
 /*
  * #########################################################

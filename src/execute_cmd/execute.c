@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/25 16:30:57 by jokang            #+#    #+#             */
+/*   Updated: 2022/06/25 16:30:58 by jokang           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd.h"
 
 void	ft_execute(t_argument *argument, int is_parent)
@@ -29,17 +41,17 @@ void	ft_execute(t_argument *argument, int is_parent)
 	ft_execute_error(command, is_parent);
 }
 
-int		ft_execute_path(t_argument *arg)
+int	ft_execute_path(t_argument *arg)
 {
 	char	**env;
 
 	env = ft_bstenv_to_dpenv(arg->env);
 	g_exit = execve(arg->pa_argument[COMMAND_POSITION], arg->pa_argument, env);
 	ft_remove_copy_env(env);
-	return 0;
+	return (0);
 }
 
-void	ft_execute_error(char * command, int is_parent)
+void	ft_execute_error(char *command, int is_parent)
 {
 	if (errno == 13)
 		ft_error(EXE_PERMISSION, command, is_parent);
@@ -48,4 +60,3 @@ void	ft_execute_error(char * command, int is_parent)
 	else
 		ft_error(EXE_CMD_NOT, command, is_parent);
 }
-

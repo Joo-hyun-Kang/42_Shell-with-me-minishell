@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 00:57:21 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 16:24:34 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/25 16:29:06 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ int	ft_exe_error(int error_code, void *info)
 		ft_putstr_fd("Permission denied\n", 2);
 		return (126);
 	}
-
 	return (0);
 }
 

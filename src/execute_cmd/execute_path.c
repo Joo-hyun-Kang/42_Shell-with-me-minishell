@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute_path.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/25 16:31:09 by jokang            #+#    #+#             */
+/*   Updated: 2022/06/25 16:31:13 by jokang           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd.h"
 
-int		ft_execute_nopath(t_argument *arg, char *pa_path)
+int	ft_execute_nopath(t_argument *arg, char *pa_path)
 {
 	char	**env;
 	char	*pa_orgin_command;
@@ -8,39 +20,40 @@ int		ft_execute_nopath(t_argument *arg, char *pa_path)
 	pa_orgin_command = ft_strdup(arg->pa_argument[COMMAND_POSITION]);
 	free(arg->pa_argument[COMMAND_POSITION]);
 	arg->pa_argument[COMMAND_POSITION] = pa_path;
-
 	env = ft_bstenv_to_dpenv(arg->env);
 	g_exit = execve(pa_path, arg->pa_argument, env);
 	ft_remove_copy_env(env);
-	return 0;
+	return (0);
 }
 
 void	ft_find_dir_pos(char *command, char **pa_directories, int *position)
 {
 	struct dirent	*ent;
 	DIR				*dir;
-	int 			i;
+	int				i;
 
 	i = 0;
 	while (pa_directories[i] != NULL)
 	{
-		if ((dir = opendir(pa_directories[i])) != NULL) 
+		dir = opendir(pa_directories[i]);
+		if (dir != NULL)
 		{
-			while ((ent = readdir (dir)) != NULL) 
+			ent = readdir (dir);
+			while (ent != NULL)
 			{
 				if (ft_strcmp(command, ent->d_name) == 0)
 				{
 					*position = i;
-					break;
+					break ;
 				}
 			}
 			closedir (dir);
-		} 
-		else 
+		}
+		else
 			return ;
 		i++;
 		if (*position > 0)
-			break;
+			break ;
 	}
 }
 

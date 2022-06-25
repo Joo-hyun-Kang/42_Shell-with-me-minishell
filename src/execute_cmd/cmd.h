@@ -123,8 +123,9 @@ void				ft_find_dir_pos(char *command, char **pa_directories, int *position);
 
 /* src/execute_cmd/execute_except.c */
 void			ft_execute_except_case(t_argument *arg);
-int				ft_is_command_dir();
+int				ft_is_command_dir(void);
 int				ft_is_command_exist(char *current_path, t_argument *arg);
+void			ft_exe_except(char *pa_path, t_argument *arg, char **env);
 
 /* src/environment/execute_env.c */
 void				ft_execute_export(t_argument *arg, int is_parent);

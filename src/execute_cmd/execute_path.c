@@ -6,7 +6,7 @@
 /*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:31:09 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 16:31:13 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/25 17:06:56 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 int	ft_execute_nopath(t_argument *arg, char *pa_path)
 {
 	char	**env;
-	char	*pa_orgin_command;
 
-	pa_orgin_command = ft_strdup(arg->pa_argument[COMMAND_POSITION]);
 	free(arg->pa_argument[COMMAND_POSITION]);
 	arg->pa_argument[COMMAND_POSITION] = pa_path;
 	env = ft_bstenv_to_dpenv(arg->env);

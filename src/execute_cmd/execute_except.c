@@ -6,7 +6,7 @@
 /*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:35:46 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 16:35:47 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/25 17:07:28 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	ft_execute_except_case(t_argument *arg)
 	int			is_command_exist;
 	char		*pa_current;
 	char		*pa_path;
-	char		*pa_orgin_command;
 
 	is_command_exist = false;
 	pa_current = getcwd(NULL, 0);
@@ -57,7 +56,6 @@ void	ft_execute_except_case(t_argument *arg)
 		return ;
 	pa_path = ft_join_path_command(pa_current, arg->pa_argument[0]);
 	free(pa_current);
-	pa_orgin_command = ft_strdup(arg->pa_argument[COMMAND_POSITION]);
 	free(arg->pa_argument[COMMAND_POSITION]);
 	arg->pa_argument[COMMAND_POSITION] = pa_path;
 	ft_exe_except(pa_path, arg, ft_bstenv_to_dpenv(arg->env));

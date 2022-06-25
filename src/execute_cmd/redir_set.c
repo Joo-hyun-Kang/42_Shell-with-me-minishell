@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:13:05 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 16:59:02 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/25 17:07:47 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ int	ft_set_redir(t_redir *redir, t_lst *arg)
 	t_lst		*open_files;
 	char		*pa_gt_files;
 	char		*lt_dlt_files;
-	int			i;
 
 	pa_gt_files = NULL;
 	lt_dlt_files = NULL;

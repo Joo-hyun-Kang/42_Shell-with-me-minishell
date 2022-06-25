@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/25 16:27:09 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/25 17:08:40 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -117,7 +117,7 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(BUILTIN_SRC:.c=.o))\
 #-----------------[ CMD ]-------------------
 CC				=	gcc
-CFLAGS			=	# -Wall -Wextra -Werror
+CFLAGS			=	-Wall -Wextra -Werror
 CPPFLAGS		=	-I include\
 					-I $(LIBFT_DIR)\
 					-I $(GNL_DIR)\
@@ -136,7 +136,7 @@ all: $(NAME)
 
 $(OBJ_DIR)/%.o: %.c
 	@echo $(COMPILE_COLOR) "Compiling...\t$<" $(END)
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@ -g3
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
 $(NAME): $(LIBFT) $(OBJ_DIR) $(OBJS)
 	@echo $(COMPILE_COLOR) "Building...\t$@" $(END)

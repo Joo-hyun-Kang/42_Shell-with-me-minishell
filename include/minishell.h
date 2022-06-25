@@ -6,26 +6,24 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 17:25:46 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 18:19:14 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include "../library/libft/inc/libft.h"
-# include "../library/get_next_line/inc/get_next_line.h"
-# include <stdio.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <stdbool.h>
 # include <termios.h>
-# include <unistd.h>
+# include <fcntl.h>
+# include <stdio.h>
+# include <stdbool.h>
 # include <sys/wait.h>
 # include <dirent.h>
 # include <errno.h>
-# include <string.h>
-# include <fcntl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include "../library/libft/inc/libft.h"
+# include "../library/get_next_line/inc/get_next_line.h"
 
 # define M_META		"|><"
 # define M_SPACE	" \r\v\f\t"

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 03:09:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 18:08:26 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 18:17:36 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ t_argument	*p_align_arg(t_argument *arg)
 		return (NULL);
 	head = arg;
 	if (arg->next_token_type == LT
-			|| arg->next_token_type == DLT || arg->next_token_type == GT)
+		|| arg->next_token_type == DLT || arg->next_token_type == GT)
 		p_swap_arg(arg, arg->next);
 	return (head);
 }

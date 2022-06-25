@@ -4,9 +4,7 @@ void	ft_fork_execute(t_argument *argument)
 {
 	pid_t	pid;
 
-	pid = fork();
-	if (pid == -1)
-		ft_system_err(FAILED_FORK);
+	pid = fork_safe();
 	if (pid == 0)
 		ft_execute(argument, false);
 	ft_wait_child(pid);

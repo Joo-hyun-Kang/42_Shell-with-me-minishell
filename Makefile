@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/24 19:31:46 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/25 14:58:11 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,6 +54,10 @@ PARSER_SRC		=	parser.c\
 MALLOC_DIR		=	src/malloc
 MALLOC_SRC		=	ft_strdup.c\
 					ft_strndup.c
+#--------------[ SAFE ]----------------
+SAFE_DIR		=	src/safe
+SAFE_SRC		=	malloc_safe.c\
+					fork_safe.c
 #--------------[ ENV ]----------------
 ENV_DIR			=	src/environment
 ENV_SRC			=	env_utils.c\
@@ -98,12 +102,6 @@ OBJ_DIR			=	objects
 SRC_DIR			=	src
 SRC				=	main.c\
 					system_err.c
-#ifdef TEST
-#	SRC = test.c
-#	NAME = testshell
-#else
-#	SRC = main.c
-#endif
 
 OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(GNL_SRC:.c=.o))\
@@ -112,6 +110,7 @@ OBJS			=	$(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(ENV_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(ENVBST_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(MALLOC_SRC:.c=.o))\
+					$(addprefix $(OBJ_DIR)/, $(SAFE_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(SIG_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(EXECUTE_SRC:.c=.o))\
 					$(addprefix $(OBJ_DIR)/, $(PRPT_SRC:.c=.o))\
@@ -123,17 +122,15 @@ CPPFLAGS		=	-I include\
 					-I $(LIBFT_DIR)\
 					-I $(GNL_DIR)\
 					-I $(EXECUTE_DIR)\
-					-I/home/linuxbrew/.linuxbrew/Cellar/readline/8.1.2/include
-					#-I/opt/homebrew/opt/readline/include
+					-I/opt/homebrew/opt/readline/include
 					#-I/Users/jokang/.brew/opt/readline/include
 LDLIBS			=	-l ft -L $(LIBFT_DIR)\
-					-l readline -L /home/linuxbrew/.linuxbrew/Cellar/readline/8.1.2/lib
-					#-l readline -L /opt/homebrew/opt/readline/lib
+					-l readline -L /opt/homebrew/opt/readline/lib
 					#-l readline -L/Users/jokang/.brew/opt/readline/lib
 AR				=	ar -rcs
 RM				=	rm -rf
 
-vpath %.c $(SRC_DIR) $(GNL_DIR) $(TOKEN_DIR) $(PARSER_DIR) $(ENV_DIR) $(ENVBST_DIR) $(MALLOC_DIR) $(SIG_DIR) $(EXECUTE_DIR) $(PRPT_DIR) $(BUILTIN_DIR)
+vpath %.c $(SRC_DIR) $(GNL_DIR) $(TOKEN_DIR) $(PARSER_DIR) $(ENV_DIR) $(ENVBST_DIR) $(MALLOC_DIR) $(SAFE_DIR) $(SIG_DIR) $(EXECUTE_DIR) $(PRPT_DIR) $(BUILTIN_DIR)
 
 all: $(NAME)
 
@@ -162,12 +159,8 @@ fclean:
 	@$(RM) $(OBJ_DIR) $(NAME)
 	@echo $(DEL_COLOR) "fclean" $(END)
 
-test:
-	@make fclean
-	@make TEST=1 -j 8
-
 re:
 	@make fclean
 	@make all
 
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re

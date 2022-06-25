@@ -100,9 +100,6 @@ void			ft_execute_except_case(t_argument *arg);
 int				ft_is_command_dir();
 int				ft_is_command_exist(char *current_path, t_argument *arg);
 
-/* src/execute_cmd/ft_atoull.c */
-unsigned long long	ft_atoull(const char *str, int *is_numeric);
-
 /* src/environment/execute_env.c */
 void				ft_execute_export(t_argument *arg, int is_parent);
 void				ft_execute_env(t_argument *arg, int is_parent);

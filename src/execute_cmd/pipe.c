@@ -6,7 +6,7 @@
 /*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 01:35:04 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 11:48:35 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 15:17:16 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,9 +63,7 @@ int	ft_construt_pipes(t_argument *arg, t_pipes *pipes)
 	while (i < pipe_count)
 	{
 		pipes->array[i] = (int *)malloc_safe(sizeof(int) * PIPE_COUNT);
-		ret = pipe(pipes->array[i]);
-		if (ret < -1)
-			ft_system_err(FAILED_PIPE);
+		ret = pipe_safe(pipes->array[i]);
 		i++;
 	}
 	return (true);

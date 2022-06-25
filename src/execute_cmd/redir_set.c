@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir_set.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/25 16:13:05 by jokang            #+#    #+#             */
+/*   Updated: 2022/06/25 16:14:14 by jokang           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd.h"
 
 void	ft_split_command(t_redir *redir, t_lst *arg, t_lst **files, char **gt)
@@ -102,12 +114,9 @@ int	ft_set_redir(t_redir *redir, t_lst *arg)
 	{
 		lt_dlt_files = open_files->pa_arr[open_files->length - 1];
 		if (lt_dlt_files != NULL && pa_gt_files != NULL)
-		{
 			if (ft_strcmp(lt_dlt_files, pa_gt_files) == 0)
 				exit(0);
-		}
 	}
-
 	ft_make_redir_com(redir, arg);
 	add_arraylist(arg, NULL, NONE);
 	ft_set_opne_file(open_files, redir);

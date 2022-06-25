@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   redir_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/06/25 16:17:49 by jokang            #+#    #+#             */
+/*   Updated: 2022/06/25 16:19:40 by jokang           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cmd.h"
 
-int		ft_is_redir(enum e_token_type token)
+int	ft_is_redir(enum e_token_type token)
 {
 	if (token == LT)
 		return (true);
@@ -15,7 +27,7 @@ int		ft_is_redir(enum e_token_type token)
 
 int	ft_find_next_pipe(t_argument **arg)
 {
-	t_argument *p;
+	t_argument	*p;
 
 	p = *arg;
 	while (p != NULL)
@@ -34,9 +46,9 @@ void	ft_free_redir_variable(t_redir *redir)
 	free_arraylist(redir->redir_arg);
 }
 
- void	ft_make_redir_com(t_redir *redir, t_lst *arg)
- {
-	int i;
+void	ft_make_redir_com(t_redir *redir, t_lst *arg)
+{
+	int	i;
 
 	i = 0;
 	while (i < redir->list_arg->length)
@@ -44,4 +56,4 @@ void	ft_free_redir_variable(t_redir *redir)
 		add_arraylist(arg, ft_strdup(redir->list_arg->pa_arr[i]), NONE);
 		++i;
 	}
- }
+}

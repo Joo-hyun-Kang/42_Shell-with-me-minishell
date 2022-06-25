@@ -66,6 +66,32 @@ typedef struct redir_var {
 	int			will_stdout_pipe;
 }	t_redir;
 
+enum e_err_code {
+	CD_MIN,
+	CD_NO_DIR,
+	CD_NO_SET,
+	CD_NOT_DIR,
+	CD_MAX,
+	PWD_MIN,
+	PWD_ERR,
+	PWD_MAX,
+	EXIT_MIN,
+	EXIT_NUMERIC,
+	EXIT_MANY_ARG,
+	EXIT_MAX,
+	UNSET_MIN,
+	UNSET_INVALID,
+	UNSET_MAX,
+	EXPORT_MIN,
+	EXPORT_INVALID,
+	EXPORT_MAX,
+	EXE_MIN,
+	EXE_CMD_NOT,
+	EXE_NO_DIR,
+	EXE_PERMISSION,
+	EXE_MAX
+};
+
 /*
  * #########################################################
  * #                                                       #
@@ -137,7 +163,7 @@ void		ft_make_redir_com(t_redir *redir, t_lst *arg);
 void   		ft_copy_origin_command(t_argument **arg, t_lst *list_com);
 void   		ft_get_gt_variable(t_argument *p, t_lst *list_arg, char **gt_file);
 void		ft_get_lt_dlt(t_argument *p, t_lst *l_arg, t_lst *l_com, int token);
-void		ft_sort_redir_command(t_argument **arg, t_lst *list_arg, t_lst *list_com);
+void		ft_sort_redir_command(t_argument **arg, t_lst *l_arg, t_lst *l_com);
 
 /* src/execute_cmd/redir_set.c */
 int			ft_set_redir(t_redir *redir, t_lst *argument);
@@ -164,32 +190,15 @@ void		exit_malloc_fail(void *p);
 void		free_arraylist(t_lst *arraylist);
 int			is_arraylist_full(t_lst *arraylist);
 
-enum e_err_code {
-	CD_MIN,
-	CD_NO_DIR,
-	CD_NO_SET,
-	CD_NOT_DIR,
-	CD_MAX,
-	PWD_MIN,
-	PWD_ERR,
-	PWD_MAX,
-	EXIT_MIN,
-	EXIT_NUMERIC,
-	EXIT_MANY_ARG,
-	EXIT_MAX,
-	UNSET_MIN,
-	UNSET_INVALID,
-	UNSET_MAX,
-	EXPORT_MIN,
-	EXPORT_INVALID,
-	EXPORT_MAX,
-	EXE_MIN,
-	EXE_CMD_NOT,
-	EXE_NO_DIR,
-	EXE_PERMISSION,
-	EXE_MAX
-};
+/* src/execute_cmd/ft_error.c */
+int			ft_pwd_error(int error_code, void *free_info);
+int			ft_unset_error(int error_code, void *info);
+int			ft_export_error(int error_code, void *info);
+int			ft_exe_error(int error_code, void *info);
+void		ft_error(enum e_err_code error_code, void *info, int is_parent);
 
-void	ft_error(enum e_err_code error_code, void *info, int is_parent);
+/* src/execute_cmd/ft_error_sec.c */
+int			ft_cd_error(int error_code, void *free_info);
+int			ft_exit_error(int error_code, void *info);
 
 #endif

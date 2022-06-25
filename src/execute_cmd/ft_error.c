@@ -6,42 +6,11 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 00:57:21 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 20:00:03 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 16:24:34 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cmd.h"
-
-int	ft_cd_error(int error_code, void *free_info)
-{
-	ft_putstr_fd("cd: ", 2);
-	ft_putstr_fd((char *)free_info, 2);
-	if (error_code == CD_NO_DIR)
-		ft_putstr_fd(": No such file or directory\n", 2);
-	else if (error_code == CD_NO_SET)
-		ft_putstr_fd(" not set\n", 2);
-	else if (error_code == CD_NOT_DIR)
-		ft_putstr_fd(": Not a directory\n", 2);
-	free(free_info);
-	return (1);
-}
-
-int	ft_exit_error(int error_code, void *info)
-{
-	ft_putstr_fd("exit: ", 2);
-	if (error_code == EXIT_NUMERIC)
-	{
-		ft_putstr_fd((char *)info, 2);
-		ft_putstr_fd(": numeric argument required\n", 2);
-		return (255);
-	}
-	else if (error_code == EXIT_MANY_ARG)
-	{
-		ft_putstr_fd("too many arguments\n", 2);
-		return (1);
-	}
-	return (0);
-}
 
 int	ft_pwd_error(int error_code, void *free_info)
 {
@@ -116,8 +85,6 @@ void	ft_error(enum e_err_code error_code, void *info, int is_parent)
 		exit_status = ft_export_error(error_code, info);
 	else if (error_code >= EXE_MIN && error_code <= EXE_MAX)
 		exit_status = ft_exe_error(error_code, info);
-
-
 	if (is_parent == 0)
 		exit (exit_status);
 	g_exit = exit_status;

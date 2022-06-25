@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:42:08 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 16:31:44 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 19:43:30 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	ft_execute_pwd(int is_parent)
 {
 	char		*pa_path;
-	const int	SIZE = 0;
+	const int	size = 0;
 
-	pa_path = getcwd(NULL, SIZE);
+	pa_path = getcwd(NULL, size);
 	if (pa_path == NULL)
 		ft_error(PWD_ERR, (void *)pa_path, is_parent);
 	else

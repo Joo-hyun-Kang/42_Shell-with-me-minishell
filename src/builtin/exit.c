@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:40:52 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 16:19:48 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 17:03:12 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	ft_execute_exit(t_argument *arg, int is_parent)
 	int					is_numeric;
 	const int			length = ft_get_length_2d_arr(arg->pa_argument);
 
+	is_numeric = 1;
 	if (length > 1)
 	{
 		rtn = ft_atoull(arg->pa_argument[1], &is_numeric);
@@ -43,7 +44,6 @@ static unsigned long long	ft_atoull(const char *str, int *is_numeric)
 
 	result = 0;
 	minus = 1;
-	*is_numeric = 1;
 	while (*str && ft_strchr(" \n\t\v\r\f", *str))
 		++str;
 	if (*str && ft_strchr("+-", *str))

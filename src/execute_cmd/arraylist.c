@@ -6,11 +6,11 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 10:11:14 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 11:47:22 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 17:15:20 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 #define BASIC_CAPACITY (10)
 

@@ -6,11 +6,11 @@
 /*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:45:38 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 16:45:39 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/25 17:16:19 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 void	ft_set_read_file(char *pa_gt_files, t_redir *redir)
 {

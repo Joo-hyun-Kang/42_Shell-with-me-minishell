@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/23 03:25:58 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 19:54:57 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 17:18:28 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@ static void	p_read_heredoc(char *heredoc, t_argument *arg);
 
 void	p_heredoc_child(t_argument *arg, t_token *cur_tok)
 {
-	char	*new_pa_str;
-	int		fd;
-
 	signal(SIGINT, ft_sig_for_child);
 	p_read_heredoc(cur_tok->pa_str, arg);
 	exit(0);

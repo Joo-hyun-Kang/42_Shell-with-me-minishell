@@ -6,11 +6,11 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 11:38:39 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 16:58:19 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/25 17:16:11 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 void	ft_get_redir_state(t_argument **arg, t_redir *redir, int state)
 {

@@ -6,11 +6,11 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:42:17 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/24 02:43:10 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/25 17:16:07 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 void	ft_close_pipe(t_pipes *pipes)
 {

@@ -6,11 +6,11 @@
 /*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:31:09 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 17:06:56 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 17:15:49 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 int	ft_execute_nopath(t_argument *arg, char *pa_path)
 {

@@ -6,11 +6,11 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:17:49 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 16:46:37 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/25 17:16:27 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 int	ft_is_redir(enum e_token_type token)
 {

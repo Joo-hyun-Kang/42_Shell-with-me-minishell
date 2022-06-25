@@ -6,13 +6,13 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:42:38 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 15:32:40 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 17:25:22 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/minishell.h"
 
-char	*ft_get_cdstr(t_argument *arg, int is_parent)
+char	*ft_get_cdstr(t_argument *arg)
 {
 	char	*key;
 	char	*cdstr;
@@ -40,7 +40,7 @@ void	ft_execute_cd(t_argument *arg, int is_parent)
 	char		*cdstr;
 	int			rst;
 
-	cdstr = ft_get_cdstr(arg, is_parent);
+	cdstr = ft_get_cdstr(arg);
 	if (cdstr == NULL)
 		return ;
 	ft_env_insert(arg->env, ft_strdup("OLDPWD"), getcwd(NULL, 0));

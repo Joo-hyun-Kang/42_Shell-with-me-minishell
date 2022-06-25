@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 02:39:45 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 18:07:17 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 17:24:59 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ static int	ft_check_unset_vaild(char *key);
 void	ft_execute_unset(t_argument *arg, int is_parent)
 {
 	int			idx;
-	char		*key;
-	int			i;
 
 	idx = 1;
 	if (arg->pa_argument[idx] == NULL)

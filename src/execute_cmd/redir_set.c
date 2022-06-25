@@ -6,11 +6,11 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:13:05 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 17:07:47 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 17:16:16 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 void	split_com(t_redir *redir, t_lst *arg, t_lst **files, char **gt)
 {

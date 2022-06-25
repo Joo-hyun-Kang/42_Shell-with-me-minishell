@@ -6,11 +6,11 @@
 /*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 01:35:04 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 15:17:16 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 17:23:50 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 void	ft_get_pipe_state(int *state)
 {
@@ -50,10 +50,8 @@ pid_t	ft_execute_pipe(t_argument **arg, int state, t_pipes *pipes)
 
 int	ft_construt_pipes(t_argument *arg, t_pipes *pipes)
 {
-	t_pipes		*temp;
 	int			pipe_count;
 	int			i;
-	int			ret;
 
 	pipe_count = ft_get_pipe_count(arg);
 	pipes->array = (int **)malloc_safe(sizeof(int *) * pipe_count);
@@ -63,7 +61,7 @@ int	ft_construt_pipes(t_argument *arg, t_pipes *pipes)
 	while (i < pipe_count)
 	{
 		pipes->array[i] = (int *)malloc_safe(sizeof(int) * PIPE_COUNT);
-		ret = pipe_safe(pipes->array[i]);
+		pipe_safe(pipes->array[i]);
 		i++;
 	}
 	return (true);
@@ -73,7 +71,6 @@ void	ft_set_pipe(t_pipes *pipes, int state)
 {
 	int	*cur_pipe;
 	int	*pre_pipe;
-	int	i;
 
 	if (state == PIPE_START)
 	{

@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/12 04:37:37 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 11:45:17 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 17:17:28 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,7 @@ static void	p_extra_pipe_child(void)
 		read_line = readline("> ");
 	}
 	if (read_line == NULL)
-	{
-		close(fd);
 		exit (2);
-	}
 	fd = open(F_EXTRA, (O_CREAT | O_TRUNC | O_RDWR), 0644);
 	if (fd < 0)
 		exit (3);

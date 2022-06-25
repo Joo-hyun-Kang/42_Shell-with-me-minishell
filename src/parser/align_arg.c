@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 03:09:29 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 11:33:27 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 17:20:52 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,9 @@ void	p_swap_arg(t_argument *cur, t_argument *next)
 	char	**new_str;
 	int		idx;
 
-	if (next->pa_argument != NULL)
-		next_size = p_strdlen(next->pa_argument);
+	if (next->pa_argument == NULL)
+		return ;
+	next_size = p_strdlen(next->pa_argument);
 	if (next_size < 1)
 		return ;
 	new_str = (char **)malloc_safe(sizeof(char *) * 2);

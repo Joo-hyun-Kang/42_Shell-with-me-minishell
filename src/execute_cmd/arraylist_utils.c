@@ -6,11 +6,11 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 09:44:19 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/24 12:27:52 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/25 17:15:24 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 void	ft_free_list_value(char **pa_char, int lenght)
 {

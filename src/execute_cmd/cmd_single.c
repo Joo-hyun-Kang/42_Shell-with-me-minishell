@@ -6,11 +6,11 @@
 /*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:53:59 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 16:54:01 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/25 17:15:36 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 void	ft_fork_execute(t_argument *argument)
 {

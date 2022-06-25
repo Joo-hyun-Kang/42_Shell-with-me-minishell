@@ -6,11 +6,11 @@
 /*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:29:21 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 16:29:22 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/25 17:16:00 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cmd.h"
+#include "../../include/minishell.h"
 
 int	ft_cd_error(int error_code, void *free_info)
 {

@@ -2,8 +2,8 @@
 
 void	ft_system(t_argument *argument)
 {
-	char *command;
-	
+	char	*command;
+
 	if (argument->pa_argument[COMMAND_POSITION] == NULL)
 	{
 		argument = argument->next;
@@ -32,7 +32,7 @@ void	ft_execute_mult_cmd(t_argument **arg)
 	state = INIT;
 	while (*arg != NULL)
 	{
-		token = (*arg)->next_token_type;		
+		token = (*arg)->next_token_type;
 		if (token == PIPE)
 			child_pid = ft_execute_pipe(arg, state, pa_pipes);
 		else if (ft_is_redir(token))
@@ -47,7 +47,7 @@ char	*ft_join_path_command_malloc(char *path, char *command)
 {
 	char	*pa_temp;
 	char	*pa_path_with_command;
-	
+
 	pa_temp = ft_strjoin(path, "/");
 	pa_path_with_command = ft_strjoin(pa_temp, command);
 	free(pa_temp);

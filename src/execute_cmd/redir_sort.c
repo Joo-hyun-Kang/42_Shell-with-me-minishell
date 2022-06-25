@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 12:08:42 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 16:17:31 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/25 16:27:38 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,5 +94,5 @@ void	ft_sort_redir_command(t_argument **arg, t_lst *l_arg, t_lst *l_com)
 			p = p->next;
 	}
 	if (gt_file != NULL)
-		add_arraylist(list_com, ft_strdup(gt_file), GT_FILE);
+		add_arraylist(l_com, ft_strdup(gt_file), GT_FILE);
 }

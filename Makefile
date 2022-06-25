@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/25 15:27:14 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/25 16:27:09 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -85,7 +85,8 @@ EXECUTE_SRC		=	cmd.c\
 					redir_utils.c\
 					arraylist.c\
 					arraylist_utils.c\
-					ft_error.c
+					ft_error.c\
+					ft_error_sec.c
 #--------------[ BUILTIN ]----------------
 BUILTIN_DIR		=	src/builtin
 BUILTIN_SRC		=	builtin.c\

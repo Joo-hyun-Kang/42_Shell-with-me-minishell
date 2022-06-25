@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/25 15:17:50 by kanghyki         ###   ########.fr        #
+#    Updated: 2022/06/25 15:27:14 by kanghyki         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -76,7 +76,6 @@ EXECUTE_SRC		=	cmd.c\
 					execute.c\
 					execute_path.c\
 					execute_except.c\
-					ft_atoull.c\
 					pipe.c\
 					pipe_utils.c\
 					redir.c\

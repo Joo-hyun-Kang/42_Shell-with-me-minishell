@@ -6,7 +6,7 @@
 /*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/17 09:14:46 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 15:50:07 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/06/25 20:24:28 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ void	ft_env_delete(t_env_root *root, char *key)
 		replace_node = cur_node->right;
 		while (replace_node->left)
 			replace_node = replace_node->left;
+		if (replace_node->parent->left == replace_node)
+			replace_node->parent->left = NULL;
+		else
+			replace_node->parent->right = NULL;
 		ft_env_delete_if_not_null(root, cur_node, replace_node);
 	}
 	--(root->size);
@@ -85,10 +89,6 @@ static void	ft_env_delete_if_right_null(t_env_root *root, t_env *cur_node)
 
 static void	ft_env_delete_if_not_null(t_env_root *root, t_env *cur, t_env *rep)
 {
-	if (rep->parent->left == rep)
-		rep->parent->left = NULL;
-	else
-		rep->parent->right = NULL;
 	if (cur->parent == NULL)
 		root->root = rep;
 	else
@@ -100,10 +100,15 @@ static void	ft_env_delete_if_not_null(t_env_root *root, t_env *cur, t_env *rep)
 	}
 	rep->parent = cur->parent;
 	if (cur->right == rep)
+	{
 		rep->left = cur->left;
+		cur->left->parent = rep->left;
+	}
 	else
 	{
 		rep->left = cur->left;
+		cur->left->parent = rep;
 		rep->right = cur->right;
+		cur->right->parent = rep;
 	}
 }

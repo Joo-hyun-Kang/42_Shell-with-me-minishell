@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   arraylist.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 10:11:14 by jokang            #+#    #+#             */
-/*   Updated: 2022/07/04 15:56:05 by jokang           ###   ########.fr       */
+/*   Updated: 2022/07/04 20:02:49 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	allocate_list_sec(t_lst *arraylist)
 {
 	char	**tmp;
 	int		*tmp2;
-	
+
 	tmp = (char **)malloc_safe(arraylist->capacity * 2 * sizeof(char *));
 	ft_copy_char_arr_list(tmp, arraylist->pa_arr, arraylist->length);
 	ft_free_list_value(arraylist->pa_arr, arraylist->length);
@@ -78,4 +78,3 @@ void	allocate_list_sec(t_lst *arraylist)
 	arraylist->type = tmp2;
 	arraylist->capacity *= 2;
 }
-

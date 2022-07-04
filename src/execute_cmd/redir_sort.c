@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir_sort.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 12:08:42 by jokang            #+#    #+#             */
-/*   Updated: 2022/07/04 15:56:18 by jokang           ###   ########.fr       */
+/*   Updated: 2022/07/04 20:02:30 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	ft_get_gt_variable(t_argument *p, t_lst *list_arg, char **gt_file)
 
 void	ft_get_lt_dlt(t_argument *p, t_lst *l_arg, t_lst *l_com, int token)
 {
-	static int j = 2;
 	int	len;
 	int	i;
 
@@ -56,12 +55,10 @@ void	ft_get_lt_dlt(t_argument *p, t_lst *l_arg, t_lst *l_com, int token)
 	if (token == LT)
 	{
 		add_arraylist(l_com, ft_strdup(p->pa_argument[i]), (int)LT_OPEN);
-		j++;
 	}
 	else
 	{
 		add_arraylist(l_com, ft_strdup(p->pa_argument[i]), (int)DLT_OPEN);
-		j++;
 	}
 	i++;
 	while (i < len)

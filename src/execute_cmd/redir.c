@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
+/*   By: kanghyki <kanghyki@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 11:38:39 by jokang            #+#    #+#             */
-/*   Updated: 2022/07/04 15:54:37 by jokang           ###   ########.fr       */
+/*   Updated: 2022/07/04 20:01:58 by kanghyki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ pid_t	ft_execute_redir(t_argument **arg, int state, t_pipes *pipes)
 		}
 	}
 	pipes->current_idx++;
-
 	ft_free_redir_variable(&redir);
 	return (ft_redir_re(arg, state, pipes, pid));
 }

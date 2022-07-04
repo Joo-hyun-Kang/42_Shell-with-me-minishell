@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/06 15:51:33 by kanghyki          #+#    #+#             */
-/*   Updated: 2022/06/25 19:41:19 by jokang           ###   ########.fr       */
+/*   Updated: 2022/06/29 23:53:14 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -389,6 +389,8 @@ void		ft_execute_cd(t_argument *arg, int is_parent);
 void		ft_system(t_argument *argument);
 void		ft_execute_mult_cmd(t_argument **arg);
 char		*ft_join_path_command(char *path, char *command);
+void		*ft_intcpy(void *dest, const void *src, size_t n);
+void		ft_copy_char_arr_list(char **dst, char **src, int src_len);
 
 /* src/execute_cmd/cmd_single.c */
 void		ft_fork_execute(t_argument *argument);

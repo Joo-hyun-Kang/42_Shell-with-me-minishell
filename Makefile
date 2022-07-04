@@ -6,7 +6,7 @@
 #    By: jokang <jokang@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/06/01 00:54:06 by kanghyki          #+#    #+#              #
-#    Updated: 2022/06/25 19:20:06 by jokang           ###   ########.fr        #
+#    Updated: 2022/06/29 21:50:44 by jokang           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -133,7 +133,7 @@ all: $(NAME)
 
 $(OBJ_DIR)/%.o: %.c
 	@echo $(COMPILE_COLOR) "Compiling...\t$<" $(END)
-	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
+	@$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@ -g3
 
 $(NAME): $(LIBFT) $(OBJ_DIR) $(OBJS)
 	@echo $(COMPILE_COLOR) "Building...\t$@" $(END)

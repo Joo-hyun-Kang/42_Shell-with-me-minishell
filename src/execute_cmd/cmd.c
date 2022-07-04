@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jokang <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/25 16:53:50 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 19:35:54 by jokang           ###   ########.fr       */
+/*   Updated: 2022/07/04 16:06:37 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,33 @@ char	*ft_join_path_command(char *path, char *command)
 	pa_path_with_command = ft_strjoin(pa_temp, command);
 	free(pa_temp);
 	return (pa_path_with_command);
+}
+
+void	*ft_intcpy(void *dest, const void *src, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	if (!dest && !src)
+		return (0);
+	while (i < n)
+	{
+		((int *)dest)[i] = ((int *)src)[i];
+		++i;
+	}
+	return (dest);
+}
+
+void	ft_copy_char_arr_list(char **dst, char **src, int src_len)
+{
+	int	i;
+
+	i = 0;
+	while (i < src_len)
+	{
+		*dst = ft_strdup(*src);
+		++dst;
+		++src;
+		++i;
+	}
 }

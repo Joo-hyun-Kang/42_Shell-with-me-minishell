@@ -6,7 +6,7 @@
 /*   By: jokang <jokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 10:11:14 by jokang            #+#    #+#             */
-/*   Updated: 2022/06/25 17:15:20 by kanghyki         ###   ########.fr       */
+/*   Updated: 2022/07/04 15:56:05 by jokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,14 +66,16 @@ void	allocate_list_sec(t_lst *arraylist)
 {
 	char	**tmp;
 	int		*tmp2;
-
+	
 	tmp = (char **)malloc_safe(arraylist->capacity * 2 * sizeof(char *));
-	ft_copy_char_arr_malloc(tmp, arraylist->pa_arr);
+	ft_copy_char_arr_list(tmp, arraylist->pa_arr, arraylist->length);
 	ft_free_list_value(arraylist->pa_arr, arraylist->length);
+	arraylist->pa_arr = tmp;
 	tmp = NULL;
 	tmp2 = (int *)malloc_safe(arraylist->capacity * 2 * sizeof(int));
-	ft_memcpy(tmp2, arraylist->type, arraylist->length);
+	ft_intcpy(tmp2, arraylist->type, arraylist->length);
 	free(arraylist->type);
 	arraylist->type = tmp2;
 	arraylist->capacity *= 2;
 }
+
